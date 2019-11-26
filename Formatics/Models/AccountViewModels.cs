@@ -119,11 +119,12 @@ namespace Formatics.Models
         public string country { get; set; }
 
 
-        [Display(Name = "Date Enrolled")]
-        public DateTime enrollDate { get; set; }
-
         [Display(Name = "Insurance")]
         public string insurance { get; set; }
+
+        [Display(Name = "Date Enrolled")]
+        [DataType(DataType.DateTime)]
+         public DateTime date { get; set; }
 
 
         [Display(Name = "Diagnosis")]

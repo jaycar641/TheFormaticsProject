@@ -14,6 +14,7 @@ namespace Formatics.Models
         public int ProcedureId { get; set; }
 
         [Display(Name = "Procedure Date")]
+        [DataType(DataType.DateTime)]
         public DateTime date { get; set; }
 
         [Display(Name = "Location")]

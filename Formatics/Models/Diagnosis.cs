@@ -20,6 +20,7 @@ namespace Formatics.Models
         public string category { get; set; }
 
         [Display(Name = "Date Diagnosed")]
+        [DataType(DataType.DateTime)]
         public DateTime dateDiagnosed { get; set; }
 
     }

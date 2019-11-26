@@ -102,6 +102,5 @@ C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.csprojAs
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.csproj.CopyComplete
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.dll
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.pdb
-C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.init.resources
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.start.resources
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.csproj.GenerateResource.cache
-C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.second.resources

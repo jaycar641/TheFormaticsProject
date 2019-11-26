@@ -179,13 +179,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201911222232010_init.cs" />
-    <Compile Include="Migrations\201911222232010_init.Designer.cs">
-      <DependentUpon>201911222232010_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201911261523217_second.cs" />
-    <Compile Include="Migrations\201911261523217_second.Designer.cs">
-      <DependentUpon>201911261523217_second.cs</DependentUpon>
+    <Compile Include="Migrations\201911262150540_start.cs" />
+    <Compile Include="Migrations\201911262150540_start.Designer.cs">
+      <DependentUpon>201911262150540_start.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -278,11 +274,11 @@
     <Content Include="Views\FrontEnd\_Perscription.cshtml" />
     <Content Include="Views\FrontEnd\_Diagnosis.cshtml" />
     <Content Include="Views\FrontEnd\Schedule.cshtml" />
+    <Content Include="Views\Steps\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Procedure\" />
-    <Folder Include="Views\Steps\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -298,11 +294,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201911222232010_init.resx">
-      <DependentUpon>201911222232010_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201911261523217_second.resx">
-      <DependentUpon>201911261523217_second.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911262150540_start.resx">
+      <DependentUpon>201911262150540_start.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

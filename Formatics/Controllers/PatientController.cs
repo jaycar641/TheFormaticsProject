@@ -1,4 +1,5 @@
 ﻿using Formatics.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,18 @@ using System.Web.Mvc;
 
 namespace Formatics.Controllers
 {
+    [Authorize]
+
     public class PatientController : Controller
     {
         // GET: Patient
         ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(int patientNumber) //Patient Dashboard
+        public ActionResult Index()//Patient Dashboard
         {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             DateTime currentDate = DateTime.Today;
-            Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
              
             return View(patient);
         }

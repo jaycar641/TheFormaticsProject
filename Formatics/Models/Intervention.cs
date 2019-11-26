@@ -18,9 +18,11 @@ namespace Formatics.Models
         public string category { get; set; }
 
         [Display(Name = "Start Date")]
+        [DataType(DataType.DateTime)]
         public DateTime startDate { get; set; }
 
         [Display(Name = "End Date")]
+        [DataType(DataType.DateTime)]
         public DateTime? endDate { get; set; }
 
         [Display(Name = "Duration")]

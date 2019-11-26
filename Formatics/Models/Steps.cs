@@ -22,6 +22,7 @@ namespace Formatics.Models
 
 
         [Display(Name = "Date")]
+        [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
 
 

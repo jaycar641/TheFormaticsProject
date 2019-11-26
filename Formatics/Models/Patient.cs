@@ -58,6 +58,7 @@ namespace Formatics.Models
 
 
             [Display(Name = "Date Enrolled")]
+            [DataType(DataType.DateTime)]
             public DateTime enrollDate { get; set; }
 
             [Display(Name = "Insurance")]

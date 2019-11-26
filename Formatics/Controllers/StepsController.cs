@@ -1,4 +1,5 @@
 ﻿using Formatics.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,14 +9,16 @@ using System.Web.Mvc;
 
 namespace Formatics.Controllers
 {
+    [Authorize]
     public class StepsController : Controller
     {
         // GET: Steps
+
         ApplicationDbContext db = new ApplicationDbContext();
 
-       public void LoadAllAlerts()
+       public void LoadAllAlerts(int interventionId)
         {
-
+            db.stepMedicines.ToList();
         }
        public void LoadStepDetails(int patientNumber, string category)
         {
@@ -35,9 +38,9 @@ namespace Formatics.Controllers
                         Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
                         steps.Add(step);
                     }
-                    foreach (Steps steps1 in steps)//edit these descriptions
+                    foreach (Steps steps1 in steps)
                     {
-                        if (steps1.day == 4) //Check acute pain treatment plan samples
+                        if (steps1.day == 4) 
                         {
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             Procedure procedure = new Procedure();
@@ -45,18 +48,26 @@ namespace Formatics.Controllers
                             stepProcedure.ProcedureId = procedure.ProcedureId;
                             stepProcedure.StepId = step2.StepId;
                             procedure.category = "Surgery";
-                            procedure.date = step2.Date; //check date logic
+                            procedure.date = step2.Date; 
                             step2.description = "Surgery";
                             procedure.location = "Froedert Hospital";
+                            Alert alert = new Alert();
+                            alert.time = DateTime.Now;
+                            alert.type = "Surgery";
+                            alert.frequency = 1;
+                            alert.description = "Surgery in 2 hours, do not eat any food!";
+                            db.alerts.Add(alert);
                             db.stepProcedures.Add(stepProcedure);
                             db.procedures.Add(procedure);
 
                         }
                         else //Everyday
                         {
+                            List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
+                            List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
 
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                            step2.description = "Remember to stretch";
+                            step2.description = "Stretch daily so that your back pain can be minimized";
                             Medicine medicine = new Medicine();
                             StepMedicine stepMedicine = new StepMedicine();
                             stepMedicine.StepId = step2.StepId;
@@ -65,6 +76,13 @@ namespace Formatics.Controllers
                             medicine.ingredients = null;
                             medicine.name = "Tylenol";
                             medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
+                            medicine.isCurrent = true;
+                            Alert alert = new Alert();
+                            alert.time = DateTime.Now;
+                            alert.type = "Medication";
+                            alert.frequency = 1;
+                            alert.description = "Take your medication";
+                            db.alerts.Add(alert);
                             db.stepMedicines.Add(stepMedicine);
                             db.medicine.Add(medicine);
 
@@ -88,7 +106,8 @@ namespace Formatics.Controllers
                     {
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             step2.description = "Breathing Excercises";
-                           
+                        List<string> ingredients = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
+                        List<string> symptoms = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
 
                         Medicine medicine = new Medicine();
                         StepMedicine stepMedicine = new StepMedicine();
@@ -96,8 +115,15 @@ namespace Formatics.Controllers
                         stepMedicine.MedicineId = medicine.MedicineId;
                         medicine.drugClass = "Breathing Medication";
                         medicine.ingredients = null;
-                        medicine.name = "Breathing Pill";
+                        medicine.name = "Xopenex";
                         medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
+                        medicine.isCurrent = true;
+                        Alert alert = new Alert();
+                        alert.time = DateTime.Now;
+                        alert.type = "Medication";
+                        alert.frequency = 1;
+                        alert.description = "Take your Medication!";
+                        db.alerts.Add(alert);
                         db.stepMedicines.Add(stepMedicine);
                         db.medicine.Add(medicine);
 
@@ -126,7 +152,9 @@ namespace Formatics.Controllers
                         }
                         else //Everyday
                         {
-                           
+
+                            List<string> ingredients = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
+                            List<string> symptoms = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
 
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             step2.description = "Remember to go to sleep at 10pm";
@@ -137,8 +165,15 @@ namespace Formatics.Controllers
                             stepMedicine.MedicineId = medicine.MedicineId;
                             medicine.drugClass = "Sleep Medication";
                             medicine.ingredients = null;
-                            medicine.name = "Nyquil";
+                            medicine.name = "Lunesta";
                             medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
+                            medicine.isCurrent = true;
+                            Alert alert = new Alert();
+                            alert.time = DateTime.Now;
+                            alert.type = "Medication";
+                            alert.frequency = 1;
+                            alert.description = "Take your Medication!";
+                            db.alerts.Add(alert);
                             db.stepMedicines.Add(stepMedicine);
                             db.medicine.Add(medicine);
 
@@ -165,24 +200,33 @@ namespace Formatics.Controllers
             for (int i = 0; i <= duration - 1; i++)
             {
                 Steps steps = new Steps();
-                PatientStep patientStep = new PatientStep();
                 steps.InterventionId = interventionId;
                 steps.day = i + 1;
                 steps.description = null;
-                patientStep.StepId = steps.StepId;
-                patientStep.PatientNumber = patient1.PatientNumber;
-                patientStep.Date = intervention.startDate.AddDays(i);
-                //steps.Date = ??//when load page checks date?
-                //db.Steps.Add(steps);
-                db.patientSteps.Add(patientStep);
-                //Patientsteps, steps medicine, steps procedure??
+         ;
+                steps.Date = intervention.startDate.AddDays(i);
+                db.steps.Add(steps);
+             
              }
             db.SaveChanges();
 
+          
         }
         public ActionResult Index()
         {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+          
+
+            if (User.Identity.IsAuthenticated == true)
+            {
+                //RedirectToAction("Create", "Step", new { id = patient.PatientNumber });
+                Create(patient.PatientNumber);
+                return RedirectToAction("Index", "Patient");
+
+            }
             return View();
+
         }
 
         // GET: Steps/Details/5
@@ -192,7 +236,7 @@ namespace Formatics.Controllers
         }
 
         // GET: Steps/Create
-        public ActionResult Create(int patientNumber)  //Register goes to create step, then edit step then dashboard
+        public void Create(int patientNumber)  //Register goes to create step, then edit step then dashboard
         {
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
@@ -200,28 +244,15 @@ namespace Formatics.Controllers
             Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
            
             LoadAllSteps(intervention.duration, intervention.InterventionId, patient1.PatientNumber);
-            LoadAllAlerts();
-            return RedirectToAction("Edit", "Steps", new { id = patient1.PatientNumber });
+            LoadAllAlerts(intervention.InterventionId);
+            Edit(patientNumber);
+
         }
 
         // POST: Steps/Create
-        [HttpPost]
-        public ActionResult Create(int patientNumber, Steps steps )
-        {
-            try
-            {
-                // TODO: Add insert logic here
-               
-            }
-            catch
-            {
-                return View();
-            }
-            return View();
-        }
-
+  
         // GET: Steps/Edit/5
-        public ActionResult Edit(int patientNumber)
+        public void Edit(int patientNumber)
         {
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
@@ -229,29 +260,10 @@ namespace Formatics.Controllers
             Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
 
             LoadStepDetails(patient1.PatientNumber, diagnosis.category);
-            return RedirectToAction("Index", "Patient", new { id = patient1.PatientNumber });
         }
 
         // POST: Steps/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int patientNumber, FormCollection collection)
-        {
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index", "Patient", new { id = patient1.PatientNumber });
-
-            }
-            catch
-            {
-                return View();
-            }
-
-            return RedirectToAction("Index", "Patient", new { id = patient1.PatientNumber });
-
-        }
+       
 
         // GET: Steps/Delete/5
         public ActionResult Delete(int id)

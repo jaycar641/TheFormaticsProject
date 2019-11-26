@@ -22,6 +22,7 @@ namespace Formatics.Models
         public int frequency { get; set; }
 
         [Display(Name = "Time")]
+        [DataType(DataType.DateTime)]
         public DateTime time { get; set; } //time of day sent out
 
 

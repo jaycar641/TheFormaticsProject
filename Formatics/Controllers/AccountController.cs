@@ -12,7 +12,6 @@ using Formatics.Models;
 
 namespace Formatics.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -161,18 +160,18 @@ namespace Formatics.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await this.UserManager.AddToRoleAsync(user.Id, "Patient");
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    //patient.ApplicationUser = user;
-                   
+
                     Patient patient1 = new Patient();
                     patient1.ApplicationId = user.Id;
                     patient1.age = model.age;
-                    patient1.enrollDate = DateTime.Today;
+                    patient1.enrollDate =  DateTime.Now;
                     patient1.firstName = model.firstName;
                     patient1.middleName = model.middleName;
                     patient1.lastName = model.lastName;
@@ -187,6 +186,7 @@ namespace Formatics.Controllers
 
                     Diagnosis diagnosis = new Diagnosis();
                     diagnosis.category = model.diagnosis;
+                    diagnosis.dateDiagnosed = DateTime.Now;
                     Intervention intervention = new Intervention();
                     diagnosis.InterventionId = intervention.InterventionId;
 
@@ -194,60 +194,32 @@ namespace Formatics.Controllers
                     {
                         case "Acute Pain":
                         intervention.category = "Acute Pain Control";
+                            intervention.startDate = DateTime.Now;
                             intervention.duration = 180;
-                            intervention.startDate = patient1.enrollDate;
-                            try
-                            {
-                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
-                            }
-                            catch
-                            {
-                                intervention.endDate = null;
-                            }
+                            intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
                             intervention.expectedOutcome = "Improve";
                         break;
                         case "Respiration Alteration":
                         intervention.category = "Breathing Excercises";
+                            intervention.startDate = DateTime.Now;
                             intervention.duration = 90;
-                            intervention.startDate = patient1.enrollDate;
-                            try
-                            {
-                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
-                            }
-                            catch
-                            {
-                                intervention.endDate = null;
-                            }
+                            intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
                             intervention.expectedOutcome = "Improve";
                             break;
                         case "Sleep Pattern Disturbance":
+                            intervention.startDate = DateTime.Now;
                             intervention.category = "Sleep Patten Control";
                             intervention.duration = 21;
-                            intervention.startDate = patient1.enrollDate;
-                            try
-                            {
-                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
-                            }
-                            catch
-                            {
-                                intervention.endDate = null;
-                            }
+                            intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
                             intervention.expectedOutcome = "Improve";
                             break;
 
 
                         default:
                             intervention.category = "Nausea Care";
+                            intervention.startDate = DateTime.Now;
                             intervention.duration = 30;
-                            intervention.startDate = DateTime.Today;
-                            try
-                            {
-                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
-                            }
-                            catch
-                            {
-                                intervention.endDate = null;
-                            }
+                            intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
                             intervention.expectedOutcome = "Improve";
                             break;
 
@@ -263,9 +235,10 @@ namespace Formatics.Controllers
 
 
                     db.SaveChanges();
-                    return RedirectToAction("Create", "Steps", new { id = patient1.PatientNumber }); //will create steps first then go to dashboard
 
-                    //Check patient number value
+                    return RedirectToAction("Index", "Steps"); //will create steps first then go to dashboard
+
+
 
 
                 }
