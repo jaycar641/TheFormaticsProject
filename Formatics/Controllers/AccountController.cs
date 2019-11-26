@@ -171,22 +171,22 @@ namespace Formatics.Controllers
                    
                     Patient patient1 = new Patient();
                     patient1.ApplicationId = user.Id;
-                    //patient1.age = model.age;
-                    //patient1.enrollDate = model.enrollDate;
-                    //patient1.firstName = model.firstName;
-                    //patient1.middleName = model.middleName;
-                    //patient1.lastName = model.lastName;
-                    //patient1.phoneNumber = model.phoneNumber;
-                    //patient1.sex = model.sex;
-                    //patient1.city = model.city;
-                    //patient1.country = model.country;
-                    //patient1.state = model.state;
-                    //patient1.zipcode = model.zipcode;
-                    //patient1.streetAddress = model.streetAddress;
+                    patient1.age = model.age;
+                    patient1.enrollDate = DateTime.Today;
+                    patient1.firstName = model.firstName;
+                    patient1.middleName = model.middleName;
+                    patient1.lastName = model.lastName;
+                    patient1.phoneNumber = model.phoneNumber;
+                    patient1.sex = model.sex;
+                    patient1.city = model.city;
+                    patient1.country = model.country;
+                    patient1.state = model.state;
+                    patient1.zipcode = model.zipcode;
+                    patient1.streetAddress = model.streetAddress;
                     db.patients.Add(patient1);
 
                     Diagnosis diagnosis = new Diagnosis();
-                    //diagnosis.category = model.Category;
+                    diagnosis.category = model.diagnosis;
                     Intervention intervention = new Intervention();
                     diagnosis.InterventionId = intervention.InterventionId;
 
@@ -195,22 +195,43 @@ namespace Formatics.Controllers
                         case "Acute Pain":
                         intervention.category = "Acute Pain Control";
                             intervention.duration = 180;
-                            intervention.startDate = DateTime.Today;
-                            intervention.endDate = intervention.startDate.AddDays(intervention.duration);//try catch?
+                            intervention.startDate = patient1.enrollDate;
+                            try
+                            {
+                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            }
+                            catch
+                            {
+                                intervention.endDate = null;
+                            }
                             intervention.expectedOutcome = "Improve";
                         break;
                         case "Respiration Alteration":
                         intervention.category = "Breathing Excercises";
                             intervention.duration = 90;
-                            intervention.startDate = DateTime.Today;
-                            intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            intervention.startDate = patient1.enrollDate;
+                            try
+                            {
+                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            }
+                            catch
+                            {
+                                intervention.endDate = null;
+                            }
                             intervention.expectedOutcome = "Improve";
                             break;
                         case "Sleep Pattern Disturbance":
                             intervention.category = "Sleep Patten Control";
                             intervention.duration = 21;
-                            intervention.startDate = DateTime.Today;
-                            intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            intervention.startDate = patient1.enrollDate;
+                            try
+                            {
+                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            }
+                            catch
+                            {
+                                intervention.endDate = null;
+                            }
                             intervention.expectedOutcome = "Improve";
                             break;
 
@@ -219,7 +240,14 @@ namespace Formatics.Controllers
                             intervention.category = "Nausea Care";
                             intervention.duration = 30;
                             intervention.startDate = DateTime.Today;
-                            intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            try
+                            {
+                                intervention.endDate = intervention.startDate.AddDays(intervention.duration);
+                            }
+                            catch
+                            {
+                                intervention.endDate = null;
+                            }
                             intervention.expectedOutcome = "Improve";
                             break;
 

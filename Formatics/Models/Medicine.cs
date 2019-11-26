@@ -25,7 +25,8 @@ namespace Formatics.Models
         [Display(Name = "Symptoms")]
         public List<string> symptoms { get; set; }
 
-      
+        [Display(Name = "Is Current")]
+        public bool isCurrent { get; set; }
 
     }
 }

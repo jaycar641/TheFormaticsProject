@@ -19,6 +19,7 @@ namespace Formatics.Controllers
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
             Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+           
             List<Steps> steps = new List<Steps>();
             List<Medicine> medicines = new List<Medicine>();
             List<StepMedicine> stepMedicines = new List<StepMedicine>();
@@ -29,10 +30,10 @@ namespace Formatics.Controllers
                 steps.Add(step);
             
             }
-            foreach (Steps steps1 in db.steps.Where(e=>e.InterventionId == intervention.InterventionId))//looping through a list of steps tht only match patients intervention id
+            foreach (Steps steps1 in db.steps.Where(e=>e.InterventionId == intervention.InterventionId).ToList())//looping through a list of steps tht only match patients intervention id
             {
-                StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                Medicine medicine = db.medicine.Where(e => e.MedicineId == stepMedicine.MedicineId).SingleOrDefault();
+                StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault(); //finds all the days with medicines
+                Medicine medicine = db.medicine.Where(e => e.MedicineId == stepMedicine.MedicineId).SingleOrDefault();//finds the medicine for that day
                 medicines.Add(medicine);
                 stepMedicines.Add(stepMedicine);
              

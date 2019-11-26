@@ -104,3 +104,4 @@ C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.dll
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.pdb
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.init.resources
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.csproj.GenerateResource.cache
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.second.resources
