@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Formatics.Models.Feedback>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StepId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PatientNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.comments)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StepId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PatientNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rating)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.comments)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.FeedbackId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.FeedbackId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.FeedbackId })
+        </td>
+    </tr>
+}
+
+</table>
