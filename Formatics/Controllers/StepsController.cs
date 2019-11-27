@@ -247,7 +247,7 @@ namespace Formatics.Controllers
                 Steps steps = new Steps();
                 PatientStep patientStep = new PatientStep();
                 patientStep.StepId = steps.StepId;
-                
+                patientStep.Date = intervention.startDate.AddDays(i);
                 steps.InterventionId = interventionId;
                 steps.day = i + 1;
                 steps.description = null;
@@ -263,9 +263,8 @@ namespace Formatics.Controllers
             foreach (PatientStep patientStep in db.patientSteps.ToList())
             {
                 patientStep.PatientNumber = patient1.PatientNumber;
-
             }
-
+            db.SaveChanges();
         }
         public ActionResult Index()
         {

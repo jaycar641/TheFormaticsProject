@@ -179,9 +179,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201911262150540_start.cs" />
-    <Compile Include="Migrations\201911262150540_start.Designer.cs">
-      <DependentUpon>201911262150540_start.cs</DependentUpon>
+    <Compile Include="Migrations\201911271652574_feedback.cs" />
+    <Compile Include="Migrations\201911271652574_feedback.Designer.cs">
+      <DependentUpon>201911271652574_feedback.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -265,7 +265,7 @@
     <Content Include="Views\Patient\Edit.cshtml" />
     <Content Include="Views\Intervention\Index.cshtml" />
     <Content Include="Views\FrontEnd\FeedbackReview.cshtml" />
-    <Content Include="Views\FrontEnd\_SubmitFeedback.cshtml" />
+    <Content Include="Views\FrontEnd\_SubmitMood.cshtml" />
     <Content Include="Views\FrontEnd\_Personalization.cshtml" />
     <Content Include="Views\FrontEnd\_Resources.cshtml" />
     <Content Include="Views\FrontEnd\_Alerts.cshtml" />
@@ -276,6 +276,8 @@
     <Content Include="Views\FrontEnd\Schedule.cshtml" />
     <Content Include="Views\Steps\Index.cshtml" />
     <Content Include="Views\Medicine\_detailsMedicine.cshtml" />
+    <Content Include="Views\FrontEnd\_SubmitCondition.cshtml" />
+    <Content Include="Views\FrontEnd\_MedicalHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -295,8 +297,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201911262150540_start.resx">
-      <DependentUpon>201911262150540_start.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911271652574_feedback.resx">
+      <DependentUpon>201911271652574_feedback.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

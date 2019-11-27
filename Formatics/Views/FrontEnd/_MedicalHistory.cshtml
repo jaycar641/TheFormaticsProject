@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Formatics.Models.PatientDiagnosis>
+
+<h2>Medical History</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DiagnosisId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PatientNumber)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DiagnosisId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PatientNumber)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PatientDiagnosisId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PatientDiagnosisId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PatientDiagnosisId })
+        </td>
+    </tr>
+}
+
+</table>

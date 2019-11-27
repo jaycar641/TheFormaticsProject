@@ -20,7 +20,8 @@ namespace Formatics.Models
         public int PatientNumber { get; set; }
         public Patient Patient { get; set; }
 
-
+        [Display(Name = "Type")]
+        public string type { get; set; }
 
         [Display(Name = "Rating")]
         public int rating { get; set; } //1-10 daily, weekly month according to plan
