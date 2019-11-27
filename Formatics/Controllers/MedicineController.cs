@@ -1,4 +1,5 @@
 ﻿using Formatics.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,14 @@ namespace Formatics.Controllers
         // GET: Medicine
         ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(int patientNumber) //Standalone Medication page a list of medications
+        public ActionResult Index() //Standalone Medication page a list of medications
         {
-
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber).SingleOrDefault(); //only one
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault(); //only one
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+            Patient patient1 = db.patients.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
            
             List<Steps> steps = new List<Steps>();
             List<Medicine> medicines = new List<Medicine>();

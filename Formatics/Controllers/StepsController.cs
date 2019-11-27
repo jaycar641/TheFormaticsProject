@@ -15,8 +15,9 @@ namespace Formatics.Controllers
         // GET: Steps
 
         ApplicationDbContext db = new ApplicationDbContext();
+       
 
-       public void LoadAllAlerts(int interventionId)
+        public void LoadAllAlerts(int interventionId)
         {
             db.stepMedicines.ToList();
         }
@@ -32,7 +33,16 @@ namespace Formatics.Controllers
                 case "Acute Pain":
                     IList<PatientStep> stepList = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
                     List<Steps> steps = new List<Steps>();
-              
+                    Medicine medicine = new Medicine();
+                    List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
+                    List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
+                    medicine.drugClass = "Pain Releif";
+                    medicine.ingredients = ingredients;
+                    medicine.name = "Tylenol";
+                    medicine.symptoms = symptoms; //change medicine symptom property to Ilist symptoms
+                    medicine.isCurrent = true;
+                    db.medicine.Add(medicine);
+
                     foreach (PatientStep patientStep in stepList)//finding all steps in db that match patient steps
                     {
                         Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
@@ -59,24 +69,18 @@ namespace Formatics.Controllers
                             db.alerts.Add(alert);
                             db.stepProcedures.Add(stepProcedure);
                             db.procedures.Add(procedure);
+                            db.SaveChanges();
+
 
                         }
                         else //Everyday
                         {
-                            List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
-                            List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
-
+                     
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             step2.description = "Stretch daily so that your back pain can be minimized";
-                            Medicine medicine = new Medicine();
                             StepMedicine stepMedicine = new StepMedicine();
                             stepMedicine.StepId = step2.StepId;
                             stepMedicine.MedicineId = medicine.MedicineId;
-                            medicine.drugClass = "Pain Releif";
-                            medicine.ingredients = null;
-                            medicine.name = "Tylenol";
-                            medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
-                            medicine.isCurrent = true;
                             Alert alert = new Alert();
                             alert.time = DateTime.Now;
                             alert.type = "Medication";
@@ -84,7 +88,8 @@ namespace Formatics.Controllers
                             alert.description = "Take your medication";
                             db.alerts.Add(alert);
                             db.stepMedicines.Add(stepMedicine);
-                            db.medicine.Add(medicine);
+                            db.SaveChanges();
+
 
                         }
                         db.SaveChanges();
@@ -95,7 +100,16 @@ namespace Formatics.Controllers
                 case "Respiration Alteration":
                     IList<PatientStep> stepList2 = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
                     IList<Steps> steps2 = new List<Steps>();
-               
+                    List<string> ingredients1 = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
+                    List<string> symptoms1 = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
+
+                    Medicine medicine1 = new Medicine();
+                    medicine1.drugClass = "Breathing Medication";
+                    medicine1.ingredients = ingredients1;
+                    medicine1.name = "Xopenex";
+                    medicine1.symptoms = symptoms1; //change medicine symptom property to Ilist symptoms
+                    medicine1.isCurrent = true;
+                    db.medicine.Add(medicine1);
 
                     foreach (PatientStep patientStep in stepList2)//finding all steps in db that match patient steps
                     {
@@ -106,18 +120,11 @@ namespace Formatics.Controllers
                     {
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             step2.description = "Breathing Excercises";
-                        List<string> ingredients = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
-                        List<string> symptoms = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
-
-                        Medicine medicine = new Medicine();
+                  
                         StepMedicine stepMedicine = new StepMedicine();
                         stepMedicine.StepId = step2.StepId;
-                        stepMedicine.MedicineId = medicine.MedicineId;
-                        medicine.drugClass = "Breathing Medication";
-                        medicine.ingredients = null;
-                        medicine.name = "Xopenex";
-                        medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
-                        medicine.isCurrent = true;
+                        stepMedicine.MedicineId = medicine1.MedicineId;
+                       
                         Alert alert = new Alert();
                         alert.time = DateTime.Now;
                         alert.type = "Medication";
@@ -125,8 +132,6 @@ namespace Formatics.Controllers
                         alert.description = "Take your Medication!";
                         db.alerts.Add(alert);
                         db.stepMedicines.Add(stepMedicine);
-                        db.medicine.Add(medicine);
-
                         db.SaveChanges();
 
                     }
@@ -135,6 +140,17 @@ namespace Formatics.Controllers
                 case "Sleep Pattern Disturbance":
                     IList<PatientStep> stepList3 = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
                     List<Steps> steps3 = new List<Steps>();
+                    Medicine medicine2 = new Medicine();
+
+                    List<string> ingredients2 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
+                    List<string> symptoms2 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
+
+                    medicine2.drugClass = "Sleep Medication";
+                    medicine2.ingredients = ingredients2;
+                    medicine2.name = "Lunesta";
+                    medicine2.symptoms = symptoms2; //change medicine symptom property to Ilist symptoms
+                    medicine2.isCurrent = true;
+                    db.medicine.Add(medicine2);
 
                     foreach (PatientStep patientStep in stepList3)//finding all steps in db that match patient steps
                     {
@@ -153,21 +169,13 @@ namespace Formatics.Controllers
                         else //Everyday
                         {
 
-                            List<string> ingredients = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
-                            List<string> symptoms = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
-
                             Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
                             step2.description = "Remember to go to sleep at 10pm";
                     
-                            Medicine medicine = new Medicine();
                             StepMedicine stepMedicine = new StepMedicine();
                             stepMedicine.StepId = step2.StepId;
-                            stepMedicine.MedicineId = medicine.MedicineId;
-                            medicine.drugClass = "Sleep Medication";
-                            medicine.ingredients = null;
-                            medicine.name = "Lunesta";
-                            medicine.symptoms = null; //change medicine symptom property to Ilist symptoms
-                            medicine.isCurrent = true;
+                            stepMedicine.MedicineId = medicine2.MedicineId;
+                          
                             Alert alert = new Alert();
                             alert.time = DateTime.Now;
                             alert.type = "Medication";
@@ -175,7 +183,8 @@ namespace Formatics.Controllers
                             alert.description = "Take your Medication!";
                             db.alerts.Add(alert);
                             db.stepMedicines.Add(stepMedicine);
-                            db.medicine.Add(medicine);
+                            db.SaveChanges();
+
 
                         }
                         db.SaveChanges();
@@ -183,6 +192,42 @@ namespace Formatics.Controllers
                     }
                     break;
                 default:
+                    IList<PatientStep> stepList4 = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+                    List<Steps> steps4 = new List<Steps>();
+                    List<string> ingredients3 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
+                    List<string> symptoms3 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
+                    Medicine medicine3 = new Medicine();
+                    medicine3.drugClass = "Sleep Medication";
+                    medicine3.ingredients = ingredients3;
+                    medicine3.name = "Lunesta";
+                    medicine3.symptoms = ingredients3; //change medicine symptom property to Ilist symptoms
+                    medicine3.isCurrent = true;
+                    db.medicine.Add(medicine3);
+
+                    foreach (PatientStep patientStep in stepList4)//finding all steps in db that match patient steps
+                    {
+                        Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
+                        steps4.Add(step);
+                    }
+                    foreach (Steps steps1 in steps4)//just saturday
+                    {
+                            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                            step2.description = "Remember to Drink a lot of water";
+
+                            StepMedicine stepMedicine = new StepMedicine();
+                            stepMedicine.StepId = step2.StepId;
+                            stepMedicine.MedicineId = medicine3.MedicineId;
+                         
+                            Alert alert = new Alert();
+                            alert.time = DateTime.Now;
+                            alert.type = "Medication";
+                            alert.frequency = 1;
+                            alert.description = "Take your Medication!";
+                            db.alerts.Add(alert);
+                            db.stepMedicines.Add(stepMedicine);
+                            db.SaveChanges();
+                        
+                    }
 
                     break;
 
@@ -200,17 +245,27 @@ namespace Formatics.Controllers
             for (int i = 0; i <= duration - 1; i++)
             {
                 Steps steps = new Steps();
+                PatientStep patientStep = new PatientStep();
+                patientStep.StepId = steps.StepId;
+                
                 steps.InterventionId = interventionId;
                 steps.day = i + 1;
                 steps.description = null;
-         ;
+         
                 steps.Date = intervention.startDate.AddDays(i);
                 db.steps.Add(steps);
-             
+                db.patientSteps.Add(patientStep);
              }
+
+           
             db.SaveChanges();
 
-          
+            foreach (PatientStep patientStep in db.patientSteps.ToList())
+            {
+                patientStep.PatientNumber = patient1.PatientNumber;
+
+            }
+
         }
         public ActionResult Index()
         {

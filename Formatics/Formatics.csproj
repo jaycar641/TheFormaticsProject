@@ -275,6 +275,7 @@
     <Content Include="Views\FrontEnd\_Diagnosis.cshtml" />
     <Content Include="Views\FrontEnd\Schedule.cshtml" />
     <Content Include="Views\Steps\Index.cshtml" />
+    <Content Include="Views\Medicine\_detailsMedicine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
