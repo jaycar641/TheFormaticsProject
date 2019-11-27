@@ -275,7 +275,7 @@
     <Content Include="Views\FrontEnd\_Diagnosis.cshtml" />
     <Content Include="Views\FrontEnd\Schedule.cshtml" />
     <Content Include="Views\Steps\Index.cshtml" />
-    <Content Include="Views\Medicine\_detailsMedicine.cshtml" />
+    <Content Include="Views\FrontEnd\_detailsMedicine.cshtml" />
     <Content Include="Views\FrontEnd\_SubmitCondition.cshtml" />
     <Content Include="Views\FrontEnd\_MedicalHistory.cshtml" />
   </ItemGroup>

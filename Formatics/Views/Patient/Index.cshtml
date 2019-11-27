@@ -129,20 +129,34 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 
-@*<div hidden>
+    <div id="LoadAlerts" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 0})'>
+
             @Html.Partial("~/Views/FrontEnd/_Alerts.cshtml")
-    <button>View All</button>
+
+    <button data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})' >View All</button>
     </div>
 
-    <div hidden>
+    @*<div>
         @Html.Partial("~/Views/FrontEnd/_TreatmentGlimpse.cshtml")
         <button>View</button>
     </div>
 
-    <div hidden>
+    <div>
         @Html.Partial("~/Views/FrontEnd/_Resources.cshtml")
     </div>*@
-@*<div hidden>
+@*<div>
     @Html.Partial("~/Views/FrontEnd/_Personalization.cshtml")
 </div>*@
 
+<script>
+    $(document).ready( function (){
+
+      $('#AlertView').show();
+      $('#TreatementGlimpseView').show();
+      $('#ResourcesView').show();
+      $('#PersonalizationView').show();
+
+
+    });
+
+</script>

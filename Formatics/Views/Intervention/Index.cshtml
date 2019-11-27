@@ -57,18 +57,36 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 
-@*<div hidden>
+@*<div>
    @Html.Partial("~/Views/FrontEnd/Schedule.cshtml");
          <button>Request Appointment</button>//Date picker pops up
 </div>
-<div hidden>
+<div>
     @Html.Partial("~/Views/FrontEnd/_Diagnosis.cshtml");
 </div>
 
-<div hidden>
-    @Html.Partial("~/Views/FrontEnd/_SubmitFeedback.cshtml");\
+<div>
+    @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml");\
 </div>
 
-<div hidden>
+    <div>
+    @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml");\
+</div>
+
+<div>
     @Html.Partial("~/Views/FrontEnd/_DailyPlanner.cshtml");
 </div>*@
+
+<script>
+    $(document).ready( function (){
+
+      $('#SubmitMoodView').show();
+      $('#SubmitConditionView').show();
+      $('#DailyPlannerView').show();
+      $('#DiagnosisView').show();
+      $('#ScheduleView').show();
+
+
+    });
+
+</script>

@@ -3,6 +3,8 @@
 
 @using (Html.BeginForm()) 
 {
+    <div id="SubmitMoodView">
+
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
@@ -48,6 +50,8 @@
             </div>
         </div>
     </div>
+
+</div>
 }
 
 

@@ -38,8 +38,8 @@
                     <button>Order Perscription</button>
                     <button>Details</button>
                 </td>*@
-            @*<td hidden>
-                    @Html.Partial("~/Views/Medicine/_detailsMedicine.cshtml")
+            @*<td>
+                    @Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml")
                 </td>*@
         </tr>
     }
@@ -48,4 +48,17 @@
 
 @*<button>Medical History</button>*@*@
 @*@Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml")
-    </p>
+    </p>*@
+
+<script>
+    $(document).ready( function (){
+
+      $('#DetailsMedicineView').show();
+      $('#MedicalHistoryView').show();
+
+
+
+    });
+
+</script>
+    
