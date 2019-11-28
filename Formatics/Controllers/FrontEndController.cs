@@ -120,26 +120,7 @@ namespace Formatics.Controllers
             return PartialView();
         }
 
-        public ActionResult Alerts(int amount)
-        {
-            List<Alert> alerts = db.alerts.ToList();
-
-            if (amount == 1) //view all
-            {
-                return PartialView("_Alerts", alerts);
-
-            }
-            else //view 5
-            {
-                List<Alert> shortList = new List<Alert>();
-                for(int i = 0; i <= 4; i++)
-                {
-                    shortList.Add(alerts[i]);
-                }
-                return PartialView("_Alerts", shortList);
-
-            }
-        }
+       
 
         public ActionResult TreatmentGlimpse()
         {
