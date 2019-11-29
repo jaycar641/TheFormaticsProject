@@ -1,64 +1,59 @@
-﻿@model IEnumerable<Formatics.Models.Medicine>
-
+﻿
 @{
     ViewBag.Title = "Index";
+    var list = ViewData["Medicines"] as List<Formatics.Models.Medicine>;
 }
 
 <h2>Medicine</h2>>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
+
+
+    @foreach (var item in list)
+    {
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.drugClass)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th></th>
+        <td>
+            @Html.DisplayFor(modelItem => item.drugClass)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ingredients)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isCurrent)                                        
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            <button data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Details</button>
+        </td>
+    </tr>
+    <tr>
+        @Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)
+
     </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.drugClass)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.MedicineId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.MedicineId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.MedicineId })
-            </td>
-            @*<td>
-                    <button>Order Perscription</button>
-                    <button>Details</button>
-                </td>*@
-            @*<td>
-                    @Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml")
-                </td>*@
-        </tr>
     }
-
 </table>
+<button id= "Medicine" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
+<button id = "Order" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Order Perscription</button>
+
 
 @*<button>Medical History</button>*@*
 @*@Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml")
     </p>*@
 
 <script>
-    $(document).ready( function (){
+    $(document).ready(function () {
+        $('#Medicine').click(function () {
 
-      $('#DetailsMedicineView').show();
-      $('#MedicalHistoryView').show();
+        });
 
+          $('#Order').click(function () {
 
+        });
 
     });
 
 </script>
-    

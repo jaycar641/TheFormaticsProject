@@ -20,8 +20,28 @@ namespace Formatics.Controllers
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault(); //only one
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
+            Steps step = db.steps.Where(e => e.StepId == 273).SingleOrDefault();
+            Feedback mood = new Feedback();
+            mood.type = "Mood";
+            mood.PatientNumber = patient.PatientNumber;
+            mood.StepId = step.StepId;
+            db.SaveChanges();
+            Feedback condition = new Feedback();
+            condition.type = "Condition";
+            condition.PatientNumber = patient.PatientNumber;
+            condition.StepId = step.StepId;
+            db.SaveChanges();
+            // ViewData["Steps"] =
+            // ViewData["StepsMedicine"] =
+            // ViewData["StepsProcedure"] =
+            // ViewData["Procedure"] =
+            // ViewData["Medicine"] =
 
-            return View(intervention);
+            ViewData["Diagnosis"] = diagnosis;
+            ViewData["Submit Mood"] = mood;
+            ViewData["Submit Condition"] = condition;
+            ViewData["Daily Planner"] = step;
+            return View();
         }
 
         // GET: Intervention/Details/5

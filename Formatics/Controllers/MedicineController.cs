@@ -40,9 +40,11 @@ namespace Formatics.Controllers
                 stepMedicines.Add(stepMedicine);
              
             }
+            ViewData["Medicines"] = medicines;
+            ViewData["Patient"] = patient; //temporary
 
-            
-              return View(medicines);
+
+            return View();
         }
 
         // GET: Medicine/Details/5

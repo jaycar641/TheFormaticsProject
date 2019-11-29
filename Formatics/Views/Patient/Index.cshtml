@@ -3,8 +3,14 @@
     ViewBag.Title = "Index";
     var list = ViewData["AlertData"] as List<Formatics.Models.Alert>;
     var resources = ViewData["Resources"] as List<string>;
+    var patient = ViewData["Patient"] as Formatics.Models.Patient;
+
 
 }
+
+@Html.ActionLink("Edit Profile", "Edit", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+@Html.ActionLink("View Profile", "Details", new {PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+
 
 <h2>Dashboard</h2>
 <dl class="dl-horizontal">
@@ -12,29 +18,27 @@
 </dl>
 <br />
 <br />
+@Html.Display("Date")
 <div>
-    <h4>Patient</h4>
     <hr />
-    <dl class="dl-horizontal">
-        @Html.Display("Patient")
-    </dl>
-    <dl class="dl-horizontal">
+    <h4>Treatment Plan</h4>
+    <dl id="GlimpsePage" class="dl-horizontal">
         @Html.Display("Glimpse")
     </dl>
-
-
+    <button id="TreatementPlan" ='@Url.Action("Index", "Intervention")'>View</button>
 
 
 </div>
 
-<table class="table">
+<h4>Alerts</h4>
+<table id="AlertTable" class="table">
 
 
     @foreach (var item in list)
     {
         <tr>
             <td>
-                @Html.Display(item.type)
+                @Html.DisplayFor(modelItem => item.type)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.description)
@@ -47,9 +51,11 @@
 
         </tr>
     }
-    <button data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
 
 </table>
+<button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
+
+<h4>Resources</h4>
 
 <table class="table">
 
@@ -58,7 +64,7 @@
     {
         <tr>
             <td>
-                @Html.Display(item)
+                @Html.DisplayFor(modelItem => item)
             </td>
         </tr>
     }
@@ -68,32 +74,19 @@
 
 
 
-@*<div id="LoadAlerts" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 0})'>
 
-            @Html.Partial("~/Views/FrontEnd/_Alerts.cshtml")
 
-    </div>*@
 
-@*<div>
-        @Html.Partial("~/Views/FrontEnd/_TreatmentGlimpse.cshtml")
-        <button>View</button>
-    </div>
-
-    <div>
-        @Html.Partial("~/Views/FrontEnd/_Resources.cshtml")
-    </div>*@
-@*<div>
-        @Html.Partial("~/Views/FrontEnd/_Personalization.cshtml")
-    </div>*@
 
 <script>
     $(document).ready(function () {
+        $('#TreatmentPlan').click(function () {
 
-        $('#AlertView').show();
-        $('#TreatementGlimpseView').show();
-        $('#ResourcesView').show();
-        $('#PersonalizationView').show();
+        });
 
+        $('#Alert').click(function () {
+
+        });
 
     });
 

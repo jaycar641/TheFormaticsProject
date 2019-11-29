@@ -16,26 +16,43 @@ namespace Formatics.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         public List<string> LoadResources()
         {
-            List<string> resources = new List<string>();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+
+            List<string> resources = new List<string>();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
+            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
+            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
 
             switch(diagnosis.category)
             {
                 case "Acute Pain":
-                    resources.Add("Acute link1", "Acute link2", "Acute link3", "Acute link4");
+                    resources.Add("Acute link1");
+                    resources.Add("Acute link2");
+                    resources.Add("Acute link3");
+                    resources.Add("Acute link4");
+
                     break;
                 case "Respiration Alteration":
-                    resources.Add("Respiration link1", "Respiration link2", "Respiration link3", "Respiration link4");
+                    resources.Add("Respiration link1");
+                    resources.Add("Respiration link2");
+                    resources.Add("Respiration link3");
+                    resources.Add("Respiration link4");
+
                     break;
                 case "Sleep Pattern Disturbance":
-                    resources.Add("Sleep link1", "Sleep link2", "Sleep link3", "Sleep link4");
+                    resources.Add("Sleep link1");
+                    resources.Add("Sleep link2");
+                    resources.Add("Sleep link3");
+                    resources.Add("Sleep link4");
+
                     break;
-                defaul:
-                    resources.Add("Nausea link1", "Nausea link2", "Nausea link3", "Nausea link4");
+                default:
+                    resources.Add("Nausea link1");
+                    resources.Add("Nausea link2");
+                    resources.Add("Nausea link3");
+                    resources.Add("Nausea link4");
+
                     break;
 
             }
@@ -45,7 +62,8 @@ namespace Formatics.Controllers
 
         public string LoadPersonalization()
         {
-            string personalization = new string();
+
+            string personalization = "";
             Random random = new Random();
           int test =  random.Next(0, 5);
             switch(test)
@@ -66,12 +84,14 @@ namespace Formatics.Controllers
                 case 4:
                     personalization = "Focus on your goal and eventually you will accomplish it!";
                     break;
-                case 5;
+                case 5:
                     personalization = "Beleive in yourself!";
                     break;
+                default:
+                    break;
 
-                    return personalization;
             }
+            return personalization;
 
 
         }
@@ -81,27 +101,30 @@ namespace Formatics.Controllers
         //}
         public ActionResult Index()//Patient Dashboard
         {
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
 
-            string userId = User.Identity.GetUserId();
-            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            
             DateTime currentDate = DateTime.Today;
 
             List<Alert> alerts = db.alerts.ToList();
             IList<Alert> shortList = new List<Alert>();
-                for (int i = 0; i <= 4; i++)
+                for (int i = 1; i <= 5; i++)
                 {
                     shortList.Add(alerts[i]);
                 }
-            Steps steps = db.steps.Where(e => e.Date == DateTime.Today && e.InterventionId == intervention.InterventionId).SingleOrDefault();
-
-            ViewData["Patient"] = patient;
+            Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
+            int number = patient.PatientNumber;
+            ViewData["AlertData"] = shortList;
             ViewData["Glimpse"] = steps;
             ViewData["Resources"] = LoadResources();
             ViewData["Personalization"] = LoadPersonalization();
-
+            ViewData["Date"] = DateTime.Today.Day;
+            ViewData["Patient"] = patient; //temporary
+            ViewData["PatientNumber"] = number;
 
             return View();
         }

@@ -1,5 +1,4 @@
-﻿@model Formatics.Models.Intervention
-
+﻿
 @{
     ViewBag.Title = "Index";
 }
@@ -10,82 +9,60 @@
     <h4>Intervention</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.category)
-        </dt>
+        @Html.Display("Diagnosis")
 
-        <dd>
-            @Html.DisplayFor(model => model.category)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.startDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.startDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.endDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.endDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.duration)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.duration)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.expectedOutcome)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.expectedOutcome)
-        </dd>
+        @Html.Display("Schedule")
+        <button id="RequestAppointment">Request Appointment</button>
+        @*//Date picker pops up*@
 
     </dl>
+    @Html.Display("Submit Condition")
+    <button id = "SubmitCondition">Submit</button>
+
+    @Html.Display("Submit Mood")
+    <button id ="SubmitMood">Submit</button>
+
+    @Html.Display("Daily Planner")
+
+
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.InterventionId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
 
 @*<div>
-   @Html.Partial("~/Views/FrontEnd/Schedule.cshtml");
-         <button>Request Appointment</button>//Date picker pops up
-</div>
-<div>
-    @Html.Partial("~/Views/FrontEnd/_Diagnosis.cshtml");
-</div>
-
-<div>
-    @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml");\
-</div>
+       @Html.Partial("~/Views/FrontEnd/Schedule.cshtml");
+             <button>Request Appointment</button>//Date picker pops up
+    </div>
+    <div>
+        @Html.Partial("~/Views/FrontEnd/_Diagnosis.cshtml");
+    </div>
 
     <div>
-    @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml");\
-</div>
+        @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml");\
+    </div>
 
-<div>
-    @Html.Partial("~/Views/FrontEnd/_DailyPlanner.cshtml");
-</div>*@
+        <div>
+        @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml");\
+    </div>
+
+    <div>
+        @Html.Partial("~/Views/FrontEnd/_DailyPlanner.cshtml");
+    </div>*@
 
 <script>
-    $(document).ready( function (){
+    $(document).ready(function () {
+          $('#SubmitMood').click(function () {
 
-      $('#SubmitMoodView').show();
-      $('#SubmitConditionView').show();
-      $('#DailyPlannerView').show();
-      $('#DiagnosisView').show();
-      $('#ScheduleView').show();
+        });
 
+          $('#SubmitCondition').click(function () {
+
+          });
+
+     $('#RequestAppointment').click(function () {
+
+        });
+
+            
 
     });
 

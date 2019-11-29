@@ -1,9 +1,9 @@
 ﻿@model Formatics.Models.Patient
 
 @{
+    var patient = ViewData["Patient"] as Formatics.Models.Patient;
     ViewBag.Title = "Details";
 }
-
 <h2>Patient Profile</h2>
 
 <div>
@@ -125,8 +125,21 @@
     </dl>
 </div>
 <p>
-    @*<button>Edit Profile</button>*@*@
-    @*@Html.Partial("_ProfilePicture")
-        <button>Update Picture</button>*@
+    <button id="EditProfile">Edit Contact Info</button>
+ 
+    @*@Html.Partial("_ProfilePicture")*@
+    <button id="UploadPicture">Update Picture</button>
 
-</p>
+    <script>
+        $(document).ready(function () {
+            $('#EditProfile').click(function () {
+
+
+            });
+
+            $('#UploadPicture').click(function () {
+
+            });
+
+        });
+        <script>
