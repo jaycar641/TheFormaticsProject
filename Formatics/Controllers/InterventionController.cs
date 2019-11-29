@@ -15,12 +15,14 @@ namespace Formatics.Controllers
 
         public ActionResult Index()//Treatment Plan Homepage
         {
+            DateTime currentDate = DateTime.Today;
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault(); //only one
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Steps step = db.steps.Where(e => e.StepId == 273).SingleOrDefault();
+            Steps step = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
+
             Feedback mood = new Feedback();
             mood.type = "Mood";
             mood.PatientNumber = patient.PatientNumber;

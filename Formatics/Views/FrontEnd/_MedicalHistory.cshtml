@@ -1,12 +1,18 @@
-﻿@model IEnumerable<Formatics.Models.PatientDiagnosis>
+﻿@model IEnumerable<Formatics.Models.Medicine>
 
-<table id="MedicalHistoryView" class="table" hidden>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DiagnosisId)
+            @Html.DisplayNameFor(model => model.drugClass)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PatientNumber)
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isCurrent)
         </th>
         <th></th>
     </tr>
@@ -14,15 +20,18 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.DiagnosisId)
+            @Html.DisplayFor(modelItem => item.drugClass)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PatientNumber)
+            @Html.DisplayFor(modelItem => item.name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PatientDiagnosisId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PatientDiagnosisId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PatientDiagnosisId })
+            @Html.DisplayFor(modelItem => item.isCurrent)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MedicineId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MedicineId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MedicineId })
         </td>
     </tr>
 }

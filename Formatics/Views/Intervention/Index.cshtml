@@ -12,14 +12,16 @@
         @Html.Display("Diagnosis")
 
         @Html.Display("Schedule")
+
+
         <button id="RequestAppointment">Request Appointment</button>
         @*//Date picker pops up*@
 
     </dl>
-    @Html.Display("Submit Condition")
+    @Html.Editor("Submit Condition")
     <button id = "SubmitCondition">Submit</button>
 
-    @Html.Display("Submit Mood")
+    @Html.Editor("Submit Mood")
     <button id ="SubmitMood">Submit</button>
 
     @Html.Display("Daily Planner")
@@ -50,11 +52,11 @@
 
 <script>
     $(document).ready(function () {
-          $('#SubmitMood').click(function () {
+          $('#SubmitMood').click(function () { //async
 
         });
 
-          $('#SubmitCondition').click(function () {
+          $('#SubmitCondition').click(function () { //async then hide edit
 
           });
 

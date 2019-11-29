@@ -23,28 +23,13 @@ namespace Formatics.Controllers
             Patient patient1 = db.patients.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
            
             List<Steps> steps = new List<Steps>();
-            List<Medicine> medicines = new List<Medicine>();
-            List<StepMedicine> stepMedicines = new List<StepMedicine>();
-
-            foreach (StepMedicine stepMedicine in db.stepMedicines.ToList())//finding all steps in db that match patient steps
-              {
-                Steps step = db.steps.Where(e => e.StepId == stepMedicine.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault(); //UNIQUE INTERVENTION ID BASED ON UNIQUE DIAGNOSIS
-                steps.Add(step);
-            
-            }
-            foreach (Steps steps1 in db.steps.Where(e=>e.InterventionId == intervention.InterventionId).ToList())//looping through a list of steps tht only match patients intervention id
-            {
-                StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault(); //finds all the days with medicines
-                Medicine medicine = db.medicine.Where(e => e.MedicineId == stepMedicine.MedicineId).SingleOrDefault();//finds the medicine for that day
-                medicines.Add(medicine);
-                stepMedicines.Add(stepMedicine);
-             
-            }
+            List<Medicine> medicines = db.medicine.ToList();
+     
             ViewData["Medicines"] = medicines;
-            ViewData["Patient"] = patient; //temporary
+            ViewData["Patient"] = patient; 
 
 
-            return View();
+            return View(medicines);
         }
 
         // GET: Medicine/Details/5

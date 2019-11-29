@@ -4,6 +4,34 @@
     var patient = ViewData["Patient"] as Formatics.Models.Patient;
     ViewBag.Title = "Details";
 }
+
+@if (Request.IsAuthenticated)
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Formatics", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Patient", new { PatientNumber = patient.PatientNumber })</li>
+                    <li>@Html.ActionLink("View Profile", "Details", new { PatientNumber = patient.PatientNumber })</li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+}
 <h2>Patient Profile</h2>
 
 <div>
@@ -124,22 +152,20 @@
 
     </dl>
 </div>
-<p>
-    <button id="EditProfile">Edit Contact Info</button>
- 
-    @*@Html.Partial("_ProfilePicture")*@
-    <button id="UploadPicture">Update Picture</button>
 
-    <script>
-        $(document).ready(function () {
-            $('#EditProfile').click(function () {
+@Html.ActionLink("Edit Profile", "Edit", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
 
-            });
+@*@Html.Partial("_ProfilePicture")*@
+<button id="UploadPicture">Update Picture</button>
 
-            $('#UploadPicture').click(function () {
+<script>
+    $(document).ready(function () {
+       
 
-            });
+        $('#UploadPicture').click(function () {
 
         });
-        <script>
+
+    });
+    <script>

@@ -1,32 +1,33 @@
 ﻿@model Formatics.Models.Medicine
+@{ 
+    var symptoms = ViewData["Symptoms"] as List<string>;
+    var ingredients = ViewData["Ingredients"] as List<string>;
 
-<div id="DetailsMedicineView">
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.drugClass)
-        </dt>
+}
+    <table id="DetailsMedicineView" hidden>
+        <hr />
 
-        <dd>
-            @Html.DisplayFor(model => model.drugClass)
-        </dd>
+        @foreach (var item in symptoms)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
+                </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
+            </tr>
+        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.isCurrent)
-        </dt>
+        @foreach (var item in ingredients)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item)
 
-        <dd>
-            @Html.DisplayFor(model => model.isCurrent)
-        </dd>
+                </td>
 
-    </dl>
-</div>
+            </tr>
+        }
+
+    </table>       
 

@@ -8,86 +8,115 @@
 
 }
 
-@Html.ActionLink("Edit Profile", "Edit", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
-@Html.ActionLink("View Profile", "Details", new {PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+@if (Request.IsAuthenticated)
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Formatics", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Patient", new { PatientNumber = patient.PatientNumber })</li>
+                    <li>@Html.ActionLink("View Profile", "Details", new { PatientNumber = patient.PatientNumber })</li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+}
 
 
-<h2>Dashboard</h2>
-<dl class="dl-horizontal">
-    @Html.Display("Personalization")
-</dl>
-<br />
-<br />
-@Html.Display("Date")
+    <h2>Dashboard</h2>
+    <dl class="dl-horizontal">
+        @Html.Display("Personalization")
+    </dl>
+    <br />
+    <br />
+    <h1>@Html.Display("Date")</h1>  
 <div>
     <hr />
-    <h4>Treatment Plan</h4>
+    <h3>Daily Planner</h3>
     <dl id="GlimpsePage" class="dl-horizontal">
+       <h5>Day </h5>
         @Html.Display("Glimpse")
     </dl>
-    <button id="TreatementPlan" ='@Url.Action("Index", "Intervention")'>View</button>
+    <h5> Description</h5>
+    <dl>
+        @Html.Display("Day")
+
+    </dl>
+    @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber}, new { @class = "btn btn-default" })
 
 
 </div>
 
-<h4>Alerts</h4>
-<table id="AlertTable" class="table">
+    <h4>Alerts</h4>
+    <table id="AlertTable" class="table">
 
 
-    @foreach (var item in list)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.time)
-            </td>
-            <td>
-            </td>
+        @foreach (var item in list)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.time)
+                </td>
+                <td>
+                </td>
 
-        </tr>
-    }
+            </tr>
+        }
 
-</table>
-<button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
+    </table>
+    <button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
 
-<h4>Resources</h4>
+    <h4>Resources</h4>
 
-<table class="table">
-
-
-    @foreach (var item in resources)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-        </tr>
-    }
-
-</table>
+    <table class="table">
 
 
+        @foreach (var item in resources)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item)
+                </td>
+            </tr>
+        }
 
+    </table>
 
 
 
 
 
-<script>
-    $(document).ready(function () {
-        $('#TreatmentPlan').click(function () {
+
+
+
+    <script>
+        $(document).ready(function () {
+          
+
+            $('#Alert').click(function () {
+
+            });
 
         });
 
-        $('#Alert').click(function () {
-
-        });
-
-    });
-
-</script>
+    </script>

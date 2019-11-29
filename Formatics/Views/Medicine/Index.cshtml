@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Index";
     var list = ViewData["Medicines"] as List<Formatics.Models.Medicine>;
+    
 }
 
 <h2>Medicine</h2>>
@@ -12,6 +13,7 @@
 
     @foreach (var item in list)
     {
+
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.drugClass)
@@ -20,37 +22,53 @@
             @Html.DisplayFor(modelItem => item.ingredients)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.isCurrent)                                        
+            @Html.DisplayFor(modelItem => item.isCurrent)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.name)
         </td>
         <td>
-            <button data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Details</button>
+            <button id "Details" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Details</button>
         </td>
+        @if (item.isCurrent == true)
+        {
+        <td>
+        <button id="Order" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1 })'>Order Perscription</button>
+         </td>
+        }
     </tr>
-    <tr>
-        @Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)
+        <tr>
+            <td>
+                @*@Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)*@
+            </td>
+        </tr>
 
-    </tr>
+        <tr>
+            <td>
+                @*@Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)*@
+            </td>
+        </tr>
+
 
     }
 </table>
-<button id= "Medicine" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
-<button id = "Order" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Order Perscription</button>
 
 
-@*<button>Medical History</button>*@*
-@*@Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml")
-    </p>*@
+    
 
 <script>
     $(document).ready(function () {
+
+        //DetailsMedicineView //on load the details div will load, yet will wait for details click
         $('#Medicine').click(function () {
 
         });
 
           $('#Order').click(function () {
+
+          });
+
+          $('#Details').click(function () {
 
         });
 
