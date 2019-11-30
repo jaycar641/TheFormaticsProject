@@ -167,6 +167,8 @@ namespace Formatics.Controllers
         public ActionResult Edit(int patientNumber) //Edit patient address and contact info
         {
             Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+
             return View(patient);
         }
 

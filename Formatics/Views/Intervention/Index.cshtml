@@ -1,8 +1,43 @@
 ﻿
 @{
     ViewBag.Title = "Index";
+        var patient = ViewData["Patient"] as Formatics.Models.Patient;
+        var steps = ViewData["Steps"] as List<Formatics.Models.Steps>;
+        var stepsMedicines = ViewData["StepsMedicine"] as List<Formatics.Models.StepMedicine>;
+        var stepsProcedures = ViewData["StepsProcedure"] as List<Formatics.Models.StepProcedure>;
+        var procedures = ViewData["Procedure"] as List<Formatics.Models.Procedure>;
+        var medicines = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
+
+
 }
 
+@if (Request.IsAuthenticated)
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Formatics", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Patient", new { PatientNumber = patient.PatientNumber })</li>
+                    <li>@Html.ActionLink("View Profile", "Details", new { PatientNumber = patient.PatientNumber })</li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+}
 <h2>Treatment Plan</h2>
 
 <div>
@@ -11,21 +46,110 @@
     <dl class="dl-horizontal">
         @Html.Display("Diagnosis")
 
+        <h4>Daily Planner</h4>
+        <dl id="GlimpsePage" class="dl-horizontal">
+            <h5>Day </h5>
+            @Html.Display("Glimpse")
+        </dl>
+        <h5> Description</h5>
+        <dl>
+            @Html.Display("Day")
+
+        </dl>
+
+
+
         @Html.Display("Schedule")
 
+        @for (int i = 1; i <= 7; i++)
+        {
+            <tr>
+                <br />
+                <th>
+                    Day
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => steps[i].day)
+                </td>
+                <th>
+                    Date
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => steps[i].Date)
+                </td>
+                <th>
+                    Description
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => steps[i].description)
+                </td>
+                @if (procedures.Count != 0)
+                {
 
+                    foreach (var item1 in stepsProcedures)
+                    {
+                        if (item1.StepId == steps[i].StepId)
+                        {
+                            foreach (var procedure in procedures)
+                            {
+                                if (procedure.ProcedureId == item1.ProcedureId)
+                                {
+                                    @Html.DisplayFor(modelItem => procedure.category)
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                <h5>Take </h5>
+                @foreach (var item2 in stepsMedicines)
+                {
+                    if (item2.StepId == steps[i].StepId)
+                    {
+                        foreach (var medicine in medicines)
+                        {
+                            if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                            {
+                                @Html.DisplayFor(modelItem => medicine.name)
+                                break;
+
+                            }
+
+                        }
+                    }
+                }
+                <br />
+
+            </tr>
+        }
         <button id="RequestAppointment">Request Appointment</button>
         @*//Date picker pops up*@
 
     </dl>
-    @Html.Editor("Submit Condition")
-    <button id = "SubmitCondition">Submit</button>
 
-    @Html.Editor("Submit Mood")
-    <button id ="SubmitMood">Submit</button>
+  
+    <br />
+    <br />
+    <div>
+        <h4>How do you feel about your condition today?</h4>
 
-    @Html.Display("Daily Planner")
+        <h5> Rating</h5>
+        @Html.Editor("ConditionRating")
+        <h5> Comment</h5>
+        @Html.Editor("ConditionComment")
+        <button id="SubmitCondition">Submit</button>
+    </div>
 
+    <div>
+        <h4>What is your overall mood today?</h4>
+
+        <h5> Rating</h5>
+        @Html.Editor("MoodRating")
+        <h5> Comment</h5>
+        @Html.Editor("MoodComment")
+        <button id="SubmitMood">Submit</button>
+    </div>
 
 </div>
 
@@ -52,19 +176,19 @@
 
 <script>
     $(document).ready(function () {
-          $('#SubmitMood').click(function () { //async
+        $('#SubmitMood').click(function () { //async
 
         });
 
-          $('#SubmitCondition').click(function () { //async then hide edit
-
-          });
-
-     $('#RequestAppointment').click(function () {
+        $('#SubmitCondition').click(function () { //async then hide edit
 
         });
 
-            
+        $('#RequestAppointment').click(function () {
+
+        });
+
+
 
     });
 

@@ -22,7 +22,12 @@ namespace Formatics.Controllers
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
             Steps step = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
-
+            List<Steps> steps = db.steps.Where(e => e.InterventionId == intervention.InterventionId && e.Date >= currentDate).ToList(); //all your steps
+            List<StepMedicine> stepMedicines = new List<StepMedicine>();
+            List<StepProcedure> stepProcedures = new List<StepProcedure>();
+            List<Procedure> procedures = new List<Procedure>();
+            List<Medicine> medicines = new List<Medicine>();
+            
             Feedback mood = new Feedback();
             mood.type = "Mood";
             mood.PatientNumber = patient.PatientNumber;
@@ -33,16 +38,71 @@ namespace Formatics.Controllers
             condition.PatientNumber = patient.PatientNumber;
             condition.StepId = step.StepId;
             db.SaveChanges();
-            // ViewData["Steps"] =
-            // ViewData["StepsMedicine"] =
-            // ViewData["StepsProcedure"] =
-            // ViewData["Procedure"] =
-            // ViewData["Medicine"] =
+            List<Medicine> medlist = db.medicine.ToList();
+            List<Procedure> prolist = db.procedures.ToList();
+            foreach(Steps steps1 in steps)
+            {
+                if (medlist.Count != 0)
+                {
+                    StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                    stepMedicines.Add(stepMedicine);
+                }
+            }
+            foreach (Steps steps1 in steps)
+            {
+                if (prolist.Count != 0)
+                {
+                    try
+                    {
+                        StepProcedure stepProcedure = db.stepProcedures.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                        stepProcedures.Add(stepProcedure);
+                    }
+                    catch
+                    {
+                        stepProcedures = stepProcedures;
+                    }
+                }
+            }
 
-            ViewData["Diagnosis"] = diagnosis;
-            ViewData["Submit Mood"] = mood;
-            ViewData["Submit Condition"] = condition;
-            ViewData["Daily Planner"] = step;
+            foreach (StepProcedure stepProcedure1 in stepProcedures)
+            {
+                if (prolist.Count != 0)
+                {
+                    try
+                    {
+                        Procedure procedure = db.procedures.Where(e => e.ProcedureId == stepProcedure1.ProcedureId).SingleOrDefault();
+                        procedures.Add(procedure);
+                    }
+                    catch
+                    {
+                        procedures = procedures;
+                    }
+                }
+            }
+
+            foreach (StepMedicine stepMedicine1 in stepMedicines)
+            {
+                if (medlist.Count != 0)
+                {
+                    Medicine medicine = db.medicine.Where(e => e.MedicineId == stepMedicine1.MedicineId).SingleOrDefault();
+                    medicines.Add(medicine);
+                }
+            }
+
+            ViewData["Steps"] = steps;
+            ViewData["StepsMedicine"] = stepMedicines;
+            ViewData["StepsProcedure"] = stepProcedures;
+            ViewData["Procedure"] = procedures;
+            ViewData["Medicine"] = medicines;
+            ViewData["Diagnosis"] = diagnosis.category;
+            ViewData["MoodRating"] = mood.rating;
+            ViewData["MoodComment"] = mood.comments;
+            ViewData["ConditionRating"] = condition.rating;
+            ViewData["ConditionComment"] = condition.comments;
+            ViewData["Glimpse"] = step.day;
+            ViewData["Day"] = step.description;
+            ViewData["Patient"] = patient; 
+
             return View();
         }
 
