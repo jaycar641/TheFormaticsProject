@@ -37,18 +37,18 @@
 }
 
 
-    <h2>Dashboard</h2>
-    <dl class="dl-horizontal">
-        @Html.Display("Personalization")
-    </dl>
-    <br />
-    <br />
-    <h1>@Html.Display("Date")</h1>  
+<h2>Dashboard</h2>
+<dl class="dl-horizontal">
+    @Html.Display("Personalization")
+</dl>
+<br />
+<br />
+<h1>@Html.Display("Date")</h1>
 <div>
     <hr />
     <h3>Daily Planner</h3>
     <dl id="GlimpsePage" class="dl-horizontal">
-       <h5>Day </h5>
+        <h5>Day </h5>
         @Html.Display("Glimpse")
     </dl>
     <h5> Description</h5>
@@ -56,67 +56,68 @@
         @Html.Display("Day")
 
     </dl>
-    @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber}, new { @class = "btn btn-default" })
+    @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
 
 </div>
+@Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
-    <h4>Alerts</h4>
-    <table id="AlertTable" class="table">
-
-
-        @foreach (var item in list)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.time)
-                </td>
-                <td>
-                </td>
-
-            </tr>
-        }
-
-    </table>
-    <button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
-
-    <h4>Resources</h4>
-
-    <table class="table">
+<h4>Alerts</h4>
+<table id="AlertTable" class="table">
 
 
-        @foreach (var item in resources)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item)
-                </td>
-            </tr>
-        }
+    @foreach (var item in list)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.time)
+            </td>
+            <td>
+            </td>
 
-    </table>
+        </tr>
+    }
+
+</table>
+<button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
+
+<h4>Resources</h4>
+
+<table class="table">
 
 
+    @foreach (var item in resources)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item)
+            </td>
+        </tr>
+    }
 
+</table>
 
 
 
 
 
-    <script>
-        $(document).ready(function () {
-          
 
-            $('#Alert').click(function () {
 
-            });
+
+<script>
+    $(document).ready(function () {
+
+
+        $('#Alert').click(function () {
 
         });
 
-    </script>
+    });
+
+</script>

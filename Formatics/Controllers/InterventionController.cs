@@ -27,16 +27,31 @@ namespace Formatics.Controllers
             List<StepProcedure> stepProcedures = new List<StepProcedure>();
             List<Procedure> procedures = new List<Procedure>();
             List<Medicine> medicines = new List<Medicine>();
+            List<int> ratings = new List<int>();
+            for(int i = 1; i <=10; i++)
+            {
+                ratings.Add(i);
+            }
+            Alert appointmentAlert = new Alert();
+            appointmentAlert.type = "Appointment";
+            appointmentAlert.frequency = 1;
+            appointmentAlert.time = DateTime.Today.Date;
+            db.alerts.Add(appointmentAlert);
+            db.SaveChanges();
             
+            ViewBag.Name = new SelectList(ratings, "rating", "FeedbackId");
+
             Feedback mood = new Feedback();
             mood.type = "Mood";
             mood.PatientNumber = patient.PatientNumber;
             mood.StepId = step.StepId;
+            db.feedbacks.Add(mood);
             db.SaveChanges();
             Feedback condition = new Feedback();
             condition.type = "Condition";
             condition.PatientNumber = patient.PatientNumber;
             condition.StepId = step.StepId;
+            db.feedbacks.Add(condition);
             db.SaveChanges();
             List<Medicine> medlist = db.medicine.ToList();
             List<Procedure> prolist = db.procedures.ToList();
@@ -95,21 +110,26 @@ namespace Formatics.Controllers
             ViewData["Procedure"] = procedures;
             ViewData["Medicine"] = medicines;
             ViewData["Diagnosis"] = diagnosis.category;
-            ViewData["MoodRating"] = mood.rating;
-            ViewData["MoodComment"] = mood.comments;
-            ViewData["ConditionRating"] = condition.rating;
-            ViewData["ConditionComment"] = condition.comments;
+            ViewData["Mood"] = mood;
+            ViewData["Condition"] = condition;
             ViewData["Glimpse"] = step.day;
             ViewData["Day"] = step.description;
-            ViewData["Patient"] = patient; 
+            ViewData["Patient"] = patient;
+            ViewData["Appointment"] = appointmentAlert;
+            ViewData["AppointmentTime"] = appointmentAlert.time;
+            ViewData["AppointmentType"] = appointmentAlert.type; 
 
             return View();
         }
 
         // GET: Intervention/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
-            return View();
+
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+            return RedirectToAction("Details", "Patient", new { PatientNumber = patient.PatientNumber });
         }
 
 
@@ -178,5 +198,16 @@ namespace Formatics.Controllers
                 return View();
             }
         }
+
+        public ActionResult Medication(int patientNumber)
+        {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+            return RedirectToAction("Index", "Medicine");
+
+        }
+
+        
     }
 }

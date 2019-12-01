@@ -1,9 +1,9 @@
 ﻿@model Formatics.Models.Feedback
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Mood", "FrontEnd", new { FeedbackId = Model.FeedbackId }, FormMethod.Post )) 
 {
-    <div id="SubmitMoodView" hidden>
+    <div id="SubmitMoodView">
 
     @Html.AntiForgeryToken()
     

@@ -199,7 +199,7 @@ namespace Formatics.Controllers
                     Medicine medicine3 = new Medicine();
                     medicine3.drugClass = "Sleep Medication";
                     medicine3.ingredients = ingredients3;
-                    medicine3.name = "Lunesta";
+                    medicine3.name = "";
                     medicine3.symptoms = ingredients3; //change medicine symptom property to Ilist symptoms
                     medicine3.isCurrent = true;
                     db.medicine.Add(medicine3);

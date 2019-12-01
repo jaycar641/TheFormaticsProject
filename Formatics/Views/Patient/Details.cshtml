@@ -154,6 +154,7 @@
 </div>
 
 @Html.ActionLink("Edit Profile", "Edit", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+@Html.ActionLink("Medical History", "MedicalHistory", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
 
 @*@Html.Partial("_ProfilePicture")*@
@@ -161,7 +162,7 @@
 
 <script>
     $(document).ready(function () {
-       
+
 
         $('#UploadPicture').click(function () {
 

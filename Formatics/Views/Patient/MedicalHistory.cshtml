@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Formatics.Models.Diagnosis>
+
+@{
+    ViewBag.Title = "MedicalHistory";
+    var medicine = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
+}
+
+<h2>MedicalHistory</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.InterventionId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.category)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dateDiagnosed)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.InterventionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dateDiagnosed)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.DiagnosisId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.DiagnosisId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.DiagnosisId })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml", medicine)

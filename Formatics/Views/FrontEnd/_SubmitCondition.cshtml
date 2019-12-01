@@ -1,9 +1,9 @@
 ﻿@model Formatics.Models.Feedback
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Condition", "FrontEnd", new { FeedbackId = Model.FeedbackId }, FormMethod.Post)) 
 {
-    <div id="SubmitConditionView" hidden>
+    <div id="SubmitConditionView">
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">

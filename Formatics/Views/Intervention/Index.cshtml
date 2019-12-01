@@ -1,15 +1,21 @@
 ﻿
 @{
     ViewBag.Title = "Index";
-        var patient = ViewData["Patient"] as Formatics.Models.Patient;
-        var steps = ViewData["Steps"] as List<Formatics.Models.Steps>;
-        var stepsMedicines = ViewData["StepsMedicine"] as List<Formatics.Models.StepMedicine>;
-        var stepsProcedures = ViewData["StepsProcedure"] as List<Formatics.Models.StepProcedure>;
-        var procedures = ViewData["Procedure"] as List<Formatics.Models.Procedure>;
-        var medicines = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
+    var patient = ViewData["Patient"] as Formatics.Models.Patient;
+    var steps = ViewData["Steps"] as List<Formatics.Models.Steps>;
+    var stepsMedicines = ViewData["StepsMedicine"] as List<Formatics.Models.StepMedicine>;
+    var stepsProcedures = ViewData["StepsProcedure"] as List<Formatics.Models.StepProcedure>;
+    var procedures = ViewData["Procedure"] as List<Formatics.Models.Procedure>;
+    var medicines = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
+    var appointment = ViewData["Appointment"] as Formatics.Models.Alert;
+    var condition = ViewData["Condition"] as Formatics.Models.Feedback;
+    var mood = ViewData["Mood"] as Formatics.Models.Feedback;
 
 
 }
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 @if (Request.IsAuthenticated)
 {
@@ -29,8 +35,8 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Dashboard", "Index", "Patient", new { PatientNumber = patient.PatientNumber })</li>
-                    <li>@Html.ActionLink("View Profile", "Details", new { PatientNumber = patient.PatientNumber })</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Patient")</li>
+                    <li>@Html.ActionLink("View Profile", "Details", "Patient", new { PatientNumber = patient.PatientNumber })</li>
 
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -45,6 +51,8 @@
     <hr />
     <dl class="dl-horizontal">
         @Html.Display("Diagnosis")
+
+        @Html.ActionLink("Medication", "Medication", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
         <h4>Daily Planner</h4>
         <dl id="GlimpsePage" class="dl-horizontal">
@@ -123,33 +131,46 @@
 
             </tr>
         }
-        <button id="RequestAppointment">Request Appointment</button>
+
+        <br />
+        <br />
+
+
+        <div id="dateAppoint" hidden>
+            <h3> Appointment</h3>
+            <br />
+            <h3>Time</h3>
+            @Html.Partial("~/Views/FrontEnd/_SetAppointment.cshtml", appointment)
+        </div>
+
+
+
+        <button id="Appoint">Appointment</button>
+
         @*//Date picker pops up*@
 
     </dl>
 
-  
-    <br />
-    <br />
-    <div>
-        <h4>How do you feel about your condition today?</h4>
 
-        <h5> Rating</h5>
-        @Html.Editor("ConditionRating")
-        <h5> Comment</h5>
-        @Html.Editor("ConditionComment")
+    <br />
+    <br />
+    <div id="review" hidden>
+        <div>
+            <h4>How do you feel about your condition today?</h4>
+            @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml", condition)
+        </div>
         <button id="SubmitCondition">Submit</button>
-    </div>
 
-    <div>
-        <h4>What is your overall mood today?</h4>
 
-        <h5> Rating</h5>
-        @Html.Editor("MoodRating")
-        <h5> Comment</h5>
-        @Html.Editor("MoodComment")
+        <div>
+            <h4>What is your overall mood today?</h4>
+            @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml", mood)
+
+        </div>
         <button id="SubmitMood">Submit</button>
     </div>
+
+    <button id="submitReview">Review</button>
 
 </div>
 
@@ -175,7 +196,17 @@
     </div>*@
 
 <script>
+
     $(document).ready(function () {
+
+        
+    
+      $(function () {
+          $("#input:text.date").datepicker({
+              dateFormat: "dd/mm/yy"
+          });      
+          });
+
         $('#SubmitMood').click(function () { //async
 
         });
@@ -184,7 +215,20 @@
 
         });
 
-        $('#RequestAppointment').click(function () {
+        $("#Appoint").click(function () {
+
+            $("#dateAppoint").show();
+            $("#Appoint").hide();
+
+
+        });
+
+        
+        $("#submitReview").click(function () {
+
+            $("#review").show();
+            $("#submitReview").hide();
+
 
         });
 
@@ -192,4 +236,7 @@
 
     });
 
+</script>
+<script>
+ 
 </script>

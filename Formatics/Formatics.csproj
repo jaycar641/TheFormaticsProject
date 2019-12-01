@@ -278,6 +278,9 @@
     <Content Include="Views\FrontEnd\_SubmitCondition.cshtml" />
     <Content Include="Views\FrontEnd\_MedicalHistory.cshtml" />
     <Content Include="Views\Patient\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\FrontEnd\_SetAppointment.cshtml" />
+    <Content Include="Views\Patient\MedicalHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

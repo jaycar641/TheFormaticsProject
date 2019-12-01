@@ -136,6 +136,8 @@ namespace Formatics.Controllers
         {
             Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
 
+
+
             ViewData["Patient"] = patient; //temporary
 
             return View(patient);
@@ -234,6 +236,29 @@ namespace Formatics.Controllers
             ViewData["Patient"] = patient; //temporary
             return RedirectToAction("Index", "Intervention");
 
+        }
+
+        public ActionResult Medication(int patientNumber)
+        {
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+            return RedirectToAction("Index", "Medication");
+
+        }
+
+
+        public ActionResult MedicalHistory(int patientNumber)
+        {
+
+
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+
+            List<Medicine> medicine = db.medicine.ToList();
+            ViewData["Medicine"] = medicine;
+            return View(diagnosis);  // pass diagnosis that is only connected to patient, use patient diagnosis list
         }
     }
 }

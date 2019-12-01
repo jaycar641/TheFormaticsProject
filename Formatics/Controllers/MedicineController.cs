@@ -32,9 +32,12 @@ namespace Formatics.Controllers
         }
 
         // GET: Medicine/Details/5
-        public ActionResult Details(int id) //Standalone Medicine Details page
+        public ActionResult Details() //Standalone Medicine Details page
         {
-            return View();
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            ViewData["Patient"] = patient; //temporary
+            return RedirectToAction("Details", "Patient", new { PatientNumber = patient.PatientNumber });
         }
 
         // GET: Medicine/Create
@@ -102,5 +105,7 @@ namespace Formatics.Controllers
                 return View();
             }
         }
+
+       
     }
 }

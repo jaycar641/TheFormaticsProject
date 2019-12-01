@@ -1,4 +1,5 @@
 ﻿using Formatics.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,11 +140,37 @@ namespace Formatics.Controllers
         //Treatment Plan
 
         // GET: 
-        public ActionResult FeedbackReview() //Feedback review paqge
+        [HttpPost]
+        public ActionResult Mood(int FeedbackId, Feedback feedback) //Feedback review paqge
         {
-            return View();
+            Feedback feedback1  = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
+            feedback1.comments = feedback.comments;
+            feedback1.rating = feedback.rating;
+            db.SaveChanges();
+                return View();
         }
 
+        [HttpPost]
+        public ActionResult Condition(int FeedbackId, Feedback feedback) //Feedback review paqge
+        {
+            Feedback feedback1 = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
+            feedback1.comments = feedback.comments;
+            feedback1.rating = feedback.rating;
+            db.SaveChanges();
+            return RedirectToAction("Index", "Intervention");
+        }
+
+        [HttpPost]
+        public ActionResult Alert(int AlertId, Alert alert)
+        {
+            Alert alert1 = db.alerts.Where(e => e.AlertId == AlertId).SingleOrDefault();
+            alert1.description = alert.description;
+            alert1.time = alert.time.Date;
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Intervention");
+
+        }
         public ActionResult Schedule() //View page
         {
             return View();
