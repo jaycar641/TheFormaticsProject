@@ -183,6 +183,14 @@
     <Compile Include="Migrations\201911271652574_feedback.Designer.cs">
       <DependentUpon>201911271652574_feedback.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912011732046_medicatoin.cs" />
+    <Compile Include="Migrations\201912011732046_medicatoin.Designer.cs">
+      <DependentUpon>201912011732046_medicatoin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912012100395_feedback1.cs" />
+    <Compile Include="Migrations\201912012100395_feedback1.Designer.cs">
+      <DependentUpon>201912012100395_feedback1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Alert.cs" />
@@ -281,10 +289,10 @@
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\FrontEnd\_SetAppointment.cshtml" />
     <Content Include="Views\Patient\MedicalHistory.cshtml" />
+    <Content Include="Views\Procedure\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Procedure\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -302,6 +310,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201911271652574_feedback.resx">
       <DependentUpon>201911271652574_feedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912011732046_medicatoin.resx">
+      <DependentUpon>201912011732046_medicatoin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912012100395_feedback1.resx">
+      <DependentUpon>201912012100395_feedback1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

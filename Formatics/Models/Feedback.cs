@@ -28,7 +28,10 @@ namespace Formatics.Models
 
         [Display(Name = "Comments")]
         public string comments { get; set; }
-
+        
+        [Display(Name = "Date Started")]
+        [DataType(DataType.DateTime)]
+        public DateTime date { get; set; } //time of day sent out
 
 
     }

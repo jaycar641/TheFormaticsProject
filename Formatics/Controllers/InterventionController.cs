@@ -45,12 +45,14 @@ namespace Formatics.Controllers
             mood.type = "Mood";
             mood.PatientNumber = patient.PatientNumber;
             mood.StepId = step.StepId;
+            mood.date = DateTime.Now;
             db.feedbacks.Add(mood);
             db.SaveChanges();
             Feedback condition = new Feedback();
             condition.type = "Condition";
             condition.PatientNumber = patient.PatientNumber;
             condition.StepId = step.StepId;
+            condition.date = DateTime.Now;
             db.feedbacks.Add(condition);
             db.SaveChanges();
             List<Medicine> medlist = db.medicine.ToList();

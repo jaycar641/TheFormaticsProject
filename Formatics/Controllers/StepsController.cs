@@ -41,6 +41,8 @@ namespace Formatics.Controllers
                     medicine.name = "Tylenol";
                     medicine.symptoms = symptoms; //change medicine symptom property to Ilist symptoms
                     medicine.isCurrent = true;
+                    medicine.startDate = diagnosis.dateDiagnosed;
+                    medicine.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
                     db.medicine.Add(medicine);
 
                     foreach (PatientStep patientStep in stepList)//finding all steps in db that match patient steps
@@ -109,6 +111,9 @@ namespace Formatics.Controllers
                     medicine1.name = "Xopenex";
                     medicine1.symptoms = symptoms1; //change medicine symptom property to Ilist symptoms
                     medicine1.isCurrent = true;
+                    medicine1.startDate = diagnosis.dateDiagnosed;
+                    medicine1.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
+
                     db.medicine.Add(medicine1);
 
                     foreach (PatientStep patientStep in stepList2)//finding all steps in db that match patient steps
@@ -150,6 +155,8 @@ namespace Formatics.Controllers
                     medicine2.name = "Lunesta";
                     medicine2.symptoms = symptoms2; //change medicine symptom property to Ilist symptoms
                     medicine2.isCurrent = true;
+                    medicine2.startDate = diagnosis.dateDiagnosed;
+                    medicine2.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
                     db.medicine.Add(medicine2);
 
                     foreach (PatientStep patientStep in stepList3)//finding all steps in db that match patient steps
@@ -194,14 +201,16 @@ namespace Formatics.Controllers
                 default:
                     IList<PatientStep> stepList4 = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
                     List<Steps> steps4 = new List<Steps>();
-                    List<string> ingredients3 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
-                    List<string> symptoms3 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
+                    List<string> ingredients3 = new List<string>() { "ondansetron hydrochloride dihydrate", "citric acid anhydrous", "sodium benzoate" };
+                    List<string> symptoms3 = new List<string>() { "diarrhea", "headache", "fever" };
                     Medicine medicine3 = new Medicine();
-                    medicine3.drugClass = "Sleep Medication";
+                    medicine3.drugClass = "Nausea Medication";
                     medicine3.ingredients = ingredients3;
-                    medicine3.name = "";
-                    medicine3.symptoms = ingredients3; //change medicine symptom property to Ilist symptoms
+                    medicine3.name = "Zofran";
+                    medicine3.symptoms = symptoms3; //change medicine symptom property to Ilist symptoms
                     medicine3.isCurrent = true;
+                    medicine3.startDate = diagnosis.dateDiagnosed;
+                    medicine3.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
                     db.medicine.Add(medicine3);
 
                     foreach (PatientStep patientStep in stepList4)//finding all steps in db that match patient steps
@@ -324,6 +333,7 @@ namespace Formatics.Controllers
         // GET: Steps/Delete/5
         public ActionResult Delete(int id)
         {
+
             return View();
         }
 

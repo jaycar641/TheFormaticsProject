@@ -251,9 +251,15 @@ namespace Formatics.Controllers
         public ActionResult MedicalHistory(int patientNumber)
         {
 
-
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
+            List<Diagnosis> diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).ToList();
+
+
+            DateTime currentDate = DateTime.Today;
+
+
             ViewData["Patient"] = patient; //temporary
 
             List<Medicine> medicine = db.medicine.ToList();

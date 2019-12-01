@@ -28,5 +28,13 @@ namespace Formatics.Models
         [Display(Name = "Is Current")]
         public bool isCurrent { get; set; }
 
+        [Display(Name = "Date Started")]
+        [DataType(DataType.DateTime)]
+        public DateTime startDate { get; set; } //time of day sent out
+
+        [Display(Name = "End Date")]
+        [DataType(DataType.DateTime)]
+        public DateTime? endDate { get; set; }
+
     }
 }
