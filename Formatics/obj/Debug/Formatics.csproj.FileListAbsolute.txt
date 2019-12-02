@@ -108,3 +108,10 @@ C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migratio
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.feedback1.resources
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.diagnosis.resources
 C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\obj\Debug\Formatics.Migrations.iscurrent.resources
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\Twilio.dll
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\danie\OneDrive\Desktop\Formatics\Formatics\bin\Twilio.xml

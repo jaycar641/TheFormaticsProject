@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 namespace Formatics.Controllers
 {
     [Authorize]
 
     public class PatientController : Controller
     {
+
         // GET: Patient
         ApplicationDbContext db = new ApplicationDbContext();
         public List<string> LoadResources()
@@ -102,6 +104,8 @@ namespace Formatics.Controllers
         //}
         public ActionResult Index()//Patient Dashboard
         {
+           
+
             DateTime currentDate = DateTime.Today;
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
             string userId = User.Identity.GetUserId();

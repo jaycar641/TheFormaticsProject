@@ -174,6 +174,13 @@
 
 </div>
 
+<div>
+    <h2>Some header above a graph</h2>
+    <img src="@Url.Action("DrawChart")" />
+</div>
+
+
+
 
 @*<div>
        @Html.Partial("~/Views/FrontEnd/Schedule.cshtml");
@@ -199,13 +206,13 @@
 
     $(document).ready(function () {
 
-        
-    
-      $(function () {
-          $("#input:text.date").datepicker({
-              dateFormat: "dd/mm/yy"
-          });      
-          });
+
+
+        $(function () {
+            $("#input:text.date").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+        });
 
         $('#SubmitMood').click(function () { //async
 
@@ -223,12 +230,11 @@
 
         });
 
-        
+
         $("#submitReview").click(function () {
 
             $("#review").show();
             $("#submitReview").hide();
-
 
         });
 
@@ -238,5 +244,5 @@
 
 </script>
 <script>
- 
+
 </script>

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace Formatics.Controllers
 {
@@ -34,34 +36,38 @@ namespace Formatics.Controllers
             {
                 ratings.Add(i);
             }
+            
+                Alert appointmentAlert = new Alert();
+                appointmentAlert.type = "Appointment";
+                appointmentAlert.frequency = 1;
+                appointmentAlert.time = DateTime.Today.Date;
+                //db.alerts.Add(appointmentAlert);
+                //db.SaveChanges();
+                ViewData["Appointment"] = appointmentAlert;
+               
+         
 
-            Alert appointmentAlert = new Alert();
-            appointmentAlert.type = "Appointment";
-            appointmentAlert.frequency = 1;
-            appointmentAlert.time = DateTime.Today.Date;
-            db.alerts.Add(appointmentAlert);
-            db.SaveChanges();
-            Feedback mood = new Feedback();
-            Feedback condition = new Feedback();
 
-            Feedback test = db.feedbacks.Where(e => e.comments == null && e.rating == 0).SingleOrDefault();
-            if (test != null  ) // when you first load the page there will be no empty feed backs
-            {
+                  
+                Feedback mood = new Feedback();
                 mood.type = "Mood";
                 mood.PatientNumber = patient.PatientNumber;
                 mood.StepId = step.StepId;
                 mood.date = DateTime.Now;
-                db.feedbacks.Add(mood);
-                db.SaveChanges();
+                //db.feedbacks.Add(mood);
+                //db.SaveChanges();
+
+                Feedback condition = new Feedback();
 
                 condition.type = "Condition";
                 condition.PatientNumber = patient.PatientNumber;
                 condition.StepId = step.StepId;
                 condition.date = DateTime.Now;
-                db.feedbacks.Add(condition);
-                db.SaveChanges();
-            }
-          
+                //db.feedbacks.Add(condition);
+                //db.SaveChanges();
+
+            
+
             List<Medicine> medlist = db.medicine.ToList();
             List<Procedure> prolist = db.procedures.ToList();
             foreach(Steps steps1 in steps)
@@ -69,7 +75,7 @@ namespace Formatics.Controllers
                 if (medlist.Count != 0)
                 {
                     StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                    stepMedicines.Add(stepMedicine);
+                  stepMedicines.Add(stepMedicine);
                 }
             }
             foreach (Steps steps1 in steps)
@@ -119,14 +125,12 @@ namespace Formatics.Controllers
             ViewData["Procedure"] = procedures;
             ViewData["Medicine"] = medicines;
             ViewData["Diagnosis"] = diagnosis.category;
-            ViewData["Mood"] = mood;
-            ViewData["Condition"] = condition;
             ViewData["Glimpse"] = step.day;
             ViewData["Day"] = step.description;
             ViewData["Patient"] = patient;
-            ViewData["Appointment"] = appointmentAlert;
-            ViewData["AppointmentTime"] = appointmentAlert.time;
-            ViewData["AppointmentType"] = appointmentAlert.type; 
+            ViewData["Mood"] = mood;
+            ViewData["Condition"] = condition;
+
 
             return View();
         }
@@ -224,6 +228,11 @@ namespace Formatics.Controllers
            return PartialView("_Results", alert);
         }
 
+        public ActionResult DrawChart()
+        {
+            Feedback feedback = new Feedback();
+            return View(feedback);
+        }
         
     }
 }

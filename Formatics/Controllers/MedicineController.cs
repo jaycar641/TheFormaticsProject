@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace Formatics.Controllers
 {
@@ -56,7 +58,12 @@ namespace Formatics.Controllers
 
 
             }
-            
+            Alert appointmentAlert = new Alert();
+            appointmentAlert.type = "Appointment";
+            appointmentAlert.frequency = 1;
+            appointmentAlert.time = DateTime.Today.Date;
+
+            ViewData["Appointment"] = appointmentAlert;
             ViewData["Medicines"] = medicines;
             ViewData["Patient"] = patient;
          
@@ -146,9 +153,21 @@ namespace Formatics.Controllers
         public ActionResult OrderPerscription(int MedicineId)
         {
             Medicine medicine = db.medicine.Where(e => e.MedicineId == MedicineId).SingleOrDefault();
+            Alert pickup = new Alert();
 
-            Console.WriteLine("order prescription");
-            //Twillio;
+            pickup.description = "Your Perscription is ready!";
+            pickup.time = DateTime.Now.AddDays(7);
+            pickup.type = "Perscription";
+            db.alerts.Add(pickup);
+            db.SaveChanges();
+         
+            TwilioClient.Init(twillio.accountSid, twillio.authToken);
+
+            var message = MessageResource.Create(
+                body: "Your perscription for " + medicine.name + " has been received!  We will notifiy you when it is available",
+                from: new Twilio.Types.PhoneNumber("+12056513904"),
+                to: new Twilio.Types.PhoneNumber("+14143887275")
+            );
             return RedirectToAction("Index", "Medicine");
             //return an alert to the view from the controller you have ordered a prescription
         }

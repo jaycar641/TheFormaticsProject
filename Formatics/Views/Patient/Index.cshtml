@@ -78,16 +78,13 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item)
+                <a href="@(item)">@(item)</a>
             </td>
         </tr>
     }
 
 </table>
 
-<div>
-    @Html.Partial("_Results", alert)
-</div>
 
 
 

@@ -143,9 +143,11 @@ namespace Formatics.Controllers
         [HttpPost]
         public ActionResult Mood(int FeedbackId, Feedback feedback) //Feedback review paqge
         {
-            Feedback feedback1  = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
+            Feedback feedback1 = new Feedback();
+            //Feedback feedback1  = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
             feedback1.comments = feedback.comments;
             feedback1.rating = feedback.rating;
+            db.feedbacks.Add(feedback1);
             db.SaveChanges();
                 return View();
         }
@@ -153,9 +155,11 @@ namespace Formatics.Controllers
         [HttpPost]
         public ActionResult Condition(int FeedbackId, Feedback feedback) //Feedback review paqge
         {
-            Feedback feedback1 = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
+            Feedback feedback1 = new Feedback();
+            //Feedback feedback1 = db.feedbacks.Where(e => e.FeedbackId == FeedbackId).SingleOrDefault();
             feedback1.comments = feedback.comments;
             feedback1.rating = feedback.rating;
+            db.feedbacks.Add(feedback1);
             db.SaveChanges();
             return RedirectToAction("Index", "Intervention");
         }
@@ -167,6 +171,8 @@ namespace Formatics.Controllers
             alert1.description = alert.description;
             alert1.time = alert.time.Date;
             db.SaveChanges();
+
+            //twillio
 
             return RedirectToAction("Index", "Intervention");
 
