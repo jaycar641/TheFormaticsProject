@@ -1,0 +1,21 @@
+﻿@model IEnumerable<String>
+
+@{
+
+    var ingredients = Model;
+}
+
+
+<table class="table">
+
+
+    @foreach (var item in ingredients)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item)
+            </td>
+        </tr>
+    }
+
+</table>

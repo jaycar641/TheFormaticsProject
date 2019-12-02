@@ -23,5 +23,8 @@ namespace Formatics.Models
         [DataType(DataType.DateTime)]
         public DateTime dateDiagnosed { get; set; }
 
+        [Display(Name = "Is Current")]
+        public bool isCurrent { get; set; }
+
     }
 }

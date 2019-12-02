@@ -46,5 +46,8 @@ namespace Formatics.Controllers
            return RedirectToAction("Details", "Patient", new { PatientNumber = patient.PatientNumber });
         }
 
+
+      
+
     }
 }

@@ -1,8 +1,37 @@
 ﻿@model IEnumerable<Formatics.Models.Diagnosis>
 
 @{
+        var patient = ViewData["Patient"] as Formatics.Models.Patient;
+
     ViewBag.Title = "MedicalHistory";
     var medicine = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
+}
+@if (Request.IsAuthenticated)
+{
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Formatics", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Patient", new { PatientNumber = patient.PatientNumber })</li>
+                    <li>@Html.ActionLink("View Profile", "Details", new { PatientNumber = patient.PatientNumber })</li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
 }
 
 <h2>MedicalHistory</h2>
@@ -10,7 +39,7 @@
 
 <table class="table">
     <tr>
-        <th>
+        <th hidden>
             @Html.DisplayNameFor(model => model.InterventionId)
         </th>
         <th>
@@ -25,7 +54,7 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
+            <td hidden>
                 @Html.DisplayFor(modelItem => item.InterventionId)
             </td>
             <td>
@@ -34,11 +63,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.dateDiagnosed)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.DiagnosisId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.DiagnosisId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.DiagnosisId })
-            </td>
+
         </tr>
     }
 

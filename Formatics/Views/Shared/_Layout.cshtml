@@ -40,5 +40,70 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script>
+
+
+    $(document).ready(function () {
+
+        $("#Alert").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+            var $alert = $("#AlertView"),
+        url = $(this).data('url');
+
+    $.get(url, function(data) {
+        $alert.replaceWith(data);
+    });
+
+        });
+
+          $("#Details").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+              $("#detailsMedicine").show();
+              $("#Details").hide();
+
+      
+          });
+
+         $("#HideDetails").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+              $("#detailsMedicine").hide();
+             $("#Details").show();
+
+         });
+
+         $("#setAppoint").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+             
+            var $appoint = $("#dateAppoint"),
+        url = $(this).data('url');
+
+    $.get(url, function(data) {
+        $appoint.replaceWith(data);
+    });
+       
+
+         });
+
+
+       
+
+      
+
+
+
+
+
+    });
+
+    </script>
+
 </body>
 </html>

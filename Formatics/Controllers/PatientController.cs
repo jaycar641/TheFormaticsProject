@@ -18,9 +18,10 @@ namespace Formatics.Controllers
         {
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
 
             List<string> resources = new List<string>();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
 
@@ -101,24 +102,32 @@ namespace Formatics.Controllers
         //}
         public ActionResult Index()//Patient Dashboard
         {
+            DateTime currentDate = DateTime.Today;
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
 
-            
-            DateTime currentDate = DateTime.Today;
 
-            List<Alert> alerts = db.alerts.ToList();
+
+            List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery").ToList();
             IList<Alert> shortList = new List<Alert>();
+            try
+            {
                 for (int i = 1; i <= 5; i++)
                 {
                     shortList.Add(alerts[i]);
                 }
+            }
+            catch
+            {
+                shortList = shortList;
+            }
             Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
             int number = patient.PatientNumber;
-            string date = "Today is " + currentDate.ToShortDateString();
+            string date = "Today is " + currentDate.ToLongDateString();
             ViewData["AlertData"] = shortList;
             ViewData["Glimpse"] = steps.day;
             ViewData["Day"] = steps.description;
@@ -228,6 +237,12 @@ namespace Formatics.Controllers
                 return View();
             }
         }
+        //Treatment Plan
+        public ActionResult ViewAll()
+        {
+            List<Alert> allAlerts = db.alerts.ToList();
+            return PartialView("~/Views/FrontEnd/_Alerts.cshtml", allAlerts);
+        }
 
         public ActionResult Intervention (int patientNumber)
         {
@@ -253,10 +268,12 @@ namespace Formatics.Controllers
 
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
-            List<Diagnosis> diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).ToList();
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
 
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
+            List<Diagnosis> diagnosis = db.diagnoses.ToList();
 
+            
             DateTime currentDate = DateTime.Today;
 
 

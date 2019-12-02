@@ -1,0 +1,21 @@
+﻿@model IEnumerable<String>
+
+@{
+
+    var symptoms = Model;
+}
+
+
+    <table class="table">
+
+
+        @foreach (var item in symptoms)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item)
+                </td>
+            </tr>
+        }
+
+    </table>

@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<Formatics.Models.Alert>
 
 
-<table id ="AlertView"class="table" hidden>
+<table id ="AlertView" class="table" >
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.type)
         </th>
-        <th>
+        <th hidden>
             @Html.DisplayNameFor(model => model.frequency)
         </th>
         <th>
@@ -23,7 +23,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.type)
         </td>
-        <td>
+        <td hidden>
             @Html.DisplayFor(modelItem => item.frequency)
         </td>
         <td>
@@ -32,11 +32,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.description)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AlertId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AlertId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AlertId })
-        </td>
+      
     </tr>
 }
 

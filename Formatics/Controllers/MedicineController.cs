@@ -17,18 +17,51 @@ namespace Formatics.Controllers
         {
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault(); //only one
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault(); //only one
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
            
             List<Steps> steps = new List<Steps>();
-            List<Medicine> medicines = db.medicine.ToList();
-     
+            List<Medicine> medicines = db.medicine.Where(e=> e.isCurrent == true).ToList();
+            Medicine medicine = db.medicine.Where(e => e.isCurrent == true).SingleOrDefault();
+            
+            switch (medicine.name)
+            {
+                case "Tylenol":
+                    List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
+                    List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
+                    ViewData["Ingredients"] = ingredients;
+                    ViewData["Symptoms"] = symptoms;
+                    break;
+                case "Xopenex":
+                    List<string> ingredients1 = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
+                    List<string> symptoms1 = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
+                    ViewData["Ingredients"] = ingredients1;
+                    ViewData["Symptoms"] = symptoms1;
+                    break;
+                case "Lunesta":
+                    List<string> ingredients2 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
+                    List<string> symptoms2 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
+                    ViewData["Ingredients"] = ingredients2;
+                    ViewData["Symptoms"] = symptoms2;
+                    break;
+                case "Zofran":
+                    List<string> ingredients3 = new List<string>() { "ondansetron hydrochloride dihydrate", "citric acid anhydrous", "sodium benzoate" };
+                    List<string> symptoms3 = new List<string>() { "diarrhea", "headache", "fever" };
+                    ViewData["Ingredients"] = ingredients3;
+                    ViewData["Symptoms"] = symptoms3;
+                    break;
+
+
+
+            }
+            
             ViewData["Medicines"] = medicines;
-            ViewData["Patient"] = patient; 
+            ViewData["Patient"] = patient;
+         
 
-
-            return View(medicines);
+            return View();
         }
 
         // GET: Medicine/Details/5
@@ -106,6 +139,20 @@ namespace Formatics.Controllers
             }
         }
 
-       
+      public ActionResult MedicalDetails ()
+        {
+            return PartialView("_detailsMedicine");
+        }
+        public ActionResult OrderPerscription(int MedicineId)
+        {
+            Medicine medicine = db.medicine.Where(e => e.MedicineId == MedicineId).SingleOrDefault();
+
+            Console.WriteLine("order prescription");
+            //Twillio;
+            return RedirectToAction("Index", "Medicine");
+            //return an alert to the view from the controller you have ordered a prescription
+        }
+
+
     }
 }

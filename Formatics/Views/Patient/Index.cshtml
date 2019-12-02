@@ -4,6 +4,8 @@
     var list = ViewData["AlertData"] as List<Formatics.Models.Alert>;
     var resources = ViewData["Resources"] as List<string>;
     var patient = ViewData["Patient"] as Formatics.Models.Patient;
+   var alert = ViewData["Appointment"] as Formatics.Models.Alert;
+
 
 
 }
@@ -63,29 +65,9 @@
 @Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
 <h4>Alerts</h4>
-<table id="AlertTable" class="table">
 
-
-    @foreach (var item in list)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.time)
-            </td>
-            <td>
-            </td>
-
-        </tr>
-    }
-
-</table>
-<button id="Alert" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>View All</button>
+@Html.Partial("~/Views/FrontEnd/_Alerts.cshtml", list)
+<button id="Alert" data-url='@Url.Action("ViewAll", "Patient")'>View All</button>
 
 <h4>Resources</h4>
 
@@ -103,21 +85,11 @@
 
 </table>
 
+<div>
+    @Html.Partial("_Results", alert)
+</div>
 
 
 
 
 
-
-
-<script>
-    $(document).ready(function () {
-
-
-        $('#Alert').click(function () {
-
-        });
-
-    });
-
-</script>

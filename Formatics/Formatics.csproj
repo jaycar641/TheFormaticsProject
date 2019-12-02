@@ -191,6 +191,14 @@
     <Compile Include="Migrations\201912012100395_feedback1.Designer.cs">
       <DependentUpon>201912012100395_feedback1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912012138018_diagnosis.cs" />
+    <Compile Include="Migrations\201912012138018_diagnosis.Designer.cs">
+      <DependentUpon>201912012138018_diagnosis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912012139358_iscurrent.cs" />
+    <Compile Include="Migrations\201912012139358_iscurrent.Designer.cs">
+      <DependentUpon>201912012139358_iscurrent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Alert.cs" />
@@ -289,10 +297,13 @@
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\FrontEnd\_SetAppointment.cshtml" />
     <Content Include="Views\Patient\MedicalHistory.cshtml" />
-    <Content Include="Views\Procedure\Index.cshtml" />
+    <Content Include="Views\FrontEnd\_symptoms.cshtml" />
+    <Content Include="Views\FrontEnd\_ingredients.cshtml" />
+    <Content Include="Views\FrontEnd\_Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Procedure\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -316,6 +327,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912012100395_feedback1.resx">
       <DependentUpon>201912012100395_feedback1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912012138018_diagnosis.resx">
+      <DependentUpon>201912012138018_diagnosis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912012139358_iscurrent.resx">
+      <DependentUpon>201912012139358_iscurrent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

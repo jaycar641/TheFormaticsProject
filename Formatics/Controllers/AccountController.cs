@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Formatics.Models;
+using System.Collections.Generic;
 
 namespace Formatics.Controllers
 {
@@ -143,6 +144,10 @@ namespace Formatics.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+           
+
+            ViewBag.Name = new SelectList(db.diagnoses.ToList(), "category", "category");
+
             return View();
         }
 

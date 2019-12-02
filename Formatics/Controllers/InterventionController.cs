@@ -18,7 +18,9 @@ namespace Formatics.Controllers
             DateTime currentDate = DateTime.Today;
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault(); //only one
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
+
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault(); //only one
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
             Steps step = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
@@ -32,29 +34,34 @@ namespace Formatics.Controllers
             {
                 ratings.Add(i);
             }
+
             Alert appointmentAlert = new Alert();
             appointmentAlert.type = "Appointment";
             appointmentAlert.frequency = 1;
             appointmentAlert.time = DateTime.Today.Date;
             db.alerts.Add(appointmentAlert);
             db.SaveChanges();
-            
-            ViewBag.Name = new SelectList(ratings, "rating", "FeedbackId");
-
             Feedback mood = new Feedback();
-            mood.type = "Mood";
-            mood.PatientNumber = patient.PatientNumber;
-            mood.StepId = step.StepId;
-            mood.date = DateTime.Now;
-            db.feedbacks.Add(mood);
-            db.SaveChanges();
             Feedback condition = new Feedback();
-            condition.type = "Condition";
-            condition.PatientNumber = patient.PatientNumber;
-            condition.StepId = step.StepId;
-            condition.date = DateTime.Now;
-            db.feedbacks.Add(condition);
-            db.SaveChanges();
+
+            Feedback test = db.feedbacks.Where(e => e.comments == null && e.rating == 0).SingleOrDefault();
+            if (test != null  ) // when you first load the page there will be no empty feed backs
+            {
+                mood.type = "Mood";
+                mood.PatientNumber = patient.PatientNumber;
+                mood.StepId = step.StepId;
+                mood.date = DateTime.Now;
+                db.feedbacks.Add(mood);
+                db.SaveChanges();
+
+                condition.type = "Condition";
+                condition.PatientNumber = patient.PatientNumber;
+                condition.StepId = step.StepId;
+                condition.date = DateTime.Now;
+                db.feedbacks.Add(condition);
+                db.SaveChanges();
+            }
+          
             List<Medicine> medlist = db.medicine.ToList();
             List<Procedure> prolist = db.procedures.ToList();
             foreach(Steps steps1 in steps)
@@ -208,6 +215,13 @@ namespace Formatics.Controllers
             ViewData["Patient"] = patient; //temporary
             return RedirectToAction("Index", "Medicine");
 
+        }
+
+        public ActionResult SetAppointment(int AlertId)
+        {
+            Alert alert = db.alerts.Where(e => e.AlertId == AlertId).SingleOrDefault();
+            //twillio
+           return PartialView("_Results", alert);
         }
 
         

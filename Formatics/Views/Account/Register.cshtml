@@ -98,12 +98,11 @@
             @Html.TextBoxFor(m => m.country, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.diagnosis, new { @class = "col-md-2 control-label" })
+
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.diagnosis, new { @class = "form-control" })
-        </div>
-    </div>
+    @Html.DropDownList("category", (IEnumerable
+        <SelectListItem>)ViewBag.Name)
+             </div>
 
 
     <div class="form-group">

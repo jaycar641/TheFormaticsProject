@@ -1,13 +1,12 @@
 ﻿@model Formatics.Models.Medicine
 @{ 
-    var symptoms = ViewData["Symptoms"] as List<string>;
-    var ingredients = ViewData["Ingredients"] as List<string>;
+    
 
 }
-    <table id="DetailsMedicineView" hidden>
+    <table id="DetailsMedicineView">
         <hr />
 
-        @foreach (var item in symptoms)
+        @foreach (var item in Model.symptoms)
         {
             <tr>
                 <td>
@@ -18,7 +17,7 @@
             </tr>
         }
 
-        @foreach (var item in ingredients)
+        @foreach (var item in Model.ingredients)
         {
             <tr>
                 <td>

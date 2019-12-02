@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "Index";
     var list = ViewData["Medicines"] as List<Formatics.Models.Medicine>;
-        var patient = ViewData["Patient"] as Formatics.Models.Patient;
-
+    var patient = ViewData["Patient"] as Formatics.Models.Patient;
+    var ingredients = ViewData["Ingredients"] as List<string>;
+    var symptoms = ViewData["Symptoms"] as List<string>;
 
 }
 
@@ -43,40 +44,45 @@
     @foreach (var item in list)
     {
 
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.drugClass)
+        </td>
+        <td id="ingredients" hidden>
+            @Html.DisplayFor(modelItem => item.ingredients)
+        </td>
+
+        <td id="symptoms" hidden>
+            @Html.DisplayFor(modelItem => item.symptoms)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isCurrent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            <button id="Details">Details</button>
+        </td>
+        <td id="detailsMedicine" hidden>
+            @Html.Partial("~/Views/FrontEnd/_symptoms.cshtml", symptoms)
+            @Html.Partial("~/Views/FrontEnd/_ingredients.cshtml", ingredients)
+            <button id="HideDetails">Hide</button>
+
+        </td>
+
+        @if (item.isCurrent == true)
+        {
+    <td>
+        @Html.ActionLink("Order Perscription", "OrderPerscription", new { MedicineId = item.MedicineId }, new { @class = "btn btn-default" })
+    </td>
+        }
+    </tr>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.drugClass)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ingredients)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isCurrent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                <button id "Details" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1})'>Details</button>
-            </td>
-            @if (item.isCurrent == true)
-            {
-                <td>
-                    <button id="Order" data-url='@Url.Action("Alerts", "FrontEnd", new { id = 1 })'>Order Perscription</button>
-                </td>
-            }
-        </tr>
-        <tr>
-            <td>
-                @*@Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)*@
-            </td>
+           
         </tr>
 
-        <tr>
-            <td>
-                @*@Html.Partial("~/Views/FrontEnd/_detailsMedicine.cshtml", item)*@
-            </td>
-        </tr>
+     
 
 
     }
@@ -86,21 +92,6 @@
 
 
 <script>
-    $(document).ready(function () {
 
-        //DetailsMedicineView //on load the details div will load, yet will wait for details click
-        $('#Medicine').click(function () {
-
-        });
-
-        $('#Order').click(function () {
-
-        });
-
-        $('#Details').click(function () {
-
-        });
-
-    });
 
 </script>
