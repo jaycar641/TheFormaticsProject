@@ -4,8 +4,7 @@
     var list = ViewData["AlertData"] as List<Formatics.Models.Alert>;
     var resources = ViewData["Resources"] as List<string>;
     var patient = ViewData["Patient"] as Formatics.Models.Patient;
-   var alert = ViewData["Appointment"] as Formatics.Models.Alert;
-
+    var alert = ViewData["Appointment"] as Formatics.Models.Alert;
 
 
 }
@@ -38,55 +37,68 @@
     </div>
 }
 
+<div class ="container">
 
-<h2>Dashboard</h2>
-<dl class="dl-horizontal">
-    @Html.Display("Personalization")
-</dl>
-<br />
-<br />
-<h1>@Html.Display("Date")</h1>
-<div>
-    <hr />
-    <h3>Daily Planner</h3>
-    <dl id="GlimpsePage" class="dl-horizontal">
-        <h5>Day </h5>
-        @Html.Display("Glimpse")
-    </dl>
-    <h5> Description</h5>
-    <dl>
-        @Html.Display("Day")
+    <h2>Dashboard</h2>
 
-    </dl>
-    @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+    <h3 class="col-sm-offset-4">@Html.Display("Personalization")</h3>>
+    <br />
+    <br />
+    <h2>@Html.Display("Date")</h2>
+    <div class="row">
+        <div class="col-sm-6 sidenav">
 
+            <h4>Alerts</h4>
+            <div id="alertsdetails">
+                @Html.Partial("~/Views/FrontEnd/_Alerts.cshtml", list)
+                <button id="hidealerts" hidden>Hide</button>
 
-</div>
-@Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
+            </div>
+            <br />
+            <button id="Alert" data-url='@Url.Action("ViewAll", "Patient")'>View All</button>
 
-<h4>Alerts</h4>
-
-@Html.Partial("~/Views/FrontEnd/_Alerts.cshtml", list)
-<button id="Alert" data-url='@Url.Action("ViewAll", "Patient")'>View All</button>
-
-<h4>Resources</h4>
-
-<table class="table">
+        </div>
 
 
-    @foreach (var item in resources)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item)
-            </td>
-        </tr>
-    }
 
-</table>
+        <div class="col-sm-6">
 
-<div>
-    @Html.Partial("_Results", alert)
+
+            <hr />
+            <h3>Daily Planner</h3>
+            <dl id="GlimpsePage" class="dl-horizontal">
+                <h5>Day </h5>
+                @Html.Display("Glimpse")
+            </dl>
+            <h5> Description</h5>
+            <dl>
+                @Html.Display("Day")
+
+            </dl>
+
+            <span>   @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
+            <span> @Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
+
+
+
+        </div>
+    </div>
+   
+    <h4>Resources</h4>
+
+    <table class="table">
+
+
+        @foreach (var item in resources)
+        {
+            <tr>
+                <td>
+                    <a href="@(item)">@(item)</a>
+                </td>
+            </tr>
+        }
+
+    </table>
 </div>
 
 

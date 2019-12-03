@@ -1,10 +1,13 @@
 ﻿using Formatics.Models;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace Formatics.Controllers
 {
@@ -35,33 +38,83 @@ namespace Formatics.Controllers
                 ratings.Add(i);
             }
 
-            Alert appointmentAlert = new Alert();
-            appointmentAlert.type = "Appointment";
-            appointmentAlert.frequency = 1;
-            appointmentAlert.time = DateTime.Today.Date;
-            db.alerts.Add(appointmentAlert);
-            db.SaveChanges();
-            Feedback mood = new Feedback();
-            Feedback condition = new Feedback();
+            //Alert alert = db.alerts.Where(e=> e.type == "Appointment" && e.description == null && e.)
 
-            Feedback test = db.feedbacks.Where(e => e.comments == null && e.rating == 0).SingleOrDefault();
-            if (test != null  ) // when you first load the page there will be no empty feed backs
+                Alert appointmentAlert = new Alert();
+                appointmentAlert.type = "Appointment";
+                appointmentAlert.frequency = 1;
+                appointmentAlert.time = DateTime.Today.Date;
+                db.alerts.Add(appointmentAlert);
+                db.SaveChanges();
+                ViewData["Appointment"] = appointmentAlert;
+
+
+            Feedback feedback1 = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Mood").SingleOrDefault();
+            Feedback feedback2 = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Condition").SingleOrDefault();
+
+            if (feedback1 == null && feedback2 != null)
             {
+                Feedback condition = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Condition").SingleOrDefault();
+
+                Feedback mood = new Feedback();
                 mood.type = "Mood";
                 mood.PatientNumber = patient.PatientNumber;
                 mood.StepId = step.StepId;
-                mood.date = DateTime.Now;
-                db.feedbacks.Add(mood);
-                db.SaveChanges();
+                mood.date = DateTime.Today;
+                ViewData["Mood"] = mood;
+                ViewData["Condition"] = condition;
+                ViewBag.PartialStyle = "display: none";
 
-                condition.type = "Condition";
-                condition.PatientNumber = patient.PatientNumber;
-                condition.StepId = step.StepId;
-                condition.date = DateTime.Now;
-                db.feedbacks.Add(condition);
-                db.SaveChanges();
+
             }
-          
+            else if (feedback1 != null && feedback2 == null)
+            {
+                Feedback mood1 = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Mood").SingleOrDefault();
+
+                Feedback condition1 = new Feedback();
+
+                condition1.type = "Condition";
+                condition1.PatientNumber = patient.PatientNumber;
+                condition1.StepId = step.StepId;
+                condition1.date = DateTime.Today;
+                ViewData["Condition"] = condition1;
+                ViewData["Mood"] = mood1;
+                ViewBag.Name = "display: none";
+
+            }
+            else if (feedback1 == null && feedback2 == null)
+            {
+                Feedback condition2 = new Feedback();
+                Feedback mood2 = new Feedback();
+
+                mood2.type = "Mood";
+                mood2.PatientNumber = patient.PatientNumber;
+                mood2.StepId = step.StepId;
+                mood2.date = DateTime.Today;
+           
+                condition2.type = "Condition";
+                condition2.PatientNumber = patient.PatientNumber;
+                condition2.StepId = step.StepId;
+                condition2.date = DateTime.Today;
+                ViewData["Condition"] = condition2;
+                ViewData["Mood"] = mood2;
+
+
+            }
+
+            else
+            {
+
+                Feedback mood4 = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Mood").SingleOrDefault();
+                Feedback condition4 = db.feedbacks.Where(e => e.date.Day == DateTime.Today.Day && e.type == "Condition").SingleOrDefault();
+                ViewData["Mood"] = mood4;
+                ViewData["Condition"] = condition4;
+                ViewBag.PartialStyle = "display: none";
+                ViewBag.Name = "display: none";
+
+            }
+
+
             List<Medicine> medlist = db.medicine.ToList();
             List<Procedure> prolist = db.procedures.ToList();
             foreach(Steps steps1 in steps)
@@ -69,7 +122,7 @@ namespace Formatics.Controllers
                 if (medlist.Count != 0)
                 {
                     StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                    stepMedicines.Add(stepMedicine);
+                  stepMedicines.Add(stepMedicine);
                 }
             }
             foreach (Steps steps1 in steps)
@@ -119,14 +172,86 @@ namespace Formatics.Controllers
             ViewData["Procedure"] = procedures;
             ViewData["Medicine"] = medicines;
             ViewData["Diagnosis"] = diagnosis.category;
-            ViewData["Mood"] = mood;
-            ViewData["Condition"] = condition;
             ViewData["Glimpse"] = step.day;
             ViewData["Day"] = step.description;
             ViewData["Patient"] = patient;
-            ViewData["Appointment"] = appointmentAlert;
-            ViewData["AppointmentTime"] = appointmentAlert.time;
-            ViewData["AppointmentType"] = appointmentAlert.type; 
+        
+
+
+            List<DataPoint> dataPoints1 = new List<DataPoint>();
+            List<DataPoint> dataPoints2 = new List<DataPoint>();
+
+
+
+            for (int i = 0; i < intervention.duration; i ++)
+            {
+                DateTime testfeed = diagnosis.dateDiagnosed.AddDays(i);
+                Feedback feedback = db.feedbacks.Where(e => e.date.Day == testfeed.Day  && e.type == "Mood").SingleOrDefault();
+                try
+                {
+                    dataPoints1.Add(new DataPoint(testfeed.ToShortDateString(), feedback.rating));
+                }
+                catch
+                {
+                    dataPoints1.Add(new DataPoint(testfeed.ToShortDateString(), 0));
+
+                }
+
+
+            }
+
+
+
+            for (int i = 0; i < intervention.duration; i++)
+            {
+                DateTime testfeed1 = diagnosis.dateDiagnosed.AddDays(i);
+                Feedback feedback = db.feedbacks.Where(e => e.date.Day == testfeed1.Day && e.type == "Condition").SingleOrDefault();
+                try
+                {
+                    dataPoints2.Add(new DataPoint(testfeed1.ToShortDateString(), feedback.rating));
+                }
+                catch
+                {
+                    dataPoints2.Add(new DataPoint(testfeed1.ToShortDateString(), 0));
+
+                }
+            }
+
+
+
+
+            ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1); //mood
+            ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2); //condition
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             return View();
         }
@@ -224,6 +349,11 @@ namespace Formatics.Controllers
            return PartialView("_Results", alert);
         }
 
+        public ActionResult DrawChart()
+        {
+            Feedback feedback = new Feedback();
+            return View(feedback);
+        }
         
     }
 }

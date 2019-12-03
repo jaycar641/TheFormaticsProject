@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Formatics.Models.Alert>
 
 
-<table id ="AlertView" class="table" >
+<table class ="col-sm-4" class="table" >
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.type)
@@ -12,7 +12,7 @@
         <th>
             @Html.DisplayNameFor(model => model.time)
         </th>
-        <th>
+        <th hidden>
             @Html.DisplayNameFor(model => model.description)
         </th>
         <th></th>
@@ -29,7 +29,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.time)
         </td>
-        <td>
+        <td hidden>
             @Html.DisplayFor(modelItem => item.description)
         </td>
       

@@ -3,6 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        div.body-content {
+
+            outline:double;
+            outline-color: olivedrab;
+            border:double;
+            border-color:olivedrab;
+            background:border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        div.container {
+            border-color: olivedrab;
+            background:border-box;
+        }
+
+    </style>
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -92,7 +110,25 @@
 
          });
 
+         $("#Alert").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
 
+              $("#Alert").hide();
+               $("#hidealerts").show();
+
+      
+          });
+
+         $("#hidealerts").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+            $("#hidealerts").hide();
+
+             $("#Alert").show();
+
+         });
        
 
       

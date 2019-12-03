@@ -3,11 +3,11 @@
 
 @using (Html.BeginForm("Condition", "FrontEnd", new { FeedbackId = Model.FeedbackId }, FormMethod.Post)) 
 {
-    <div id="SubmitConditionView">
+    <div id="SubmitConditionView" style="@ViewBag.Name">
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <h4>Condition</h4>
+            <h4>How do you feel about your condition today?</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div hidden class="form-group">

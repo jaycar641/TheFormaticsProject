@@ -1,0 +1,16 @@
+﻿@model Formatics.Models.Feedback
+
+@{
+    var myChart = new LineChart(width: 600, height: 400)
+        .AddTitle("Growth Chart")
+        .AddSeries(
+            name: "Day",
+            xValue: new[] {  "1", "2", "3", "4", "5" },
+            yValues: new[] { "10", "6", "4", "5", "3" })
+        .Write();
+
+
+}
+
+<h2>DrawChart</h2>
+

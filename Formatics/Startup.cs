@@ -6,6 +6,8 @@ using Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 [assembly: OwinStartupAttribute(typeof(Formatics.Startup))]
 namespace Formatics
@@ -41,17 +43,25 @@ namespace Formatics
 
         private void SendAlert()
         {
+
+            TwilioClient.Init(twillio.accountSid, twillio.authToken);
             //check list and if they have been sent out
             ApplicationDbContext db = new ApplicationDbContext();
             DateTime date = new DateTime();
-            date = DateTime.Today;
+            date = DateTime.Today.Date;
             List<Alert> alerts = db.alerts.ToList();
 
             foreach (Alert alert in alerts)
             {
-                if (alert.time.Date == date.Date )
+                if (alert.time.Date == date.Date)
                 {
-                    //send twillio S
+                   
+
+                    var message = MessageResource.Create(
+                        body: "You have a " + alert.type + " today at " + alert.time.Hour.ToString() + ":" + alert.time.Minute.ToString() + "  " + " Notes: " + alert.description + "",
+                        from: new Twilio.Types.PhoneNumber("+12056513904"),
+                        to: new Twilio.Types.PhoneNumber("+14143887275")
+                    );
                 }
 
             }

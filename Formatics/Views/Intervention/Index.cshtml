@@ -12,11 +12,42 @@
     var mood = ViewData["Mood"] as Formatics.Models.Feedback;
 
 
+
+
 }
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+window.onload = function () {
 
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title: {
+		text: "Progress Report"
+	},
+	axisY: {
+		includeZero: false
+	},
+	toolTip: {
+		shared: true
+	},
+	data: [{
+		type: "line",
+		name: "Mood",
+		showInLegend: true,
+		dataPoints: @Html.Raw(ViewBag.DataPoints1)
+        }, {
+        type: "line",
+        name: "Condition",
+        showInLegend: true,
+        dataPoints: @Html.Raw(ViewBag.DataPoints2)
+        }]
+        });
+        chart.render();
+
+        }
+</script>
 @if (Request.IsAuthenticated)
 {
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,166 +77,177 @@
 }
 <h2>Treatment Plan</h2>
 
-<div>
-    <h4>Intervention</h4>
+<div class="container">
+    <h3>@Html.Display("Diagnosis") Treatment Plan</h3>
     <hr />
-    <dl class="dl-horizontal">
-        @Html.Display("Diagnosis")
-
-        @Html.ActionLink("Medication", "Medication", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
-
-        <h4>Daily Planner</h4>
-        <dl id="GlimpsePage" class="dl-horizontal">
-            <h5>Day </h5>
-            @Html.Display("Glimpse")
-        </dl>
-        <h5> Description</h5>
-        <dl>
-            @Html.Display("Day")
-
-        </dl>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-sm-6 sidenav">
+      
+            <div id="dateAppoint" hidden>
+                <h3> Appointment</h3>
+                <br />
+                <h3>Time</h3>
+                @Html.Partial("~/Views/FrontEnd/_SetAppointment.cshtml", appointment)
+            </div>
+            <button id="Appoint">Appointment</button>
 
 
+            <ul class="nav nav-pills nav-stacked">
+            </ul><br>
 
-        @Html.Display("Schedule")
+        </div>
+
+        <div class="col-sm-6">
+
+            <h4>Daily Planner</h4>
+            <dl id="GlimpsePage">
+                <h5>Day </h5>
+                @Html.Display("Glimpse")
+            </dl>
+            <h5> Description</h5>
+            <dl>
+                @Html.Display("Day")
+
+            </dl>
+
+            <li>@Html.ActionLink("Medication", "Medication", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</li>
+
+        </div>
+
+        
+
+
+    </div>
+
+    @Html.Display("Schedule")
+
+    <div class="row">
+
 
         @for (int i = 1; i <= 7; i++)
         {
-            <tr>
-                <br />
-                <th>
-                    Day
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => steps[i].day)
-                </td>
-                <th>
-                    Date
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => steps[i].Date)
-                </td>
-                <th>
-                    Description
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => steps[i].description)
-                </td>
-                @if (procedures.Count != 0)
-                {
+            <div class="col-sm-2">
 
-                    foreach (var item1 in stepsProcedures)
-                    {
-                        if (item1.StepId == steps[i].StepId)
+                <tr>
+                    <br />
+                    <th>
+                        Day
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelItem => steps[i].day)
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelItem => steps[i].Date)
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelItem => steps[i].description)
+                    </th>
+                    <th>
+
+                        @if (procedures.Count != 0)
+
                         {
-                            foreach (var procedure in procedures)
+                            foreach (var item1 in stepsProcedures)
                             {
-                                if (procedure.ProcedureId == item1.ProcedureId)
+                                if (item1.StepId == steps[i].StepId)
                                 {
-                                    @Html.DisplayFor(modelItem => procedure.category)
+                                    foreach (var procedure in procedures)
+                                    {
+                                        if (procedure.ProcedureId == item1.ProcedureId)
+                                        {
+                                            @Html.DisplayFor(modelItem => procedure.category)
+                                            break;
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
+                    </th>
+
+                    <h5>Take </h5>
+                    @foreach (var item2 in stepsMedicines)
+                    {
+                        if (item2.StepId == steps[i].StepId)
+                        {
+                            foreach (var medicine in medicines)
+                            {
+                                if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                                {
+                                    @Html.DisplayFor(modelItem => medicine.name)
                                     break;
+
                                 }
 
                             }
                         }
                     }
-                }
-                <h5>Take </h5>
-                @foreach (var item2 in stepsMedicines)
-                {
-                    if (item2.StepId == steps[i].StepId)
-                    {
-                        foreach (var medicine in medicines)
-                        {
-                            if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
-                            {
-                                @Html.DisplayFor(modelItem => medicine.name)
-                                break;
 
-                            }
+                    <br />
 
-                        }
-                    }
-                }
-                <br />
+                </tr>
+            </div>
 
-            </tr>
         }
 
-        <br />
-        <br />
 
-
-        <div id="dateAppoint" hidden>
-            <h3> Appointment</h3>
-            <br />
-            <h3>Time</h3>
-            @Html.Partial("~/Views/FrontEnd/_SetAppointment.cshtml", appointment)
-        </div>
-
-
-
-        <button id="Appoint">Appointment</button>
-
-        @*//Date picker pops up*@
-
-    </dl>
-
+    </div>
 
     <br />
     <br />
-    <div id="review" hidden>
+
+
+
+
+    <div id="review">
         <div>
-            <h4>How do you feel about your condition today?</h4>
             @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml", condition)
         </div>
-        <button id="SubmitCondition">Submit</button>
 
 
         <div>
-            <h4>What is your overall mood today?</h4>
             @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml", mood)
 
         </div>
-        <button id="SubmitMood">Submit</button>
     </div>
 
-    <button id="submitReview">Review</button>
+
+
+
+
+
 
 </div>
 
 
-@*<div>
-       @Html.Partial("~/Views/FrontEnd/Schedule.cshtml");
-             <button>Request Appointment</button>//Date picker pops up
-    </div>
-    <div>
-        @Html.Partial("~/Views/FrontEnd/_Diagnosis.cshtml");
-    </div>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-    <div>
-        @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml");\
-    </div>
 
-        <div>
-        @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml");\
-    </div>
 
-    <div>
-        @Html.Partial("~/Views/FrontEnd/_DailyPlanner.cshtml");
-    </div>*@
+
+
 
 <script>
 
     $(document).ready(function () {
 
-        
-    
-      $(function () {
-          $("#input:text.date").datepicker({
-              dateFormat: "dd/mm/yy"
-          });      
-          });
+
+
+        $(function () {
+            $("#input:text.date").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+        });
 
         $('#SubmitMood').click(function () { //async
 
@@ -223,14 +265,7 @@
 
         });
 
-        
-        $("#submitReview").click(function () {
 
-            $("#review").show();
-            $("#submitReview").hide();
-
-
-        });
 
 
 
@@ -238,5 +273,5 @@
 
 </script>
 <script>
- 
+
 </script>

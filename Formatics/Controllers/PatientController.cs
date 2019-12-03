@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 namespace Formatics.Controllers
 {
     [Authorize]
 
     public class PatientController : Controller
     {
+
         // GET: Patient
         ApplicationDbContext db = new ApplicationDbContext();
         public List<string> LoadResources()
@@ -102,6 +104,8 @@ namespace Formatics.Controllers
         //}
         public ActionResult Index()//Patient Dashboard
         {
+
+
             DateTime currentDate = DateTime.Today;
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
             string userId = User.Identity.GetUserId();
@@ -112,11 +116,11 @@ namespace Formatics.Controllers
 
 
 
-            List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery").ToList();
-            IList<Alert> shortList = new List<Alert>();
+            List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time.Day == currentDate.Day).ToList();
+            List<Alert> shortList = new List<Alert>();
             try
             {
-                for (int i = 1; i <= 5; i++)
+                for (int i = 0; i <= 5; i++)
                 {
                     shortList.Add(alerts[i]);
                 }
@@ -240,7 +244,9 @@ namespace Formatics.Controllers
         //Treatment Plan
         public ActionResult ViewAll()
         {
-            List<Alert> allAlerts = db.alerts.ToList();
+            DateTime currentDate = DateTime.Today;
+
+            List<Alert> allAlerts = db.alerts.Where(e => e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time.Day == currentDate.Day).ToList();
             return PartialView("~/Views/FrontEnd/_Alerts.cshtml", allAlerts);
         }
 

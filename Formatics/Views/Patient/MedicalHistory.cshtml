@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Formatics.Models.Diagnosis>
 
 @{
-        var patient = ViewData["Patient"] as Formatics.Models.Patient;
+    var patient = ViewData["Patient"] as Formatics.Models.Patient;
 
     ViewBag.Title = "MedicalHistory";
     var medicine = ViewData["Medicine"] as List<Formatics.Models.Medicine>;
@@ -34,38 +34,46 @@
     </div>
 }
 
+
 <h2>MedicalHistory</h2>
 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table">
+                <h3>Diagnosis</h3>
+                <tr>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.InterventionId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.dateDiagnosed)
+                    </th>
+                    <th></th>
+                </tr>
 
-<table class="table">
-    <tr>
-        <th hidden>
-            @Html.DisplayNameFor(model => model.InterventionId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.dateDiagnosed)
-        </th>
-        <th></th>
-    </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.InterventionId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.dateDiagnosed)
+                        </td>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.InterventionId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.dateDiagnosed)
-            </td>
+                    </tr>
+                }
 
-        </tr>
-    }
-
-</table>
-@Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml", medicine)
+            </table>
+            <h3>Medicine</h3>
+            @Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml", medicine)
+        </div>
+    </div>
+    </div>
