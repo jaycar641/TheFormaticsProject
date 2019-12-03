@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace Formatics.Controllers
 {
@@ -189,6 +191,13 @@ namespace Formatics.Controllers
             alert1.time = alert.time.Date;
             db.SaveChanges();
 
+            TwilioClient.Init(twillio.accountSid, twillio.authToken);
+
+            var message = MessageResource.Create(
+                body: "Your Appointment has been sent.  We will send you  reminder the day of",
+                from: new Twilio.Types.PhoneNumber("+12056513904"),
+                to: new Twilio.Types.PhoneNumber("+14143887275")
+            );
             //twillio
 
             return RedirectToAction("Index", "Intervention");

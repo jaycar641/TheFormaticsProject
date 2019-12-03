@@ -194,6 +194,7 @@ namespace Formatics.Controllers
                     diagnosis.dateDiagnosed = DateTime.Now;
                     Intervention intervention = new Intervention();
                     diagnosis.InterventionId = intervention.InterventionId;
+                    diagnosis.isCurrent = true;
 
                     switch(diagnosis.category) //Use database lingo 
                     {

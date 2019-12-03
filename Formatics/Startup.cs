@@ -47,22 +47,22 @@ namespace Formatics
             TwilioClient.Init(twillio.accountSid, twillio.authToken);
             //check list and if they have been sent out
             ApplicationDbContext db = new ApplicationDbContext();
-            DateTime date = new DateTime();
-            date = DateTime.Today.Date;
-            List<Alert> alerts = db.alerts.ToList();
+            DateTime currentDate = DateTime.Today;
+
+            //DateTime date = new DateTime();
+            //date = DateTime.Today.Date;
+            List<Alert> alerts = db.alerts.Where(e => e.time.Day == currentDate.Day).ToList();
 
             foreach (Alert alert in alerts)
             {
-                if (alert.time.Date == date.Date)
-                {
-                   
+                
 
                     var message = MessageResource.Create(
                         body: "You have a " + alert.type + " today at " + alert.time.Hour.ToString() + ":" + alert.time.Minute.ToString() + "  " + " Notes: " + alert.description + "",
                         from: new Twilio.Types.PhoneNumber("+12056513904"),
                         to: new Twilio.Types.PhoneNumber("+14143887275")
                     );
-                }
+                
 
             }
         }
