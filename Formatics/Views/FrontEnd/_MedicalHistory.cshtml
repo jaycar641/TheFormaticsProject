@@ -1,33 +1,38 @@
 ﻿@model IEnumerable<Formatics.Models.Medicine>
 
+    <div style="border:double;  border-color: olivedrab">
+        <br />
+        <h3>Medicine</h3>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.drugClass)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isCurrent)
-        </th>
-        <th></th>
-    </tr>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.drugClass)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isCurrent)
+                </th>
+                <th></th>
+            </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.drugClass)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isCurrent)
-        </td>
-  
-    </tr>
-}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.drugClass)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.isCurrent)
+                    </td>
 
-</table>
+                </tr>
+            }
+
+        </table>
+    </div>

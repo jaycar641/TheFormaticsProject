@@ -146,7 +146,7 @@ namespace Formatics.Controllers
         {
            
 
-            ViewBag.Name = new SelectList(db.diagnoses.ToList(), "category", "category");
+            ViewBag.Name = new SelectList(db.diagnoses.ToList(), "DiagnosisId", "category");
 
             return View();
         }
@@ -196,7 +196,7 @@ namespace Formatics.Controllers
                     diagnosis.InterventionId = intervention.InterventionId;
                     diagnosis.isCurrent = true;
 
-                    switch(diagnosis.category) //Use database lingo 
+                    switch(model.diagnosis) //Use database lingo 
                     {
                         case "Acute Pain":
                         intervention.category = "Acute Pain Control";

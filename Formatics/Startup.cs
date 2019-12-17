@@ -49,20 +49,19 @@ namespace Formatics
             ApplicationDbContext db = new ApplicationDbContext();
             DateTime currentDate = DateTime.Today;
 
-            //DateTime date = new DateTime();
-            //date = DateTime.Today.Date;
-            List<Alert> alerts = db.alerts.Where(e => e.time.Day == currentDate.Day).ToList();
+            List<Alert> alerts = db.alerts.Where(e => e.time.Day == currentDate.Day && e.time.Month == currentDate.Month && e.time.Year == currentDate.Year).ToList();
 
             foreach (Alert alert in alerts)
             {
-                
 
-                    var message = MessageResource.Create(
-                        body: "You have a " + alert.type + " today at " + alert.time.Hour.ToString() + ":" + alert.time.Minute.ToString() + "  " + " Notes: " + alert.description + "",
-                        from: new Twilio.Types.PhoneNumber("+12056513904"),
-                        to: new Twilio.Types.PhoneNumber("+14143887275")
-                    );
-                
+                if (alert.time.Day == currentDate.Day && alert.time.Month == currentDate.Month && alert.time.Year == currentDate.Year)
+                {
+                    //var message = MessageResource.Create(
+                    //    body: "You have a " + alert.type + " today at " + alert.time.Hour.ToString() + ":" + alert.time.Minute.ToString() + "  " + " Notes: " + alert.description + "",
+                    //    from: new Twilio.Types.PhoneNumber("+12056513904"),
+                    //    to: new Twilio.Types.PhoneNumber("+14143887275")
+                    //);
+                }
 
             }
         }

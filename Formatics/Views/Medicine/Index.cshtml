@@ -38,57 +38,67 @@
 }
 <h2>Medicine</h2>>
 
-
+<div style="border:double;  border-color: olivedrab">
 <table class="table">
 
 
     @foreach (var item in list)
     {
-
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.drugClass)
-        </td>
-        <td id="ingredients" hidden>
-            @Html.DisplayFor(modelItem => item.ingredients)
-        </td>
-
-        <td id="symptoms" hidden>
-            @Html.DisplayFor(modelItem => item.symptoms)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isCurrent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            <button id="Details">Details</button>
-        </td>
-        <td id="detailsMedicine" hidden>
-            @Html.Partial("~/Views/FrontEnd/_symptoms.cshtml", symptoms)
-            @Html.Partial("~/Views/FrontEnd/_ingredients.cshtml", ingredients)
-            <button id="HideDetails">Hide</button>
-
-        </td>
-
-        @if (item.isCurrent == true)
-        {
-    <td>
-        @Html.ActionLink("Order Perscription", "OrderPerscription", new { MedicineId = item.MedicineId }, new { @class = "btn btn-default" })
-    </td>
-        }
-    </tr>
         <tr>
-           
+            <th>
+                <h5>Drug Class</h5>
+            </th>
+            <th>
+                <h5>Is Current</h5>
+            </th>
+            <th>
+                <h5>Name</h5>
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.drugClass)
+            </td>
+            <td id="ingredients" hidden>
+                @Html.DisplayFor(modelItem => item.ingredients)
+            </td>
+
+            <td id="symptoms" hidden>
+                @Html.DisplayFor(modelItem => item.symptoms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isCurrent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                <button id="Details">Details</button>
+            </td>
+            <td id="detailsMedicine" hidden>
+                @Html.Partial("~/Views/FrontEnd/_symptoms.cshtml", symptoms)
+                @Html.Partial("~/Views/FrontEnd/_ingredients.cshtml", ingredients)
+                <button id="HideDetails">Hide</button>
+
+            </td>
+
+            @if (item.isCurrent == true)
+            {
+                <td>
+                    @Html.ActionLink("Order Perscription", "OrderPerscription", new { MedicineId = item.MedicineId }, new { @class = "btn btn-default" })
+                </td>
+            }
+        </tr>
+        <tr>
         </tr>
 
-     
+
 
 
     }
 </table>
-
+</div>
 
 
 <script>

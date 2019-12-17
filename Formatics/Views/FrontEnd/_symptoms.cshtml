@@ -4,18 +4,19 @@
 
     var symptoms = Model;
 }
+    <div style="border:double;  border-color: olivedrab">
+        <h4>Symptoms</h4>
+        <table class="table">
 
 
-    <table class="table">
+            @foreach (var item in symptoms)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item)
+                    </td>
+                </tr>
+            }
 
-
-        @foreach (var item in symptoms)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item)
-                </td>
-            </tr>
-        }
-
-    </table>
+        </table>
+    </div>

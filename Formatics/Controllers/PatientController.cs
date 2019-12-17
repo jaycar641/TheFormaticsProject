@@ -116,7 +116,7 @@ namespace Formatics.Controllers
 
 
 
-            List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time.Day == currentDate.Day).ToList();
+            List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time >= currentDate).ToList();
             List<Alert> shortList = new List<Alert>();
             try
             {
@@ -129,7 +129,7 @@ namespace Formatics.Controllers
             {
                 shortList = shortList;
             }
-            Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.InterventionId == intervention.InterventionId).SingleOrDefault();
+            Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.Date.Month == currentDate.Month && e.Date.Year == currentDate.Year && e.InterventionId == intervention.InterventionId).SingleOrDefault();
             int number = patient.PatientNumber;
             string date = "Today is " + currentDate.ToLongDateString();
             ViewData["AlertData"] = shortList;
@@ -246,7 +246,7 @@ namespace Formatics.Controllers
         {
             DateTime currentDate = DateTime.Today;
 
-            List<Alert> allAlerts = db.alerts.Where(e => e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time.Day == currentDate.Day).ToList();
+            List<Alert> allAlerts = db.alerts.Where(e => e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time >= currentDate).ToList();
             return PartialView("~/Views/FrontEnd/_Alerts.cshtml", allAlerts);
         }
 

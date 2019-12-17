@@ -1,6 +1,6 @@
 ﻿@model DateTime?
 
-@Html.TextBox("", Model.HasValue ? Model.Value.ToString("dd/MM/yyyy") : "", new { @class = "date"})
+@Html.TextBox("", Model.HasValue ? Model.Value.ToString("MM/dd/yyyy") : "", new { @class = "date"})
 
 
 

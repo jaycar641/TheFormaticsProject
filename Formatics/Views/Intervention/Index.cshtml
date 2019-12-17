@@ -10,6 +10,8 @@
     var appointment = ViewData["Appointment"] as Formatics.Models.Alert;
     var condition = ViewData["Condition"] as Formatics.Models.Feedback;
     var mood = ViewData["Mood"] as Formatics.Models.Feedback;
+    var medi = ViewData["CurrentMed"] as Formatics.Models.Medicine;
+
 
 
 
@@ -83,7 +85,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
     <br />
     <br />
     <div class="row">
-        <div class="col-sm-6 sidenav">
+        <div style="border:double;  border-color: olivedrab" class="col-sm-6 sidenav">
       
             <div id="dateAppoint" hidden>
                 <h3> Appointment</h3>
@@ -99,7 +101,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 
         </div>
 
-        <div class="col-sm-6">
+        <div style="border:double;  border-color: olivedrab" class="col-sm-6">
 
             <h4>Daily Planner</h4>
             <dl id="GlimpsePage">
@@ -111,8 +113,12 @@ var chart = new CanvasJS.Chart("chartContainer", {
                 @Html.Display("Day")
 
             </dl>
+            <h5> Take </h5>
+            <dl>
+                @Html.Display("CurrentMed")
+            </dl>
 
-            <li>@Html.ActionLink("Medication", "Medication", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</li>
+            @Html.ActionLink("Medication", "Medication", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })
 
         </div>
 
@@ -123,21 +129,21 @@ var chart = new CanvasJS.Chart("chartContainer", {
 
     @Html.Display("Schedule")
 
-    <div class="row">
+    <div style="border:double;  border-color: olivedrab" class="row">
 
 
-        @for (int i = 1; i <= 7; i++)
+        @for (int i = 1; i <= 6; i++)
         {
-            <div class="col-sm-2">
+            <div style="border:double;  border-color: olivedrab" class="col-sm-2">
 
                 <tr>
                     <br />
-                    <th>
+                    @*<th>
                         Day
                     </th>
                     <th>
                         @Html.DisplayFor(modelItem => steps[i].day)
-                    </th>
+                    </th>*@
                     <th>
                         Date
                     </th>
@@ -157,17 +163,25 @@ var chart = new CanvasJS.Chart("chartContainer", {
                         {
                             foreach (var item1 in stepsProcedures)
                             {
-                                if (item1.StepId == steps[i].StepId)
+                                if (item1 != null)
                                 {
-                                    foreach (var procedure in procedures)
+                                    if (item1.StepId == steps[i].StepId)
                                     {
-                                        if (procedure.ProcedureId == item1.ProcedureId)
+                                        foreach (var procedure in procedures)
                                         {
+                                            if (procedure.ProcedureId == item1.ProcedureId)
+                                            {
                                             @Html.DisplayFor(modelItem => procedure.category)
-                                            break;
-                                        }
+                                              break;
+                                            }
 
+
+                                        }
                                     }
+                                }
+                                else
+                                {
+                                    break;
                                 }
                             }
 
@@ -177,17 +191,20 @@ var chart = new CanvasJS.Chart("chartContainer", {
                     <h5>Take </h5>
                     @foreach (var item2 in stepsMedicines)
                     {
-                        if (item2.StepId == steps[i].StepId)
+                        if (item2 != null)
                         {
-                            foreach (var medicine in medicines)
+                            if (item2.StepId == steps[i].StepId)
                             {
-                                if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                                foreach (var medicine in medicines)
                                 {
+                                    if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                                    {
                                     @Html.DisplayFor(modelItem => medicine.name)
-                                    break;
+                                        break;
+
+                                    }
 
                                 }
-
                             }
                         }
                     }
@@ -208,13 +225,13 @@ var chart = new CanvasJS.Chart("chartContainer", {
 
 
 
-    <div id="review">
-        <div>
+    <div style="border:double;  border-color: olivedrab" id="review">
+        <div style="border:double;  border-color: olivedrab">
             @Html.Partial("~/Views/FrontEnd/_SubmitCondition.cshtml", condition)
         </div>
 
 
-        <div>
+        <div style="border:double;  border-color: olivedrab">
             @Html.Partial("~/Views/FrontEnd/_SubmitMood.cshtml", mood)
 
         </div>

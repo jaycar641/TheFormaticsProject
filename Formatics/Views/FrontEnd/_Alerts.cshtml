@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Formatics.Models.Alert>
 
 
-<table class ="col-sm-4" class="table" >
+<table class="col-sm-4" class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.type)
@@ -18,22 +18,25 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.type)
-        </td>
-        <td hidden>
-            @Html.DisplayFor(modelItem => item.frequency)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.time)
-        </td>
-        <td hidden>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-      
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.frequency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.time)
+            </td>
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+
+        </tr>
+    }
 
 </table>
+<br />
+<br />

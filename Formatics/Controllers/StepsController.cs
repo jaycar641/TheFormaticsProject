@@ -67,7 +67,7 @@ namespace Formatics.Controllers
                             step2.description = "Surgery";
                             procedure.location = "Froedert Hospital";
                             Alert alert = new Alert();
-                            alert.time = DateTime.Now.AddDays(count3 +1);
+                            alert.time = DateTime.Now.AddDays(count3);
                             alert.type = "Surgery";
                             alert.frequency = 1;
                             alert.description = "Surgery in 2 hours, do not eat any food!";

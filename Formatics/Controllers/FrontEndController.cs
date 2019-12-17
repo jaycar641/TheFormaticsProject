@@ -148,14 +148,15 @@ namespace Formatics.Controllers
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             feedback.date = DateTime.Now;
-            Feedback feedback1 = new Feedback(); feedback1.comments = feedback.comments;
+            Feedback feedback1 = new Feedback(); 
+            feedback1.comments = feedback.comments;
             feedback1.rating = feedback.rating;
             feedback1.date = feedback.date;
             feedback1.PatientNumber = patient.PatientNumber;
             feedback1.type = "Mood";
             feedback1.StepId = feedback.StepId;
             db.feedbacks.Add(feedback1);
-            ViewBag.PartialStyle1 = "display: none";
+            ViewBag.PartialStyle = "display: none";
 
             db.SaveChanges();
 
@@ -177,7 +178,7 @@ namespace Formatics.Controllers
             feedback1.StepId = feedback.StepId;
             feedback1.PatientNumber = patient.PatientNumber;
             db.feedbacks.Add(feedback1);
-            ViewBag.PartialStyle2 = "display: none";
+            ViewBag.Name = "display: none";
 
             db.SaveChanges();
             return RedirectToAction("Index", "Intervention");
@@ -186,16 +187,20 @@ namespace Formatics.Controllers
         [HttpPost]
         public ActionResult Alert(int AlertId, Alert alert)
         {
-          Alert alert1 =  db.alerts.Where(e => e.AlertId == AlertId).SingleOrDefault();
+            Alert alert1 = new Alert();
             alert1.description = alert.description;
+            alert1.description = alert.description;
+            alert1.frequency = alert.frequency;
+            alert1.type = "Appointment";
             alert1.time = alert.time.Date;
+            db.alerts.Add(alert1);
             db.SaveChanges();
 
             TwilioClient.Init(twillio.accountSid, twillio.authToken);
 
             var message = MessageResource.Create(
-                body: "Your Appointment has been sent.  We will send you  reminder the day of",
-                from: new Twilio.Types.PhoneNumber("+12056513904"),
+                body: "Your Appointment has been sent.  We will send you a reminder the day of",
+                from: new Twilio.Types.PhoneNumber("+12564877936"),
                 to: new Twilio.Types.PhoneNumber("+14143887275")
             );
             //twillio

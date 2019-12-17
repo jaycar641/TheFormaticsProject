@@ -39,7 +39,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-12">
+        <div style="border:double;  border-color: olivedrab" class="col-sm-12">
             <table class="table">
                 <h3>Diagnosis</h3>
                 <tr>
@@ -72,7 +72,9 @@
                 }
 
             </table>
-            <h3>Medicine</h3>
+
+        </div>
+        <div style="border:double;  border-color: olivedrab">
             @Html.Partial("~/Views/FrontEnd/_MedicalHistory.cshtml", medicine)
         </div>
     </div>

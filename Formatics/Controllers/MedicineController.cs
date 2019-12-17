@@ -165,7 +165,7 @@ namespace Formatics.Controllers
 
             var message = MessageResource.Create(
                 body: "Your perscription for " + medicine.name + " has been received!  We will notifiy you when it is available",
-                from: new Twilio.Types.PhoneNumber("+12056513904"),
+                from: new Twilio.Types.PhoneNumber("+12564877936"),
                 to: new Twilio.Types.PhoneNumber("+14143887275")
             );
             return RedirectToAction("Index", "Medicine");

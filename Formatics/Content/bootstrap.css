@@ -243,6 +243,7 @@ th {
   }
   .navbar {
     display: none;
+    color:blue;
   }
   .btn > .caret,
   .dropup > .btn > .caret {
@@ -4673,7 +4674,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-  color: #fff;
+  color: #3c763d;
   background-color: transparent;
 }
 .navbar-inverse .navbar-text {
