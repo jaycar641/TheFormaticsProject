@@ -317,6 +317,7 @@
     <Content Include="Views\FrontEnd\_ingredients.cshtml" />
     <Content Include="Views\FrontEnd\_Results.cshtml" />
     <Content Include="Views\Intervention\DrawChart.cshtml" />
+    <Content Include="Views\Intervention\test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

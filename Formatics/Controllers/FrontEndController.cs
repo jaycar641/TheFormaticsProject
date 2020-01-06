@@ -148,6 +148,8 @@ namespace Formatics.Controllers
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             feedback.date = DateTime.Now;
+
+            //////////////////////////////FEEDBACK LOAD
             Feedback feedback1 = new Feedback(); 
             feedback1.comments = feedback.comments;
             feedback1.rating = feedback.rating;
@@ -168,7 +170,6 @@ namespace Formatics.Controllers
         {
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-
             feedback.date = DateTime.Now;
             Feedback feedback1 = new Feedback();
             feedback1.comments = feedback.comments;

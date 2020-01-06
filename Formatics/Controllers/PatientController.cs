@@ -18,6 +18,7 @@ namespace Formatics.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         public List<string> LoadResources()
         {
+            /////////////////////////////////////////LOAD CURRENT INFO FUNCTION
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();

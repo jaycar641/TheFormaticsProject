@@ -18,6 +18,7 @@ namespace Formatics.Controllers
 
         public ActionResult Index()//Treatment Plan Homepage
         {
+            ////////////////////////////////////////////LOAD CURRENT INFO
             DateTime currentDate = DateTime.Today;
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
@@ -32,7 +33,7 @@ namespace Formatics.Controllers
             List<StepProcedure> stepProcedures = new List<StepProcedure>();
             List<Procedure> procedures = new List<Procedure>();
             Medicine med = db.medicine.Where(e => e.isCurrent).SingleOrDefault();
-;            List<Medicine> medicines = new List<Medicine>();
+            List<Medicine> medicines = new List<Medicine>();
             List<int> ratings = new List<int>();
             for(int i = 1; i <=10; i++)
             {
@@ -40,16 +41,16 @@ namespace Formatics.Controllers
             }
 
             //Alert alert = db.alerts.Where(e=> e.type == "Appointment" && e.description == null && e.)
-
+            ////////////////////////////////////////////////LOAD ALERT
                 Alert appointmentAlert = new Alert();
                 appointmentAlert.frequency = 1;
                 appointmentAlert.time = DateTime.Today;
                 ViewData["Appointment"] = appointmentAlert;
        
-
+            ///////////////////////////////////////FEEDBACK FUNCTION
             Feedback feedback1 = db.feedbacks.Where(e => e.date.Day == currentDate.Day && e.date.Month == currentDate.Month && e.date.Year == currentDate.Year && e.type == "Mood").SingleOrDefault();
             Feedback feedback2 = db.feedbacks.Where(e => e.date.Day == currentDate.Day && e.date.Month == currentDate.Month && e.date.Year == currentDate.Year && e.type == "Condition").SingleOrDefault();
-
+            
             if (feedback1 == null && feedback2 != null)
             {
                 Feedback condition = db.feedbacks.Where(e => e.date.Day == currentDate.Day && e.date.Month == currentDate.Month && e.date.Year == currentDate.Year && e.type == "Condition").SingleOrDefault();
@@ -115,12 +116,21 @@ namespace Formatics.Controllers
 
             List<Medicine> medlist = db.medicine.ToList();
             List<Procedure> prolist = db.procedures.ToList();
+
+            ///////////////////////////////////////LOAD JUNCTIONS
             foreach(Steps steps1 in steps)
             {
                 if (medlist.Count != 0)
                 {
-                    StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                  stepMedicines.Add(stepMedicine);
+                    try
+                    {
+                        StepMedicine stepMedicine = db.stepMedicines.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                        stepMedicines.Add(stepMedicine);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
                 }
             }
             foreach (Steps steps1 in steps)
@@ -134,7 +144,7 @@ namespace Formatics.Controllers
                     }
                     catch
                     {
-                        break;
+                        continue;
                     }
                 }
             }
@@ -150,7 +160,7 @@ namespace Formatics.Controllers
                     }
                     catch
                     {
-                        break;
+                        continue;
                     }
                 }
             }
@@ -171,6 +181,7 @@ namespace Formatics.Controllers
                 }
             }
 
+
             ViewData["Steps"] = steps;
             ViewData["StepsMedicine"] = stepMedicines;
             ViewData["StepsProcedure"] = stepProcedures;
@@ -183,11 +194,10 @@ namespace Formatics.Controllers
             ViewData["CurrentMed"] = med.name;
 
 
+
+            /////////////////////////////////DATAPOINTS FUNCTION
             List<DataPoint> dataPoints1 = new List<DataPoint>();
             List<DataPoint> dataPoints2 = new List<DataPoint>();
-
-
-
             for (int i = 0; i < intervention.duration; i ++)
             {
                 DateTime testfeed = diagnosis.dateDiagnosed.AddDays(i);
@@ -223,40 +233,8 @@ namespace Formatics.Controllers
             }
 
 
-
-
             ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1); //mood
             ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2); //condition
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             return View();
         }
@@ -360,5 +338,10 @@ namespace Formatics.Controllers
             return View(feedback);
         }
         
+        public ActionResult test ()
+        {
+          
+            return View();
+        }
     }
 }

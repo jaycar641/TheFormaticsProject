@@ -148,10 +148,9 @@ var chart = new CanvasJS.Chart("chartContainer", {
                         Date
                     </th>
                     <th>
-                        @Html.DisplayFor(modelItem => steps[i].Date)
+                        <h5> @Html.DisplayFor(modelItem => steps[i].Date.Month) / @Html.DisplayFor(modelItem => steps[i].Date.Day) / @Html.DisplayFor(modelItem => steps[i].Date.Year) </h5>
                     </th>
                     <th>
-                        Description
                     </th>
                     <th>
                         @Html.DisplayFor(modelItem => steps[i].description)
@@ -172,6 +171,8 @@ var chart = new CanvasJS.Chart("chartContainer", {
                                             if (procedure.ProcedureId == item1.ProcedureId)
                                             {
                                             @Html.DisplayFor(modelItem => procedure.category)
+                                                <br />
+                                                <br />
                                               break;
                                             }
 
@@ -187,28 +188,33 @@ var chart = new CanvasJS.Chart("chartContainer", {
 
                         }
                     </th>
-
+                    <br />
                     <h5>Take </h5>
-                    @foreach (var item2 in stepsMedicines)
-                    {
-                        if (item2 != null)
+                    <th>
+                        @foreach (var item2 in stepsMedicines)
                         {
-                            if (item2.StepId == steps[i].StepId)
+                            if (item2 != null)
                             {
-                                foreach (var medicine in medicines)
+                                if (item2.StepId == steps[i].StepId)
                                 {
-                                    if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                                    foreach (var medicine in medicines)
                                     {
-                                    @Html.DisplayFor(modelItem => medicine.name)
-                                        break;
+                                        if (medicine.MedicineId == item2.MedicineId && medicine.isCurrent == true)
+                                        {
+                                            @Html.DisplayFor(modelItem => medicine.name)
+                                            break;
+
+                                        }
 
                                     }
-
                                 }
                             }
+                            else
+                            {
+                               
+                            }
                         }
-                    }
-
+                    </th>
                     <br />
 
                 </tr>

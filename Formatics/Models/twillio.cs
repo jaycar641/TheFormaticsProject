@@ -7,7 +7,7 @@ namespace Formatics.Models
 {
 	public static class twillio
 	{
-      public const string accountSid = "";
-        public const string authToken = "";
+      public const string accountSid = 
+        public const string authToken = 
     }
 }

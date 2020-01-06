@@ -17,6 +17,7 @@ namespace Formatics.Controllers
 
         public ActionResult Index() //Standalone Medication page a list of medications
         {
+            ///LOAD INFO FUNCTION
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
@@ -27,7 +28,7 @@ namespace Formatics.Controllers
             List<Steps> steps = new List<Steps>();
             List<Medicine> medicines = db.medicine.Where(e=> e.isCurrent == true).ToList();
             Medicine medicine = db.medicine.Where(e => e.isCurrent == true).SingleOrDefault();
-            
+            ///////////////////////////////////Load SYMPTOMS
             switch (medicine.name)
             {
                 case "Tylenol":
@@ -58,6 +59,8 @@ namespace Formatics.Controllers
 
 
             }
+
+            /////LOAD ALERT
             Alert appointmentAlert = new Alert();
             appointmentAlert.type = "Appointment";
             appointmentAlert.frequency = 1;
@@ -153,6 +156,8 @@ namespace Formatics.Controllers
         public ActionResult OrderPerscription(int MedicineId)
         {
             Medicine medicine = db.medicine.Where(e => e.MedicineId == MedicineId).SingleOrDefault();
+            
+            /////////////////////////Load alert
             Alert pickup = new Alert();
 
             pickup.description = "Your Perscription is ready!";

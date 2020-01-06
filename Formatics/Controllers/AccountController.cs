@@ -175,6 +175,8 @@ namespace Formatics.Controllers
 
                     Patient patient1 = new Patient();
                     patient1.ApplicationId = user.Id;
+
+
                     patient1.age = model.age;
                     patient1.enrollDate =  DateTime.Now;
                     patient1.firstName = model.firstName;
@@ -192,7 +194,11 @@ namespace Formatics.Controllers
                     Diagnosis diagnosis = new Diagnosis();
                     diagnosis.category = model.diagnosis;
                     diagnosis.dateDiagnosed = DateTime.Now;
+
+
+
                     Intervention intervention = new Intervention();
+                    ////////////after both load functions set intervention id and iscurrent
                     diagnosis.InterventionId = intervention.InterventionId;
                     diagnosis.isCurrent = true;
 
