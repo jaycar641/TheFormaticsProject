@@ -92,25 +92,12 @@ namespace Formatics.Controllers
 
             }
         }
-        //Profile
-
-
-        //Symptoms Checker
-
-
-        //Medicine
-        // GET: 
+ 
         public ActionResult Perscription() //Feedback review paqge
         {
             return PartialView();
 
         }
-
-
-
-
-
-
 
         //Dashboard
         public ActionResult Personalization()
@@ -130,17 +117,6 @@ namespace Formatics.Controllers
             return PartialView();
         }
 
-
-
-
-
-
-
-
-
-
-     
-
         // GET: 
         [HttpPost]
         public ActionResult Mood(int FeedbackId, Feedback feedback) //Feedback review paqge
@@ -149,7 +125,6 @@ namespace Formatics.Controllers
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             feedback.date = DateTime.Now;
 
-            //////////////////////////////FEEDBACK LOAD
             Feedback feedback1 = new Feedback(); 
             feedback1.comments = feedback.comments;
             feedback1.rating = feedback.rating;
@@ -247,8 +222,6 @@ namespace Formatics.Controllers
             return PartialView();
         }
 
-        // GET: 
-      
 
 
     }

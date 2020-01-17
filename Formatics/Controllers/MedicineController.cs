@@ -20,11 +20,7 @@ namespace Formatics.Controllers
             ///LOAD INFO FUNCTION
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault(); //only one
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();//only one
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-           
+    
             List<Steps> steps = new List<Steps>();
             List<Medicine> medicines = db.medicine.Where(e=> e.isCurrent == true).ToList();
             Medicine medicine = db.medicine.Where(e => e.isCurrent == true).SingleOrDefault();
@@ -157,7 +153,6 @@ namespace Formatics.Controllers
         {
             Medicine medicine = db.medicine.Where(e => e.MedicineId == MedicineId).SingleOrDefault();
             
-            /////////////////////////Load alert
             Alert pickup = new Alert();
 
             pickup.description = "Your Perscription is ready!";
