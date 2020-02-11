@@ -1,0 +1,44 @@
+﻿
+
+@{
+    ViewBag.Title = "Map";
+    var mapPoint = ViewData["MapLocation"] as string;
+
+}
+
+<h2>Map</h2>
+
+<div id="testMap"></div>
+
+<script>
+    /////Do a geocoding search using the search results of Froedert and put them into marker object, and add
+    //var geocoder = new google.maps.Geocoder();
+    var mapFlag = @mapPoint;
+    var address = mapFlag;
+                    //position: results[0].geometry.location,
+    var marker = new google.maps.Marker({
+                position: mapFlag,
+                map: map,
+                 zoom: 16,
+                icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+            });
+    ////geocoder.geocode({ 'address': address }, function (results, status) {
+    ////    if (status == 'OK') {
+    ////        var marker = new google.maps.Marker({
+    ////            position: mapFlag,
+    ////            map: map,
+    ////             zoom: 16,
+    ////            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+    ////        });
+
+    ////    }
+    ////    else {
+
+    ////        console.log("Map not loading");
+    ////    }
+
+    ////});
+
+
+
+</script>

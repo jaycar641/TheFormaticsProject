@@ -318,6 +318,7 @@
     <Content Include="Views\FrontEnd\_Results.cshtml" />
     <Content Include="Views\Intervention\DrawChart.cshtml" />
     <Content Include="Views\Intervention\test.cshtml" />
+    <Content Include="Views\Patient\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

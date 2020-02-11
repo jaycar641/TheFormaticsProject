@@ -102,6 +102,23 @@
 
 
 <script>
+    $("#Details").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
 
+              $("#detailsMedicine").show();
+              $("#Details").hide();
+
+      
+          });
+
+         $("#HideDetails").click(function (page) {
+            page.preventDefault();
+            page.stopPropagation();
+
+              $("#detailsMedicine").hide();
+             $("#Details").show();
+
+         });
 
 </script>

@@ -5,30 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQbmRUy1ZtjroXIrAjcyqcJkRB74HHkU0&callback=initMap"
+            type="text/javascript"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAQbmRUy1ZtjroXIrAjcyqcJkRB74HHkU0"
+        type="text/javascript"></script>
     <style>
-         li:hover {
-        background-color: olivedrab;
-    }
+        #testMap {
+            height: 400px;
+            width: 300px;
+        }
+
+        li:hover {
+            background-color: olivedrab;
+        }
 
 
         div.body-content {
-
-            outline:double;
+            outline: double;
             outline-color: olivedrab;
-            
-            border:double;
-            border-color:olivedrab;
-            background:border-box;
+            border: double;
+            border-color: olivedrab;
+            background: border-box;
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
-        
+
         div.container {
             border-color: olivedrab;
-            background:border-box;
-            width:auto;
-
+            background: border-box;
+            width: auto;
         }
-
     </style>
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
@@ -70,9 +75,18 @@
     @RenderSection("scripts", required: false)
     <script>
 
-
+       
     $(document).ready(function () {
+         var location = { lat: 43.0389, lng: -87.9065 };
 
+            var options = {
+                zoom: 13, 
+                center: location,
+            }
+
+            var map = new google.maps.Map(document.getElementById('testMap'), options);
+
+            
         $("#Alert").click(function (page) {
             page.preventDefault();
             page.stopPropagation();
@@ -140,14 +154,33 @@
 
          });
        
+     
+        
+    
 
-      
+        //zoom: 13,
+        ////mapTypeId: google.maps.MapTypeId.ROADMAP,
+        //zoomControl: true,
+        //zoomControlOptions: {
+        //    position: google.maps.ControlPosition.LEFT_BOTTOM
+        //},
+        //streetViewControl: true,
+        //streetViewControlOptions: {
+        //    position: google.maps.ControlPosition.LEFT_BOTTOM
+
+        //},
+
+        //mapTypeControlOptions: {
+        //    position: google.maps.ControlPosition.RIGHT_CENTER
+        //},
+
 
 
 
 
 
     });
+           
 
     </script>
 

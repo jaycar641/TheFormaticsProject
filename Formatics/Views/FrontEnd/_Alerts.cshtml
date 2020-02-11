@@ -20,21 +20,22 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.frequency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.time)
-            </td>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.type)
+    </td>
+    <td hidden>
+        @Html.DisplayFor(modelItem => item.frequency)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.time)
+    </td>
+    <td hidden>
+        @Html.DisplayFor(modelItem => item.description)
+    </td>
+    @*@Html.ActionLink("Map", "Map", new { AlertId = item.AlertId }, new { @class = "btn btn-default" })*@
 
-        </tr>
+</tr>
     }
 
 </table>

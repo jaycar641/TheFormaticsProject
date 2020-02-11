@@ -8,23 +8,34 @@
 
 
 }
+
+<head>
+
+
+
+
+</head>
 <style>
     li:hover {
         background-color: olivedrab;
     }
 
-  .row1 {
-    display: table; /* Make the container element behave like a table */
-    width: 100%; /* Set full-width to expand the whole page */
-}
+    .row1 {
+        display: table; /* Make the container element behave like a table */
+        width: 100%; /* Set full-width to expand the whole page */
+    }
 
-.col-sm-6 sidenav{
-    display: table-cell; /* Make elements inside the container behave like table cells */
-}
-h2 {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
+    .col-sm-6 sidenav {
+        display: table-cell; /* Make elements inside the container behave like table cells */
+    }
 
+    .col-sm-3 sidenav {
+        display: table-cell; /* Make elements inside the container behave like table cells */
+    }
+
+    h2 {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
 </style>
 @if (Request.IsAuthenticated)
 {
@@ -58,60 +69,63 @@ h2 {
 
 
 
-    <h2>@Html.Display("Date")</h2>
+<h2>@Html.Display("Date")</h2>
 
 <div class="row1">
-    <div style="border:double;  border-color: olivedrab" class="col-sm-6 sidenav">
+    <div style="border: double; border-color: olivedrab" class="col-sm-3 sidenav">
+
         <h3>Alerts</h3>
-        <div id="alertsdetails">
-            @Html.Partial("~/Views/FrontEnd/_Alerts.cshtml", list)
-            <button id="hidealerts" hidden>Hide</button>
-        </div>
-        <br />
-        <br />
-        <br />        
-        <button class="btn btn-default" id="Alert" data-url='@Url.Action("ViewAll", "Patient")'>View All</button>
+            <div id="alertsdetails">
+                @Html.Partial("~/Views/FrontEnd/_Alerts.cshtml", list)
+                <button id="hidealerts" hidden>Hide</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            <button class="btn btn-default" id="Alert" data-url='@Url.Action("ViewAll", "Patient")'>View All</button>
     </div>
 
-            <div style="border:double; border-color: olivedrab" class="col-sm-6 sidenav">
-                <h3>Daily Planner</h3>
-                <dl id="GlimpsePage" class="dl-horizontal">
-                    <h5>Day </h5>
-                    @Html.Display("Glimpse")
-                </dl>
-                <h5> Description</h5>
-                <dl>
-                    @Html.Display("Day")
+    <div id ="testMap" style="border:double;  border-color: olivedrab" class="col-sm-3 sidenav" hidden>
+    
+           
+    </div>
+    <div style="border:double; border-color: olivedrab" class="col-sm-6 sidenav">
+        <h3>Daily Planner</h3>
+        <dl id="GlimpsePage" class="dl-horizontal">
+            <h5>Day </h5>
+            @Html.Display("Glimpse")
+        </dl>
+        <h5> Description</h5>
+        <dl>
+            @Html.Display("Day")
 
-                </dl>
-               
+        </dl>
 
-                <span>   @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
-                <span> @Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
-             </div>
- </div>
+
+        <span>   @Html.ActionLink("View", "Intervention", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
+        <span> @Html.ActionLink("Medication", "Index", "Medicine", new { PatientNumber = patient.PatientNumber }, new { @class = "btn btn-default" })</span>
+    </div>
+</div>
 
 <div class="row">
-        <div class="col-sm-12" style="border:double;  border-color: olivedrab">
-            <h4>Resources</h4>
+    <div class="col-sm-12" style="border:double;  border-color: olivedrab">
+        <h4>Resources</h4>
 
-            <table class="table">
+        <table class="table">
 
 
-                @foreach (var item in resources)
-                {
-                    <tr>
-                        <td>
-                            <a href="@(item)">@(item)</a>
-                        </td>
-                    </tr>
-                }
+            @foreach (var item in resources)
+            {
+                <tr>
+                    <td>
+                        <a href="@(item)">@(item)</a>
+                    </td>
+                </tr>
+            }
 
-                </table style="border:double;>
+        </table>
         
 
-            </div>
- </div>
-
-
+    </div>
+</div>
 

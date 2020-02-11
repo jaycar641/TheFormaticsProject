@@ -102,7 +102,23 @@ namespace Formatics.Controllers
         //public IList<Alert> Alerts(int amount)
         //{
         //    return 
-        //}
+            //}
+        public ActionResult Map (int alertId)
+        {
+            
+            Alert alert = db.alerts.Where(e => e.AlertId == alertId).SingleOrDefault();
+            Procedure procedure = db.procedures.Where(e => e.category == alert.type).SingleOrDefault(); //also use date and step procedure to secure
+            try
+            {
+            
+            ViewData["MapLocation"] = "{ lat: 43.0389, lng: -87.9065 }";
+            }
+            catch
+            {
+                ViewData["MapLocation"] = null;
+             }
+            return View();
+        }
         public ActionResult Index()//Patient Dashboard
         {
 
