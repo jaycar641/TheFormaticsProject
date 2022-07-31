@@ -19,43 +19,7 @@ namespace Formatics.Controllers
 
 
 
-        /// <summary>
-        /// //////////3 LoadAllSteps////////////////////////////
-        /// </summary>
-        public void LoadAllSteps(int duration, int interventionId, int patientNumber)
-        {
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-
-            for (int i = 0; i <= duration - 1; i++)
-            {
-                Steps steps = new Steps();
-
-                PatientStep patientStep = new PatientStep();
-                patientStep.PatientNumber = patient1.PatientNumber;
-                patientStep.StepId = steps.StepId;
-                patientStep.Date = intervention.startDate.AddDays(i);
-
-                steps.InterventionId = interventionId;
-                steps.day = i + 1;
-                steps.description = null;
-
-                steps.Date = intervention.startDate.AddDays(i);
-                db.steps.Add(steps);
-                db.patientSteps.Add(patientStep);
-                db.SaveChanges();
-
-            }
-
-            foreach (PatientStep patientStep in db.patientSteps.ToList())
-            {
-                patientStep.PatientNumber = patient1.PatientNumber;
-            }
-            db.SaveChanges();
-        }
+      
 
 
 
@@ -229,16 +193,6 @@ namespace Formatics.Controllers
 
 
 
-        // Patient Controller
-
-        /// <summary>
-        /// //////////4 LoadAllAlerts////////////////////////////
-        /// </summary>
-        public void LoadAllAlerts(int interventionId)
-        {
-            db.stepMedicines.ToList();
-        }
-
 
         public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
         {
@@ -293,13 +247,6 @@ namespace Formatics.Controllers
 
 
 
-
-
-
-        //Medicine Controller
-        /// <summary>
-        /// //////////7 LoadMedicineDetails//////////////
-        /// </summary>
         public Medicine LoadMedicineDetails(Intervention intervention, Diagnosis diagnosis, String category)
         {
             Medicine medicine = new Medicine();
@@ -381,8 +328,6 @@ namespace Formatics.Controllers
             return stepMedicine;
         }
 
-        ///Procedure Controller
-
         public Procedure LoadProcedures(Steps step2, String category) //Loaded for each procedure
         {
             Procedure procedure = new Procedure();
@@ -421,21 +366,20 @@ namespace Formatics.Controllers
 
 
 
-        /// <summary>
-        /// //////////1 Entry Point////////////////////////////
-        /// </summary>
-        /// <returns></returns>
         /// Use Authorize instead
         public ActionResult Index()
         {
+
             string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-          
+           Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
+            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
+            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
 
             if (User.Identity.IsAuthenticated == true)
             {
-                //RedirectToAction("Create", "Step", new { id = patient.PatientNumber });
-                Create(patient.PatientNumber);
+                   LoadStepDetails(patient.PatientNumber, diagnosis.category);
                 return RedirectToAction("Index", "Patient");
 
             }
@@ -451,48 +395,6 @@ namespace Formatics.Controllers
             return View();
         }
 
-        // GET: Steps/Create
-
-
-        /// <summary>
-       /// //////////2 Create ////////////////////////////
-        /// </summary>
-        public void Create(int patientNumber)  //Register goes to create step, then edit step then dashboard
-        {
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-           
-
-            ////Updated: You only need the intervention classs when calling the steps
-            LoadAllSteps(intervention.duration, intervention.InterventionId, patient1.PatientNumber);
-            LoadAllAlerts(intervention.InterventionId);
-            Edit(patientNumber);
-
-        }
-
-        // POST: Steps/Create
-
-        // GET: Steps/Edit/5
-        /// <summary>
-        /// //////////5 Edit ////////////////////////////
-        /// </summary>
-        public void Edit(int patientNumber)
-        {
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-
-            LoadStepDetails(patient1.PatientNumber, diagnosis.category);
-        }
-
-        // POST: Steps/Edit/5
-       
 
         // GET: Steps/Delete/5
         public ActionResult Delete(int id)

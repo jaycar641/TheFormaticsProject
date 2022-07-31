@@ -15,7 +15,49 @@ namespace Formatics.Controllers
     {
         // GET: Intervention
         ApplicationDbContext db = new ApplicationDbContext();
+        // </summary>
+        public void LoadAllAlerts(int interventionId)
+        {
+            db.stepMedicines.ToList();
+        }
 
+          /// <summary>
+        /// //////////3 LoadAllSteps////////////////////////////
+        /// </summary>
+        public void LoadAllSteps(int duration, int interventionId, int patientNumber)
+        {
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
+            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
+            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
+            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
+            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+
+            for (int i = 0; i <= duration - 1; i++)
+            {
+                Steps steps = new Steps();
+
+                PatientStep patientStep = new PatientStep();
+                patientStep.PatientNumber = patient1.PatientNumber;
+                patientStep.StepId = steps.StepId;
+                patientStep.Date = intervention.startDate.AddDays(i);
+
+                steps.InterventionId = interventionId;
+                steps.day = i + 1;
+                steps.description = null;
+
+                steps.Date = intervention.startDate.AddDays(i);
+                db.steps.Add(steps);
+                db.patientSteps.Add(patientStep);
+                db.SaveChanges();
+
+            }
+
+            foreach (PatientStep patientStep in db.patientSteps.ToList())
+            {
+                patientStep.PatientNumber = patient1.PatientNumber;
+            }
+            db.SaveChanges();
+        }
          public Intervention interventionLoad(string diagnosis, Patient patient)
         {
             Intervention intervention = new Intervention();
@@ -434,7 +476,7 @@ namespace Formatics.Controllers
 
         // POST: Intervention/Create
         [HttpPost]
-       public async Task<ActionResult> Create(string diagnosis)   //loading functions should be asynchronous
+       public ActionResult Create(string diagnosis)   //loading functions should be asynchronous
         {
             
             string userId = User.Identity.GetUserId();
@@ -445,7 +487,8 @@ namespace Formatics.Controllers
                   Intervention intervention = interventionLoad(diagnosis, patient);
                     db.interventions.Add(intervention);
                     db.SaveChanges();
-    
+                LoadAllSteps(intervention.duration, intervention.InterventionId, patient1.PatientNumber);
+                LoadAllAlerts(intervention.InterventionId);
 
                 return RedirectToAction("Create", "Patient", new {InterventionId = intervention.InterventionId, PatientNumber = patient.PatientNumber, Category = diagnosis });
             }
