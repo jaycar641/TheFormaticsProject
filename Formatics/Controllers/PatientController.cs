@@ -150,29 +150,6 @@ namespace Formatics.Controllers
         {
 
             
-                   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             DateTime currentDate = DateTime.Today;
@@ -182,8 +159,6 @@ namespace Formatics.Controllers
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-
-
 
             List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time >= currentDate).ToList();
             List<Alert> shortList = new List<Alert>();
