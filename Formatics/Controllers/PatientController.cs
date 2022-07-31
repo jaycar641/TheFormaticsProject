@@ -16,6 +16,33 @@ namespace Formatics.Controllers
 
         // GET: Patient
         ApplicationDbContext db = new ApplicationDbContext();
+
+         public Diagnosis diagnosisLoad (string diagnosis, int interventionId)
+        {
+            Intervention intervention = db.interventions.Where(e => e.InterventionId == intervention.InterventionId).SingleOrDefault();////
+           
+            Diagnosis diagnosis = new Diagnosis();
+            diagnosis.category = diagnosis; ////
+            diagnosis.dateDiagnosed = DateTime.Now;
+            diagnosis.InterventionId = interventionId;
+            diagnosis.isCurrent = true;
+            return diagnosis;
+        }
+
+            //Create the diagnosis in the patientDiagnosisLoad, saved it in the database, save the patient diagnosis in the database also 
+            public PatientDiagnosis patientDiagnosisLoad(int diagnosisId, int patientNumber)
+            {
+            PatientDiagnosis patientDiagnosis = new PatientDiagnosis();
+            Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.DiagnosisId == diagnosis.DiagnosisId).SingleOrDefault();
+
+            patientDiagnosis.DiagnosisId = diagnosis1.DiagnosisId;
+            patientDiagnosis.PatientNumber = patient.PatientNumber;
+
+            return patientDiagnosis;
+        }
+
+
         public List<string> LoadResources()
         {
             /////////////////////////////////////////LOAD CURRENT INFO FUNCTION
@@ -122,6 +149,31 @@ namespace Formatics.Controllers
         public ActionResult Index()//Patient Dashboard
         {
 
+            
+                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             DateTime currentDate = DateTime.Today;
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
@@ -181,17 +233,28 @@ namespace Formatics.Controllers
 
         // POST: Patient/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(int interventionId, int patientId, string category)
         {
+                 Patient patient = db.patients.Where(e => e.PatientNumber == patientId ).SingleOrDefault();
+
             try
             {
-                // TODO: Add insert logic here
+                Intervention intervention = db.interventions.Where(e=> e.InterventionId == interventionId).SingleOrDefault();
+                Diagnosis diagnosis = diagnosisLoad(category, intervention.InterventionId);                 
+                db.diagnoses.Add(diagnosis);
+                    db.SaveChanges();
 
-                return RedirectToAction("Index");
+                
+                    PatientDiagnosis patientDiagnosis = patientDiagnosisLoad(diagnosis.DiagnosisId, patientId);
+                    db.patientDiagnoses.Add(patientDiagnosis);
+                    db.SaveChanges();
+
+                   return RedirectToAction("Index", "Steps"); //will create steps first then go to dashboard
+
             }
             catch
             {
-                return View();
+                 return RedirectToAction("Register", "Account", new {patient}); 
             }
         }
 
