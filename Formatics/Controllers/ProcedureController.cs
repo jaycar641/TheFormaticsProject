@@ -12,6 +12,93 @@ namespace Formatics.Controllers
     {
         // GET: Procedure
         ApplicationDbContext db = new ApplicationDbContext();
+        
+
+        public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
+        {
+            Alert alert = new Alert();
+            switch (category) 
+            {
+                case "Acute Pain":
+                    if (dayPick.day == 4)
+                    {
+                        alert.time = DateTime.Now.AddDays(count);
+                        alert.type = "Surgery";
+                        alert.frequency = 1;
+                        alert.description = "Surgery in 2 hours, do not eat any food!";
+
+                    }
+                    else
+                    {
+                        alert.time = DateTime.Now.AddDays(count);
+                        alert.type = "Medication";
+                        alert.frequency = 1;
+                        alert.description = "Take your medication";
+                     
+                    }
+                    break;
+                case "Respiration Alteration":
+                    alert.time = DateTime.Now.AddDays(count);
+                    alert.type = "Medication";
+                    alert.frequency = 1;
+                    alert.description = "Take your Medication!";
+                    break;
+                case "Sleep Pattern Disturbance":
+                    alert.time = DateTime.Now.AddDays(count);
+                    alert.type = "Medication";
+                    alert.frequency = 1;
+                    alert.description = "Take your Medication!";
+                    break;
+
+                default:
+                    alert.time = DateTime.Now.AddDays(count);
+                    alert.type = "Medication";
+                    alert.frequency = 1;
+                    alert.description = "Take your Medication!";
+                    break;
+
+
+            }
+
+            return alert;
+
+        }
+
+          public Procedure LoadProcedures(Steps step2, String category) //Loaded for each procedure
+        {
+            Procedure procedure = new Procedure();
+            switch (category)
+            {
+                case "Acute Pain":
+                    procedure.category = "Surgery";
+                    procedure.date = step2.Date;
+                    procedure.location = "Froedert Hospital";
+                    break;
+                case "Respiration Alteration":
+
+                    break;
+                case "Sleep Pattern Disturbance":
+
+                    break;
+                    
+                default:
+
+                    break;
+
+            }
+            return procedure;
+
+        }
+        
+        public StepProcedure LoadStepProcedure(Procedure procedure, Steps step2)
+        {
+            StepProcedure stepProcedure = new StepProcedure();
+            stepProcedure.ProcedureId = procedure.ProcedureId;
+            stepProcedure.StepId = step2.StepId;
+            return stepProcedure;
+
+        }
+       
         public ActionResult Index()
         {
 
@@ -39,7 +126,12 @@ namespace Formatics.Controllers
             try
             {
                 
-                // TODO: Add insert logic here
+          
+
+
+
+
+
 
                 return RedirectToAction("Index");
             }
