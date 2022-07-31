@@ -54,71 +54,10 @@ namespace Formatics.Controllers
             }
         }
 
-            public PatientDiagnosis patientDiagnosisLoad(Diagnosis diagnosis, Patient patient)
-            {
-            PatientDiagnosis patientDiagnosis = new PatientDiagnosis();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.DiagnosisId == diagnosis.DiagnosisId).SingleOrDefault();
 
-            patientDiagnosis.DiagnosisId = diagnosis.DiagnosisId;
-            patientDiagnosis.PatientNumber = patient1.PatientNumber;
-
-            return patientDiagnosis;
-        }
-            public Diagnosis diagnosisLoad (RegisterViewModel model, Intervention intervention)
-        {
-            Intervention intervention1 = db.interventions.Where(e => e.InterventionId == intervention.InterventionId).SingleOrDefault();
+  
            
-            Diagnosis diagnosis = new Diagnosis();
-            diagnosis.category = model.diagnosis;
-            diagnosis.dateDiagnosed = DateTime.Now;
-            diagnosis.InterventionId = intervention1.InterventionId;
-            diagnosis.isCurrent = true;
-            return diagnosis;
-        }
-
-            public Intervention interventionLoad(RegisterViewModel model, Patient patient)
-        {
-            Intervention intervention = new Intervention();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
-
-            switch (model.diagnosis) //Use database lingo 
-            {
-                case "Acute Pain":
-                    intervention.category = "Acute Pain Control";
-                    intervention.startDate = DateTime.Now;
-                    intervention.duration = 180;
-                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
-                    intervention.expectedOutcome = "Improve";
-                    break;
-                case "Respiration Alteration":
-                    intervention.category = "Breathing Excercises";
-                    intervention.startDate = DateTime.Now;
-                    intervention.duration = 90;
-                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
-                    intervention.expectedOutcome = "Improve";
-                    break;
-                case "Sleep Pattern Disturbance":
-                    intervention.startDate = DateTime.Now;
-                    intervention.category = "Sleep Patten Control";
-                    intervention.duration = 21;
-                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
-                    intervention.expectedOutcome = "Improve";
-                    break;
-
-
-                default:
-                    intervention.category = "Nausea Care";
-                    intervention.startDate = DateTime.Now;
-                    intervention.duration = 30;
-                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
-                    intervention.expectedOutcome = "Improve";
-                    break;
-
-            }
-            return intervention;
-
-        }
+           
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -240,8 +179,6 @@ namespace Formatics.Controllers
 
                     Patient patient1 = new Patient();
                     patient1.ApplicationId = user.Id;
-
-
                     patient1.age = model.age;
                     patient1.enrollDate =  DateTime.Now;
                     patient1.firstName = model.firstName;
@@ -257,19 +194,13 @@ namespace Formatics.Controllers
                     db.patients.Add(patient1);
                     db.SaveChanges();
 
-                    Intervention intervention = interventionLoad(model, patient1);
-                    db.interventions.Add(intervention);
-                    db.SaveChanges();
+                    return RedirectToAction("Create", "Intervention", new {model.diagnosis});
 
-                    Diagnosis diagnosis = diagnosisLoad(model, intervention);
-                    db.diagnoses.Add(diagnosis);
-                    db.SaveChanges();
 
-                    PatientDiagnosis patientDiagnosis = patientDiagnosisLoad(diagnosis, patient1);
-                    db.patientDiagnoses.Add(patientDiagnosis);
-                    db.SaveChanges();
 
-                    return RedirectToAction("Index", "Steps"); //will create steps first then go to dashboard
+
+
+
 
 
 

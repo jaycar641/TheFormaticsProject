@@ -16,6 +16,49 @@ namespace Formatics.Controllers
         // GET: Intervention
         ApplicationDbContext db = new ApplicationDbContext();
 
+         public Intervention interventionLoad(string diagnosis, Patient patient)
+        {
+            Intervention intervention = new Intervention();
+            Patient patient1 = db.patients.Where(e => e.PatientNumber == patient.PatientNumber).SingleOrDefault();
+
+            switch (diagnosis) //Use database lingo 
+            {
+                case "Acute Pain":
+                    intervention.category = "Acute Pain Control";
+                    intervention.startDate = DateTime.Now;
+                    intervention.duration = 180;
+                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
+                    intervention.expectedOutcome = "Improve";
+                    break;
+                case "Respiration Alteration":
+                    intervention.category = "Breathing Excercises";
+                    intervention.startDate = DateTime.Now;
+                    intervention.duration = 90;
+                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
+                    intervention.expectedOutcome = "Improve";
+                    break;
+                case "Sleep Pattern Disturbance":
+                    intervention.startDate = DateTime.Now;
+                    intervention.category = "Sleep Patten Control";
+                    intervention.duration = 21;
+                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
+                    intervention.expectedOutcome = "Improve";
+                    break;
+
+
+                default:
+                    intervention.category = "Nausea Care";
+                    intervention.startDate = DateTime.Now;
+                    intervention.duration = 30;
+                    intervention.endDate = patient1.enrollDate.AddDays(intervention.duration);
+                    intervention.expectedOutcome = "Improve";
+                    break;
+
+            }
+            return intervention;
+
+        }
+
         public List<DataPoint> loadDataPointCondition(Intervention intervention, Diagnosis diagnosis)
         {
             DateTime currentDate = DateTime.Today;
@@ -383,24 +426,35 @@ namespace Formatics.Controllers
         // GET: Intervention/Create
         public ActionResult Create()
         {
+           
+
             return View();
         }
 
+
         // POST: Intervention/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+       public async Task<ActionResult> Create(string diagnosis)   //loading functions should be asynchronous
         {
+            
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+
             try
             {
-                // TODO: Add insert logic here
+                  Intervention intervention = interventionLoad(diagnosis, patient);
+                    db.interventions.Add(intervention);
+                    db.SaveChanges();
+    
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Patient", new {InterventionId = intervention.InterventionId, PatientNumber = patient.PatientNumber, Category = diagnosis });
             }
             catch
             {
-                return View();
+                 return RedirectToAction("Register", "Account", new {patient}); 
             }
-        }
+
+       }
 
         // GET: Intervention/Edit/5
         public ActionResult Edit(int id)
