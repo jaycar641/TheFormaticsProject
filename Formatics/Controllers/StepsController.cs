@@ -26,65 +26,17 @@ namespace Formatics.Controllers
         /// <summary>
         /// //////////6 LoadStepDetails Midpoint can use Procedure and Medicine Controller///////////////////
         /// </summary>
-        public void LoadStepDetails(int patientNumber, string category)
+        public void LoadStepDetails(int patientNumber, string category, int interventionId)
         {
    
 
             switch (category) //Use database lingo 
             {
                 case "Acute Pain":
-                    int count3 = 0;
-                    List<PatientStep> stepList = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
-                    List<Steps> steps = new List<Steps>();
-
-                    Medicine medicine = LoadMedicineDetails(intervention, diagnosis, category);
-                    db.medicine.Add(medicine);
-                    db.SaveChanges();
-
-                    foreach (PatientStep patientStep in stepList)//finding all steps in db that match patient steps
-                    {
-                        Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
-                        steps.Add(step);
-                    }
-                    foreach (Steps steps1 in steps)
-                    {
-                        if (steps1.day == 4)
-                        {
-                            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                            Procedure procedure = LoadProcedures(step2, category);
-                            db.procedures.Add(procedure);
-                            db.SaveChanges();
-                            StepProcedure stepProcedure = LoadStepProcedure(procedure, step2);
-                            step2.description = "Surgery";
-                            db.stepProcedures.Add(stepProcedure);
-                            db.SaveChanges();
-
-
-                            Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                            /////////////////////Check github for existing code
-                            db.alerts.Add(alert);
-                            db.SaveChanges();
-                            count3++;
-
-                        }
-                        else //Everyday
-                        {
-
-                            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                            step2.description = "Stretch daily so that your back pain can be minimized";
-
-                            StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
-
-                            Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                            db.alerts.Add(alert);
-                            db.stepMedicines.Add(stepMedicine);
-                            db.SaveChanges();
-                            count3++;
-
-                        }
-                        db.SaveChanges();
-
-                    }
+                    int procedureDay = 4;
+                    RedirectToAction("Create", "Procedure", PatientNumber = patientNumber, Category = category, InterventionId = interventionId, ProcedureDay = procedureDay  )
+                  
+                    
                     break;
 
                 case "Respiration Alteration":
@@ -95,11 +47,13 @@ namespace Formatics.Controllers
                     Medicine medicine1 = LoadMedicineDetails(intervention, diagnosis, category);
                     db.medicine.Add(medicine1);
                     db.SaveChanges();
+
                     foreach (PatientStep patientStep in stepList2)//finding all steps in db that match patient steps
                     {
                         Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
                         steps2.Add(step);
                     }
+                    //for each step in this list it adds a description, then loads the step medicine with the step id and then loads all the alerts
                     foreach (Steps steps1 in steps2)//edit these descriptions
                     {
                         Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
@@ -201,7 +155,7 @@ namespace Formatics.Controllers
 
             if (User.Identity.IsAuthenticated == true)
             {
-                   LoadStepDetails(patient.PatientNumber, diagnosis.category);
+                   LoadStepDetails(patient.PatientNumber, diagnosis.category, intervention.InterventionId);
                 return RedirectToAction("Index", "Patient");
 
             }

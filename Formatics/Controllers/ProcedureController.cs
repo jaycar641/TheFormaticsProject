@@ -70,8 +70,9 @@ namespace Formatics.Controllers
             switch (category)
             {
                 case "Acute Pain":
-                    procedure.category = "Surgery";
-                    procedure.date = step2.Date;
+                   
+                    procedure.category = "Surgery"
+                    procedure.date = step2.Date.AddDays(4);
                     procedure.location = "Froedert Hospital";
                     break;
                 case "Respiration Alteration":
@@ -111,6 +112,8 @@ namespace Formatics.Controllers
             return View();
         }
 
+
+
         // GET: Procedure/Create
         public ActionResult Create()
         {
@@ -121,26 +124,71 @@ namespace Formatics.Controllers
 
         // POST: Procedure/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(int patientNumber, string category, int interventionId, int procedureDay)
         {
-            try
-            {
-                
-          
+           
+            int count3 = 0;
+ 
+                    List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+                    List<Steps> stepList = new List<Steps>();
+
+                foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
+                    {
+                        Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
+                        stepList.Add(step);
+                    }
 
 
+                foreach (Steps steps1 in stepList) //the list for the diagnosis will be passed so it will be nuetral
+                    {
+                    switch(steps1.day)
+                    {
+                        case procedureDay:
+                        
+                        Procedure procedure = LoadProcedures(steps1, category);
+                        db.procedures.Add(procedure);
+                        db.SaveChanges();
+                        StepProcedure stepProcedure = LoadStepProcedure(procedure, steps1);
+                        db.stepProcedures.Add(stepProcedure);
+                        db.SaveChanges();
+                        Alert alert = LoadDailyAlerts(count3, category, steps1, steps1.day); //patient index
+                        db.alerts.Add(alert);
+                        db.SaveChanges();
+                        count3++;
+                        break;
+                     default:
+                      Steps step2 = loadDailyReminders(diagnosis, steps1);
+                         count3++;
+
+                    }
+                        db.SaveChanges();
+
+                    }
 
 
-
-
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Medicine", new {StepList = stepList, PatientStepList = patientStepList, Category = category, InterventionId = interventionId} );
             }
-            catch
-            {
-                return View();
-            }
+       
         }
 
+        public Steps loadDailyReminders(string diagnosis, Steps steps1)
+        {
+            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+             case "Acute Pain":
+               step2.description = "Stretch daily so that your back pain can be minimized";
+                    break;
+                case "Respiration Alteration":
+
+                    break;
+                case "Sleep Pattern Disturbance":
+
+                    break;
+                    
+                default:
+
+                    break;
+            
+        }
         // GET: Procedure/Edit/5
         public ActionResult Edit(int id)
         {

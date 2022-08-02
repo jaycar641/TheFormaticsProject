@@ -68,9 +68,11 @@ namespace Formatics.Controllers
 
         }
 
-        public Medicine LoadMedicineDetails(Intervention intervention, Diagnosis diagnosis, String category)
+        public Medicine LoadMedicineDetails(int interventionId, Diagnosis diagnosis, String category)
         {
             Medicine medicine = new Medicine();
+                        Intervention intervention = db.interventions.Where(e => e.InterventionId == interventionId).SingleOrDefault();
+
             switch (category)
             {
                 case "Acute Pain":
@@ -222,18 +224,40 @@ namespace Formatics.Controllers
 
         // POST: Medicine/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(List<Steps> steps, List<PatientStep> patientSteps, string category, int interventionId)
         {
-            try
-            {
-                // TODO: Add insert logic here
+                 string userId = User.Identity.GetUserId();
+                     Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+                    int count3 = 0;
+                    List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patient.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+                    List<Steps> stepList = new List<Steps>();
+                    stepList = steps;
+                    patientStepList = patientSteps;
 
-                return RedirectToAction("Index");
+                    Medicine medicine = LoadMedicineDetails(interventionId, diagnosis, category);
+                    db.medicine.Add(medicine);
+                    db.SaveChanges();
+
+                foreach (Steps steps1 in stepList)
+                    {
+                        if (steps1.day == 4)
+                        continue;
+
+                         Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                        Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
+                         db.alerts.Add(alert);
+                          db.SaveChanges();
+                         StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
+                          db.stepMedicines.Add(stepMedicine);
+                          db.SaveChanges();
+                         count3++;
+
+                    }
+
+                return RedirectToAction("Index", "Patient");
+
             }
-            catch
-            {
-                return View();
-            }
+            
         }
 
         // GET: Medicine/Edit/5
