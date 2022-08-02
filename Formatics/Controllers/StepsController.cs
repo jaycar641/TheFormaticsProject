@@ -15,7 +15,7 @@ namespace Formatics.Controllers
         // GET: Steps
 
         ApplicationDbContext db = new ApplicationDbContext();
-
+         
 
 
 
@@ -26,68 +26,17 @@ namespace Formatics.Controllers
         /// <summary>
         /// //////////6 LoadStepDetails Midpoint can use Procedure and Medicine Controller///////////////////
         /// </summary>
-        public void LoadStepDetails(int patientNumber, string category)
+        public void LoadStepDetails(int patientNumber, string category, int interventionId)
         {
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-
-            PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-            Patient patient1 = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
+   
 
             switch (category) //Use database lingo 
             {
                 case "Acute Pain":
-                    int count3 = 0;
-                    List<PatientStep> stepList = db.patientSteps.Where(e => e.PatientNumber == patient1.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
-                    List<Steps> steps = new List<Steps>();
-
-                    Medicine medicine = LoadMedicineDetails(intervention, diagnosis, category);
-                    db.medicine.Add(medicine);
-                    db.SaveChanges();
-
-                    foreach (PatientStep patientStep in stepList)//finding all steps in db that match patient steps
-                    {
-                        Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
-                        steps.Add(step);
-                    }
-                    foreach (Steps steps1 in steps)
-                    {
-                        if (steps1.day == 4)
-                        {
-                            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                            Procedure procedure = LoadProcedures(step2, category);
-                            db.procedures.Add(procedure);
-                            db.SaveChanges();
-                            StepProcedure stepProcedure = LoadStepProcedure(procedure, step2);
-                            step2.description = "Surgery";
-                            db.stepProcedures.Add(stepProcedure);
-                            db.SaveChanges();
-                            Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                            /////////////////////Check github for existing code
-                            db.alerts.Add(alert);
-                            db.SaveChanges();
-                            count3++;
-
-                        }
-                        else //Everyday
-                        {
-
-                            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                            step2.description = "Stretch daily so that your back pain can be minimized";
-
-                            StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
-
-                            Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                            db.alerts.Add(alert);
-                            db.stepMedicines.Add(stepMedicine);
-                            db.SaveChanges();
-                            count3++;
-
-                        }
-                        db.SaveChanges();
-
-                    }
+                    int procedureDay = 4;
+                    RedirectToAction("Create", "Procedure", PatientNumber = patientNumber, Category = category, InterventionId = interventionId, ProcedureDay = procedureDay  )
+                  
+                    
                     break;
 
                 case "Respiration Alteration":
@@ -98,11 +47,13 @@ namespace Formatics.Controllers
                     Medicine medicine1 = LoadMedicineDetails(intervention, diagnosis, category);
                     db.medicine.Add(medicine1);
                     db.SaveChanges();
+
                     foreach (PatientStep patientStep in stepList2)//finding all steps in db that match patient steps
                     {
                         Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
                         steps2.Add(step);
                     }
+                    //for each step in this list it adds a description, then loads the step medicine with the step id and then loads all the alerts
                     foreach (Steps steps1 in steps2)//edit these descriptions
                     {
                         Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
@@ -191,181 +142,6 @@ namespace Formatics.Controllers
 
        
 
-
-
-
-        public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
-        {
-            Alert alert = new Alert();
-            switch (category) 
-            {
-                case "Acute Pain":
-                    if (dayPick.day == 4)
-                    {
-                        alert.time = DateTime.Now.AddDays(count);
-                        alert.type = "Surgery";
-                        alert.frequency = 1;
-                        alert.description = "Surgery in 2 hours, do not eat any food!";
-
-                    }
-                    else
-                    {
-                        alert.time = DateTime.Now.AddDays(count);
-                        alert.type = "Medication";
-                        alert.frequency = 1;
-                        alert.description = "Take your medication";
-                     
-                    }
-                    break;
-                case "Respiration Alteration":
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-                case "Sleep Pattern Disturbance":
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-
-                default:
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-
-
-            }
-
-            return alert;
-
-        }
-
-
-
-
-        public Medicine LoadMedicineDetails(Intervention intervention, Diagnosis diagnosis, String category)
-        {
-            Medicine medicine = new Medicine();
-            switch (category)
-            {
-                case "Acute Pain":
-                    List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
-                    List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
-                    medicine.drugClass = "Pain Releif";
-                    medicine.ingredients = ingredients;
-                    medicine.name = "Tylenol";
-                    medicine.symptoms = symptoms; //change medicine symptom property to Ilist symptoms
-                    medicine.isCurrent = true;
-                    medicine.startDate = diagnosis.dateDiagnosed;
-                    medicine.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
-                    break;
-                case "Respiration Alteration":
-                    List<string> ingredients1 = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
-                    List<string> symptoms1 = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
-                    medicine.drugClass = "Breathing Medication";
-                    medicine.ingredients = ingredients1;
-                    medicine.name = "Xopenex";
-                    medicine.symptoms = symptoms1; //change medicine symptom property to Ilist symptoms
-                    medicine.isCurrent = true;
-                    medicine.startDate = diagnosis.dateDiagnosed;
-                    medicine.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
-                    break;
-                case "Sleep Pattern Disturbance":
-                    List<string> ingredients2 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
-                    List<string> symptoms2 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
-                    medicine.drugClass = "Sleep Medication";
-                    medicine.ingredients = ingredients2;
-                    medicine.name = "Lunesta";
-                    medicine.symptoms = symptoms2; //change medicine symptom property to Ilist symptoms
-                    medicine.isCurrent = true;
-                    medicine.startDate = diagnosis.dateDiagnosed;
-                    medicine.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
-                    break;
-                   
-                    default:
-                    List<string> ingredients3 = new List<string>() { "ondansetron hydrochloride dihydrate", "citric acid anhydrous", "sodium benzoate" };
-                    List<string> symptoms3 = new List<string>() { "diarrhea", "headache", "fever" };
-                    medicine.drugClass = "Nausea Medication";
-                    medicine.ingredients = ingredients3;
-                    medicine.name = "Zofran";
-                    medicine.symptoms = symptoms3; //change medicine symptom property to Ilist symptoms
-                    medicine.isCurrent = true;
-                    medicine.startDate = diagnosis.dateDiagnosed;
-                    medicine.endDate = diagnosis.dateDiagnosed.AddDays(intervention.duration);
-                    break;
-            }
-            return medicine;
-        }
-        
-
-        public StepMedicine LoadStepMedicineDetails(Medicine medicine, Steps step, String category, Steps dayPick)
-        {
-            StepMedicine stepMedicine = new StepMedicine();
-            switch (category)
-            {
-                case "Acute Pain":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-                case "Respiration Alteration":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-                case "Sleep Pattern Disturbance":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-
-                default:
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-            }
-            return stepMedicine;
-        }
-
-        public Procedure LoadProcedures(Steps step2, String category) //Loaded for each procedure
-        {
-            Procedure procedure = new Procedure();
-            switch (category)
-            {
-                case "Acute Pain":
-                    procedure.category = "Surgery";
-                    procedure.date = step2.Date;
-                    procedure.location = "Froedert Hospital";
-                    break;
-                case "Respiration Alteration":
-
-                    break;
-                case "Sleep Pattern Disturbance":
-
-                    break;
-                    
-                default:
-
-                    break;
-
-            }
-            return procedure;
-
-        }
-        
-        public StepProcedure LoadStepProcedure(Procedure procedure, Steps step2)
-        {
-            StepProcedure stepProcedure = new StepProcedure();
-            stepProcedure.ProcedureId = procedure.ProcedureId;
-            stepProcedure.StepId = step2.StepId;
-            return stepProcedure;
-
-        }
-       
-
-
-
         /// Use Authorize instead
         public ActionResult Index()
         {
@@ -379,7 +155,7 @@ namespace Formatics.Controllers
 
             if (User.Identity.IsAuthenticated == true)
             {
-                   LoadStepDetails(patient.PatientNumber, diagnosis.category);
+                   LoadStepDetails(patient.PatientNumber, diagnosis.category, intervention.InterventionId);
                 return RedirectToAction("Index", "Patient");
 
             }

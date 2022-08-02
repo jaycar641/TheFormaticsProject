@@ -18,7 +18,7 @@ namespace Formatics.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         ApplicationDbContext db = new ApplicationDbContext();
-
+       
 
         public AccountController()
         {
