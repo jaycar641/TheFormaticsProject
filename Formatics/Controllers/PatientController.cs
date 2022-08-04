@@ -149,22 +149,21 @@ namespace Formatics.Controllers
         public ActionResult Index()//Patient Dashboard
         {
 
-            
+            string userId = User.Identity.GetUserId();
 
 
             DateTime currentDate = DateTime.Today;
             Diagnosis diagnosis1 = db.diagnoses.Where(e => e.isCurrent == true).SingleOrDefault();
-            string userId = User.Identity.GetUserId();
             Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
             PatientDiagnosis patientDiagnosis = db.patientDiagnoses.Where(e => e.PatientNumber == patient.PatientNumber && e.DiagnosisId == diagnosis1.DiagnosisId).SingleOrDefault();
             Diagnosis diagnosis = db.diagnoses.Where(e => e.DiagnosisId == patientDiagnosis.DiagnosisId).SingleOrDefault();
             Intervention intervention = db.interventions.Where(e => e.InterventionId == diagnosis.InterventionId).SingleOrDefault();
-
+            
             List<Alert> alerts = db.alerts.Where(e=> e.type == "Appointment" || e.type == "Surgery" || e.type == "Perscription" && e.time >= currentDate).ToList();
             List<Alert> shortList = new List<Alert>();
             try
             {
-                for (int i = 0; i <= 5; i++)
+                for (int i = 0; i < alerts.Count; i++)
                 {
                     shortList.Add(alerts[i]);
                 }

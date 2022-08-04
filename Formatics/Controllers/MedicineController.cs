@@ -72,16 +72,6 @@ namespace Formatics.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
         public Medicine LoadMedicineDetails(int interventionId, Diagnosis diagnosis, String category)
         {
             Medicine medicine = new Medicine();
@@ -263,6 +253,30 @@ namespace Formatics.Controllers
 
 
 
+        public string loadDailyReminders(string diagnosis, Steps steps1)
+        {
+            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+            string stepDescription = "";
+            switch (diagnosis)
+            {
+
+                case "Acute Pain":
+                    stepDescription = "Stretch daily so that your back pain can be minimized";
+                    break;
+                case "Respiration Alteration":
+
+                    break;
+                case "Sleep Pattern Disturbance":
+
+                    break;
+
+                default:
+
+                    break;
+            }
+            return stepDescription;
+
+        }
 
 
 
@@ -289,6 +303,8 @@ namespace Formatics.Controllers
             {
 
                 Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                step2.description = loadDailyReminders(category, steps1);
+                db.SaveChanges();
                 Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
                 db.alerts.Add(alert);
                 db.SaveChanges();
@@ -300,7 +316,7 @@ namespace Formatics.Controllers
             }
             ///   LoadAllAlerts(interventionId);//use twillio
 
-            return RedirectToAction("Index", "Patient");
+            return RedirectToAction("Index", "Patient", new {PatientNumber = patient.PatientNumber});
 
 
 
