@@ -19,14 +19,14 @@ namespace Formatics.Controllers
 
          public Diagnosis diagnosisLoad (string diagnosis, int interventionId)
         {
-            Intervention intervention = db.interventions.Where(e => e.InterventionId == intervention.InterventionId).SingleOrDefault();////
+            Intervention intervention = db.interventions.Where(e => e.InterventionId == interventionId).SingleOrDefault();////
            
-            Diagnosis diagnosis = new Diagnosis();
-            diagnosis.category = diagnosis; ////
-            diagnosis.dateDiagnosed = DateTime.Now;
-            diagnosis.InterventionId = interventionId;
-            diagnosis.isCurrent = true;
-            return diagnosis;
+            Diagnosis diagnosis1 = new Diagnosis();
+            diagnosis1.category = diagnosis; ////
+            diagnosis1.dateDiagnosed = DateTime.Now;
+            diagnosis1.InterventionId = interventionId;
+            diagnosis1.isCurrent = true;
+            return diagnosis1;
         }
 
             //Create the diagnosis in the patientDiagnosisLoad, saved it in the database, save the patient diagnosis in the database also 
@@ -34,7 +34,7 @@ namespace Formatics.Controllers
             {
             PatientDiagnosis patientDiagnosis = new PatientDiagnosis();
             Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
-            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.DiagnosisId == diagnosis.DiagnosisId).SingleOrDefault();
+            Diagnosis diagnosis1 = db.diagnoses.Where(e => e.DiagnosisId == diagnosisId).SingleOrDefault();
 
             patientDiagnosis.DiagnosisId = diagnosis1.DiagnosisId;
             patientDiagnosis.PatientNumber = patient.PatientNumber;
@@ -171,7 +171,7 @@ namespace Formatics.Controllers
             }
             catch
             {
-                shortList = shortList;
+               return View();
             }
             Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.Date.Month == currentDate.Month && e.Date.Year == currentDate.Year && e.InterventionId == intervention.InterventionId).SingleOrDefault();
             int number = patient.PatientNumber;
@@ -201,36 +201,35 @@ namespace Formatics.Controllers
         }
 
         // GET: Patient/Create
-        public ActionResult Create()
+        public ActionResult Create(int interventionId, int patientNumber, string category)
         {
-            return View();
-        }
-
-        // POST: Patient/Create
-        [HttpPost]
-        public ActionResult Create(int interventionId, int patientId, string category)
-        {
-                 Patient patient = db.patients.Where(e => e.PatientNumber == patientId ).SingleOrDefault();
+            Patient patient = db.patients.Where(e => e.PatientNumber == patientNumber).SingleOrDefault();
 
             try
             {
-                Intervention intervention = db.interventions.Where(e=> e.InterventionId == interventionId).SingleOrDefault();
-                Diagnosis diagnosis = diagnosisLoad(category, intervention.InterventionId);                 
+                Intervention intervention = db.interventions.Where(e => e.InterventionId == interventionId).SingleOrDefault();
+                Diagnosis diagnosis = diagnosisLoad(category, intervention.InterventionId);
                 db.diagnoses.Add(diagnosis);
-                    db.SaveChanges();
+                db.SaveChanges();
+                PatientDiagnosis patientDiagnosis = patientDiagnosisLoad(diagnosis.DiagnosisId, patientNumber);
+                db.patientDiagnoses.Add(patientDiagnosis);
+                db.SaveChanges();
 
-                
-                    PatientDiagnosis patientDiagnosis = patientDiagnosisLoad(diagnosis.DiagnosisId, patientId);
-                    db.patientDiagnoses.Add(patientDiagnosis);
-                    db.SaveChanges();
-
-                   return RedirectToAction("Index", "Steps"); //will create steps first then go to dashboard
+                return RedirectToAction("Index", "Steps", new {PatientNumber = patient.PatientNumber}); //will create steps first then go to dashboard
 
             }
             catch
             {
-                 return RedirectToAction("Register", "Account", new {patient}); 
+                return RedirectToAction("Register", "Account", new { id = patientNumber });
             }
+
+        }
+
+        // POST: Patient/Create
+        [HttpPost]
+        public ActionResult Create()
+        {
+            return View();
         }
 
         // GET: Patient/Edit/5

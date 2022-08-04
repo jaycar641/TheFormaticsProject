@@ -16,7 +16,10 @@ namespace Formatics.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
 
         
-        
+          public void LoadAllAlerts(int interventionId)
+        {
+            db.alerts.ToList();
+        }
 
         public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
         {
@@ -67,6 +70,17 @@ namespace Formatics.Controllers
             return alert;
 
         }
+
+
+
+
+
+
+
+
+
+
+
 
         public Medicine LoadMedicineDetails(int interventionId, Diagnosis diagnosis, String category)
         {
@@ -125,6 +139,17 @@ namespace Formatics.Controllers
         }
         
 
+
+
+
+
+
+
+
+
+
+
+
         public StepMedicine LoadStepMedicineDetails(Medicine medicine, Steps step, String category, Steps dayPick)
         {
             StepMedicine stepMedicine = new StepMedicine();
@@ -150,6 +175,18 @@ namespace Formatics.Controllers
             }
             return stepMedicine;
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
       
         public ActionResult Index() //Standalone Medication page a list of medications
@@ -207,6 +244,14 @@ namespace Formatics.Controllers
             return View();
         }
 
+
+
+
+
+
+
+
+
         // GET: Medicine/Details/5
         public ActionResult Details() //Standalone Medicine Details page
         {
@@ -216,55 +261,76 @@ namespace Formatics.Controllers
             return RedirectToAction("Details", "Patient", new { PatientNumber = patient.PatientNumber });
         }
 
+
+
+
+
+
         // GET: Medicine/Create
-        public ActionResult Create()
+        public ActionResult Create(int patientNumber, string category, int interventionId)
         {
-            return View();
+            string userId = User.Identity.GetUserId();
+            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+            Diagnosis diagnosis = db.diagnoses.Where(e => e.InterventionId == interventionId).SingleOrDefault();
+            int count3 = 0;
+            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patient.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+            List<Steps> stepList = new List<Steps>();
+         
+             foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
+            {
+                Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == interventionId).SingleOrDefault();
+                stepList.Add(step);
+            }
+            Medicine medicine = LoadMedicineDetails(interventionId, diagnosis, category);
+            db.medicine.Add(medicine);
+            db.SaveChanges();
+
+            foreach (Steps steps1 in stepList)
+            {
+
+                Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
+                db.alerts.Add(alert);
+                db.SaveChanges();
+                StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
+                db.stepMedicines.Add(stepMedicine);
+                db.SaveChanges();
+                count3++;
+
+            }
+            ///   LoadAllAlerts(interventionId);//use twillio
+
+            return RedirectToAction("Index", "Patient");
+
+
+
         }
+
+
+
+
 
         // POST: Medicine/Create
         [HttpPost]
-        public ActionResult Create(List<Steps> steps, List<PatientStep> patientSteps, string category, int interventionId)
+        public ActionResult Create()
         {
-                 string userId = User.Identity.GetUserId();
-                     Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-                    int count3 = 0;
-                    List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patient.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
-                    List<Steps> stepList = new List<Steps>();
-                    stepList = steps;
-                    patientStepList = patientSteps;
 
-                    Medicine medicine = LoadMedicineDetails(interventionId, diagnosis, category);
-                    db.medicine.Add(medicine);
-                    db.SaveChanges();
-
-                foreach (Steps steps1 in stepList)
-                    {
-                        if (steps1.day == 4)
-                        continue;
-
-                         Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                        Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                         db.alerts.Add(alert);
-                          db.SaveChanges();
-                         StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
-                          db.stepMedicines.Add(stepMedicine);
-                          db.SaveChanges();
-                         count3++;
-
-                    }
-
-                return RedirectToAction("Index", "Patient");
-
-            }
-            
+            return View();
         }
+
+
+
+
+
 
         // GET: Medicine/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
+
+
+
 
         // POST: Medicine/Edit/5
         [HttpPost]
@@ -282,11 +348,15 @@ namespace Formatics.Controllers
             }
         }
 
+
+
         // GET: Medicine/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
+
+
 
         // POST: Medicine/Delete/5
         [HttpPost]
@@ -304,10 +374,15 @@ namespace Formatics.Controllers
             }
         }
 
+
+
       public ActionResult MedicalDetails ()
         {
             return PartialView("_detailsMedicine");
         }
+
+
+
         public ActionResult OrderPerscription(int MedicineId)
         {
             Medicine medicine = db.medicine.Where(e => e.MedicineId == MedicineId).SingleOrDefault();
@@ -330,6 +405,9 @@ namespace Formatics.Controllers
             return RedirectToAction("Index", "Medicine");
             //return an alert to the view from the controller you have ordered a prescription
         }
+
+
+
 
 
     }
