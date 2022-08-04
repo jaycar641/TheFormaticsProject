@@ -100,31 +100,7 @@ namespace Formatics.Controllers
 
         }
 
-        
-        public Steps loadDailyReminders(string diagnosis, Steps steps1)
-        {
-            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-            
-            switch(diagnosis)
-            { 
-
-             case "Acute Pain":
-               step2.description = "Stretch daily so that your back pain can be minimized";
-                    break;
-                case "Respiration Alteration":
-
-                    break;
-                case "Sleep Pattern Disturbance":
-
-                    break;
-                    
-                default:
-
-                    break;
-            }
-            return step2;
-            
-        }
+       
        
         public ActionResult Index()
         {
@@ -137,6 +113,7 @@ namespace Formatics.Controllers
         {
             return View();
         }
+      
 
 
 
@@ -167,13 +144,11 @@ namespace Formatics.Controllers
                         StepProcedure stepProcedure = LoadStepProcedure(procedure, steps1);
                         db.stepProcedures.Add(stepProcedure);
                         db.SaveChanges();
-                        Alert alert = LoadDailyAlerts(count3, category, steps1, steps1.day); //patient index
-                        db.alerts.Add(alert);
-                        db.SaveChanges();
+                      
                         count3++;
                         break;
                     default:
-                        Steps step2 = loadDailyReminders(category, steps1);
+                     
                         count3++;
                         break;
 
