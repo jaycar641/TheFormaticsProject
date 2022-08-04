@@ -22,10 +22,11 @@ namespace Formatics.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-            string userId = User.Identity.GetUserId();
-            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            ViewData["Patient"] = patient; //temporary
+            DeleteCurrentUser();
+           // ViewBag.Message = "Your application description page.";
+            //string userId = User.Identity.GetUserId();
+            //Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
+           // ViewData["Patient"] = patient; //temporary
             return View();
         }
 
@@ -46,7 +47,7 @@ namespace Formatics.Controllers
            return RedirectToAction("Details", "Patient", new { PatientNumber = patient.PatientNumber });
         }
 
-        public ActionResult DeleteCurrentUser()
+        public void DeleteCurrentUser()
         {
             string userId = User.Identity.GetUserId();
 
@@ -171,7 +172,7 @@ namespace Formatics.Controllers
             db.SaveChanges();
 
 
-            return RedirectToAction ("index", "Home");
+           
         }
 
 

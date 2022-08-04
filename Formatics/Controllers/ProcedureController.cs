@@ -14,13 +14,13 @@ namespace Formatics.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         
 
-        public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
+        public Alert LoadDailyAlerts (int count, String category, Steps step, int dayPick)
         {
             Alert alert = new Alert();
             switch (category) 
             {
                 case "Acute Pain":
-                    if (dayPick.day == 4)
+                    if (dayPick == 4)
                     {
                         alert.time = DateTime.Now.AddDays(count);
                         alert.type = "Surgery";
@@ -71,8 +71,8 @@ namespace Formatics.Controllers
             {
                 case "Acute Pain":
                    
-                    procedure.category = "Surgery"
-                    procedure.date = step2.Date.AddDays(4);
+                    procedure.category = "Surgery";
+                    procedure.date = step2.Date;
                     procedure.location = "Froedert Hospital";
                     break;
                 case "Respiration Alteration":
@@ -99,6 +99,32 @@ namespace Formatics.Controllers
             return stepProcedure;
 
         }
+
+        
+        public Steps loadDailyReminders(string diagnosis, Steps steps1)
+        {
+            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+            
+            switch(diagnosis)
+            { 
+
+             case "Acute Pain":
+               step2.description = "Stretch daily so that your back pain can be minimized";
+                    break;
+                case "Respiration Alteration":
+
+                    break;
+                case "Sleep Pattern Disturbance":
+
+                    break;
+                    
+                default:
+
+                    break;
+            }
+            return step2;
+            
+        }
        
         public ActionResult Index()
         {
@@ -115,36 +141,26 @@ namespace Formatics.Controllers
 
 
         // GET: Procedure/Create
-        public ActionResult Create()
+        public ActionResult Create(int patientNumber, string category, int interventionId)
         {
-          
+            int count3 = 0; ////////////////////////Fix the count so the front end will work in patient
 
-            return View();
-        }
+            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+            List<Steps> stepList = new List<Steps>();
 
-        // POST: Procedure/Create
-        [HttpPost]
-        public ActionResult Create(int patientNumber, string category, int interventionId, int procedureDay)
-        {
-           
-            int count3 = 0;
- 
-                    List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
-                    List<Steps> stepList = new List<Steps>();
-
-                foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
-                    {
-                        Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == intervention.InterventionId).SingleOrDefault();
-                        stepList.Add(step);
-                    }
+            foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
+            {
+                Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == interventionId).SingleOrDefault();
+                stepList.Add(step);
+            }
 
 
-                foreach (Steps steps1 in stepList) //the list for the diagnosis will be passed so it will be nuetral
-                    {
-                    switch(steps1.day)
-                    {
-                        case procedureDay:
-                        
+            foreach (Steps steps1 in stepList) //the list for the diagnosis will be passed so it will be nuetral
+            {
+                switch (steps1.day)
+                {
+                    case 4:
+
                         Procedure procedure = LoadProcedures(steps1, category);
                         db.procedures.Add(procedure);
                         db.SaveChanges();
@@ -156,39 +172,31 @@ namespace Formatics.Controllers
                         db.SaveChanges();
                         count3++;
                         break;
-                     default:
-                      Steps step2 = loadDailyReminders(diagnosis, steps1);
-                         count3++;
+                    default:
+                        Steps step2 = loadDailyReminders(category, steps1);
+                        count3++;
+                        break;
 
-                    }
-                        db.SaveChanges();
+                }
+                db.SaveChanges();
 
-                    }
-
-
-                return RedirectToAction("Create", "Medicine", new {StepList = stepList, PatientStepList = patientStepList, Category = category, InterventionId = interventionId} );
             }
-       
+
+
+            return RedirectToAction("Create", "Medicine", new { PatientNumber = patientNumber, category = category, InterventionId = interventionId });
+
+
         }
 
-        public Steps loadDailyReminders(string diagnosis, Steps steps1)
+        // POST: Procedure/Create
+        [HttpPost]
+        public ActionResult Create()
         {
-            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-             case "Acute Pain":
-               step2.description = "Stretch daily so that your back pain can be minimized";
-                    break;
-                case "Respiration Alteration":
 
-                    break;
-                case "Sleep Pattern Disturbance":
 
-                    break;
-                    
-                default:
-
-                    break;
-            
+            return View();
         }
+
         // GET: Procedure/Edit/5
         public ActionResult Edit(int id)
         {
@@ -234,5 +242,9 @@ namespace Formatics.Controllers
         }
 
         
+
+
+
+
     }
 }

@@ -305,7 +305,6 @@
     <Content Include="Views\FrontEnd\_Perscription.cshtml" />
     <Content Include="Views\FrontEnd\_Diagnosis.cshtml" />
     <Content Include="Views\FrontEnd\Schedule.cshtml" />
-    <Content Include="Views\Steps\Index.cshtml" />
     <Content Include="Views\FrontEnd\_detailsMedicine.cshtml" />
     <Content Include="Views\FrontEnd\_SubmitCondition.cshtml" />
     <Content Include="Views\FrontEnd\_MedicalHistory.cshtml" />
@@ -323,6 +322,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Procedure\" />
+    <Folder Include="Views\Steps\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
