@@ -21,6 +21,38 @@ namespace Formatics.Controllers
             db.alerts.ToList();
         }
 
+        public string loadDailyReminders(string diagnosis, Steps steps1)
+        {
+            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+            string stepDescription = "";
+            switch (diagnosis)
+            {
+
+                case "Acute Pain":
+                    stepDescription = "Stretch daily so that your back pain can be minimized";
+                    break;
+                case "Respiration Alteration":
+                    stepDescription = "Breathing Excercises";
+                    break;
+                case "Sleep Pattern Disturbance":
+                    if (steps1.Date.DayOfWeek == DayOfWeek.Saturday || steps1.Date.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        stepDescription = "Get a lot of sleep on the weekends";
+                    }
+                    else
+                    {
+                        step2.description = "Remember to go to sleep early";
+                    }
+                    break;
+
+                default:
+                    stepDescription = "Remember to Drink a lot of water";
+                    break;
+            }
+            return stepDescription;
+
+        }
+
         public Alert LoadDailyAlerts (int count, String category, Steps step, Steps dayPick)
         {
             Alert alert = new Alert();
@@ -128,55 +160,14 @@ namespace Formatics.Controllers
             return medicine;
         }
         
-
-
-
-
-
-
-
-
-
-
-
-
-        public StepMedicine LoadStepMedicineDetails(Medicine medicine, Steps step, String category, Steps dayPick)
+        public StepMedicine LoadStepMedicineDetails(Medicine medicine, Steps step)
         {
             StepMedicine stepMedicine = new StepMedicine();
-            switch (category)
-            {
-                case "Acute Pain":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-                case "Respiration Alteration":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-                case "Sleep Pattern Disturbance":
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-
-                default:
-                    stepMedicine.StepId = step.StepId;
-                    stepMedicine.MedicineId = medicine.MedicineId;
-                    break;
-            }
+            stepMedicine.StepId = step.StepId;
+            stepMedicine.MedicineId = medicine.MedicineId;
+              
             return stepMedicine;
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
       
         public ActionResult Index() //Standalone Medication page a list of medications
@@ -188,44 +179,13 @@ namespace Formatics.Controllers
             List<Steps> steps = new List<Steps>();
             List<Medicine> medicines = db.medicine.Where(e=> e.isCurrent == true).ToList();
             Medicine medicine = db.medicine.Where(e => e.isCurrent == true).SingleOrDefault();
-            ///////////////////////////////////Load SYMPTOMS
-            switch (medicine.name)
-            {
-                case "Tylenol":
-                    List<string> ingredients = new List<string>() { "Acetaminophen", "Cellulose", "Cornstarch" };
-                    List<string> symptoms = new List<string>() { "Rash", "Itching", "Loss of appetite" };
-                    ViewData["Ingredients"] = ingredients;
-                    ViewData["Symptoms"] = symptoms;
-                    break;
-                case "Xopenex":
-                    List<string> ingredients1 = new List<string>() { "Sodium Choloride", "Sulfuric Acid", "levalbuterol" };
-                    List<string> symptoms1 = new List<string>() { "Dizziness", "Nervousness", "Tremors" };
-                    ViewData["Ingredients"] = ingredients1;
-                    ViewData["Symptoms"] = symptoms1;
-                    break;
-                case "Lunesta":
-                    List<string> ingredients2 = new List<string>() { "Eszopiclone", "Calcium phosphate", "Magnesium Stearate" };
-                    List<string> symptoms2 = new List<string>() { "Dizziness", "Drowsiness", "Tremors" };
-                    ViewData["Ingredients"] = ingredients2;
-                    ViewData["Symptoms"] = symptoms2;
-                    break;
-                case "Zofran":
-                    List<string> ingredients3 = new List<string>() { "ondansetron hydrochloride dihydrate", "citric acid anhydrous", "sodium benzoate" };
-                    List<string> symptoms3 = new List<string>() { "diarrhea", "headache", "fever" };
-                    ViewData["Ingredients"] = ingredients3;
-                    ViewData["Symptoms"] = symptoms3;
-                    break;
-
-
-
-            }
-
-            /////LOAD ALERT
+       
+            ViewData["Ingredients"] = medicine.ingredients;
+            ViewData["Symptoms"] = medicine.symptoms;
             Alert appointmentAlert = new Alert();
             appointmentAlert.type = "Appointment";
             appointmentAlert.frequency = 1;
             appointmentAlert.time = DateTime.Today.Date;
-
             ViewData["Appointment"] = appointmentAlert;
             ViewData["Medicines"] = medicines;
             ViewData["Patient"] = patient;
@@ -233,14 +193,6 @@ namespace Formatics.Controllers
 
             return View();
         }
-
-
-
-
-
-
-
-
 
         // GET: Medicine/Details/5
         public ActionResult Details() //Standalone Medicine Details page
@@ -252,79 +204,54 @@ namespace Formatics.Controllers
         }
 
 
-
-        public string loadDailyReminders(string diagnosis, Steps steps1)
-        {
-            Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-            string stepDescription = "";
-            switch (diagnosis)
-            {
-
-                case "Acute Pain":
-                    stepDescription = "Stretch daily so that your back pain can be minimized";
-                    break;
-                case "Respiration Alteration":
-
-                    break;
-                case "Sleep Pattern Disturbance":
-
-                    break;
-
-                default:
-
-                    break;
-            }
-            return stepDescription;
-
-        }
-
-
-
         // GET: Medicine/Create
         public ActionResult Create(int patientNumber, string category, int interventionId)
         {
-            string userId = User.Identity.GetUserId();
-            Patient patient = db.patients.Where(e => e.ApplicationId == userId).SingleOrDefault();
-            Diagnosis diagnosis = db.diagnoses.Where(e => e.InterventionId == interventionId).SingleOrDefault();
-            int count3 = 0;
-            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patient.PatientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
-            List<Steps> stepList = new List<Steps>();
          
+            int count3 = 0;
+            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+            List<Steps> stepList = new List<Steps>();
              foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
             {
                 Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == interventionId).SingleOrDefault();
                 stepList.Add(step);
             }
+
+
+            Diagnosis diagnosis = db.diagnoses.Where(e => e.InterventionId == interventionId).SingleOrDefault();
             Medicine medicine = LoadMedicineDetails(interventionId, diagnosis, category);
             db.medicine.Add(medicine);
             db.SaveChanges();
 
             foreach (Steps steps1 in stepList)
             {
+                try
+                {
+                    Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
+                    step2.description = loadDailyReminders(category, steps1);
+                    db.SaveChanges();
+                    Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
+                    db.alerts.Add(alert);
+                    db.SaveChanges();
+                    StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2);
+                    db.stepMedicines.Add(stepMedicine);
+                    db.SaveChanges();
+                    count3++;
+                }
+                catch(NullReferenceException e)
+                {
 
-                Steps step2 = db.steps.Where(e => e.StepId == steps1.StepId).SingleOrDefault();
-                step2.description = loadDailyReminders(category, steps1);
-                db.SaveChanges();
-                Alert alert = LoadDailyAlerts(count3, category, step2, steps1);
-                db.alerts.Add(alert);
-                db.SaveChanges();
-                StepMedicine stepMedicine = LoadStepMedicineDetails(medicine, step2, category, steps1);
-                db.stepMedicines.Add(stepMedicine);
-                db.SaveChanges();
-                count3++;
+                    count3++;
+                }
 
             }
             ///   LoadAllAlerts(interventionId);//use twillio
 
-            return RedirectToAction("Index", "Patient", new {PatientNumber = patient.PatientNumber});
+            return RedirectToAction("Index", "Patient", new {PatientNumber = patientNumber});
 
 
 
         }
-
-
-
-
 
         // POST: Medicine/Create
         [HttpPost]
@@ -333,64 +260,6 @@ namespace Formatics.Controllers
 
             return View();
         }
-
-
-
-
-
-
-        // GET: Medicine/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-
-
-
-        // POST: Medicine/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-
-        // GET: Medicine/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-
-
-        // POST: Medicine/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
 
       public ActionResult MedicalDetails ()
         {

@@ -13,77 +13,37 @@ namespace Formatics.Controllers
         // GET: Procedure
         ApplicationDbContext db = new ApplicationDbContext();
         
-
-        public Alert LoadDailyAlerts (int count, String category, Steps step, int dayPick)
-        {
-            Alert alert = new Alert();
-            switch (category) 
-            {
-                case "Acute Pain":
-                    if (dayPick == 4)
-                    {
-                        alert.time = DateTime.Now.AddDays(count);
-                        alert.type = "Surgery";
-                        alert.frequency = 1;
-                        alert.description = "Surgery in 2 hours, do not eat any food!";
-
-                    }
-                    else
-                    {
-                        alert.time = DateTime.Now.AddDays(count);
-                        alert.type = "Medication";
-                        alert.frequency = 1;
-                        alert.description = "Take your medication";
-                     
-                    }
-                    break;
-                case "Respiration Alteration":
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-                case "Sleep Pattern Disturbance":
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-
-                default:
-                    alert.time = DateTime.Now.AddDays(count);
-                    alert.type = "Medication";
-                    alert.frequency = 1;
-                    alert.description = "Take your Medication!";
-                    break;
-
-
-            }
-
-            return alert;
-
-        }
-
           public Procedure LoadProcedures(Steps step2, String category) //Loaded for each procedure
         {
             Procedure procedure = new Procedure();
             switch (category)
             {
                 case "Acute Pain":
-                   
-                    procedure.category = "Surgery";
-                    procedure.date = step2.Date;
-                    procedure.location = "Froedert Hospital";
+                    if (step2.day == 4)
+                    {
+                        procedure.category = "Surgery";
+                        procedure.date = step2.Date;
+                        procedure.location = "Froedert Hospital";
+                    }
+                    else
+                    {
+                        procedure = null;
+                        return procedure;
+
+                    }
                     break;
                 case "Respiration Alteration":
-
+                    procedure = null;
+                    return procedure;
                     break;
                 case "Sleep Pattern Disturbance":
-
+                    procedure = null;
+                    return procedure;
                     break;
                     
                 default:
-
+                    procedure = null;
+                    return procedure;
                     break;
 
             }
@@ -93,11 +53,17 @@ namespace Formatics.Controllers
         
         public StepProcedure LoadStepProcedure(Procedure procedure, Steps step2)
         {
-            StepProcedure stepProcedure = new StepProcedure();
-            stepProcedure.ProcedureId = procedure.ProcedureId;
-            stepProcedure.StepId = step2.StepId;
-            return stepProcedure;
-
+            if (procedure == null)
+            {
+                return null;
+            }
+            else
+            {
+                StepProcedure stepProcedure = new StepProcedure();
+                stepProcedure.ProcedureId = procedure.ProcedureId;
+                stepProcedure.StepId = step2.StepId;
+                return stepProcedure;
+            }
         }
 
        
@@ -120,12 +86,12 @@ namespace Formatics.Controllers
         // GET: Procedure/Create
         public ActionResult Create(int patientNumber, string category, int interventionId)
         {
-            int count3 = 0; ////////////////////////Fix the count so the front end will work in patient
+            int count3 = 0;
 
-            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); //getting all the steps in the table that apply to patient first then manipulating them
+            List<PatientStep> patientStepList = db.patientSteps.Where(e => e.PatientNumber == patientNumber).ToList(); 
             List<Steps> stepList = new List<Steps>();
 
-            foreach (PatientStep patientStep in patientStepList)//finding all steps in db that match patient steps
+            foreach (PatientStep patientStep in patientStepList)
             {
                 Steps step = db.steps.Where(e => e.StepId == patientStep.StepId && e.InterventionId == interventionId).SingleOrDefault();
                 stepList.Add(step);
@@ -134,26 +100,24 @@ namespace Formatics.Controllers
 
             foreach (Steps steps1 in stepList) //the list for the diagnosis will be passed so it will be nuetral
             {
-                switch (steps1.day)
-                {
-                    case 4:
+                
+                    Procedure procedure2 = LoadProcedures(steps1, category);
+                StepProcedure stepProcedure2 = LoadStepProcedure(procedure2, steps1);
+                count3++;
 
-                        Procedure procedure = LoadProcedures(steps1, category);
-                        db.procedures.Add(procedure);
-                        db.SaveChanges();
-                        StepProcedure stepProcedure = LoadStepProcedure(procedure, steps1);
-                        db.stepProcedures.Add(stepProcedure);
-                        db.SaveChanges();
-                      
-                        count3++;
-                        break;
-                    default:
-                     
-                        count3++;
-                        break;
+
+                if (procedure2 == null)
+                {
+                    continue;
 
                 }
-                db.SaveChanges();
+                else
+                {
+                    db.procedures.Add(procedure2);
+                    db.stepProcedures.Add(stepProcedure2);
+                    db.SaveChanges();
+                }                    
+                
 
             }
 
@@ -172,50 +136,7 @@ namespace Formatics.Controllers
             return View();
         }
 
-        // GET: Procedure/Edit/5
-        public ActionResult Edit(int id)
-        {
-           
-            return View();
-        }
-
-        // POST: Procedure/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, Diagnosis diagnosis)
-        {
-            try
-            {
-              
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Procedure/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Procedure/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
+      
         
 
 

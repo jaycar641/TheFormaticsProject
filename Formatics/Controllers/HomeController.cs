@@ -9,6 +9,9 @@ using System.Web.Mvc;
 
 namespace Formatics.Controllers
 {
+    /// <summary>
+    /// Your about to go form protest to performance
+    /// </summary>
     public class HomeController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
@@ -116,6 +119,7 @@ namespace Formatics.Controllers
 
             foreach (PatientStep patientStep in db.patientSteps)
             {
+
                 if (patientStep.PatientNumber == patient.PatientNumber)
                 {
                     db.patientSteps.Remove(patientStep);

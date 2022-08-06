@@ -170,7 +170,8 @@ namespace Formatics.Controllers
             }
             catch
             {
-               return View();
+                ViewData["AlertData"] = db.alerts.ToList();
+
             }
             Steps steps = db.steps.Where(e => e.Date.Day == currentDate.Day && e.Date.Month == currentDate.Month && e.Date.Year == currentDate.Year && e.InterventionId == intervention.InterventionId).SingleOrDefault();
             int number = patient.PatientNumber;
